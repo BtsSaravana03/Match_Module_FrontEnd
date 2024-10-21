@@ -1,0 +1,15 @@
+@import './variable';
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    body{
+        font-family: $font-primary;
+        font-optical-sizing: auto;
+        h1,h2,h3,h4,h5,h6{
+            font-family: $header-font;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+    }
+}

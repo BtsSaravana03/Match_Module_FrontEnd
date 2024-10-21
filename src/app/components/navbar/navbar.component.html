@@ -1,0 +1,17 @@
+<nav class="navbar-wrap" [ngClass]="{'d-none': !visibility}">
+    <div class="navbar-content container">
+        <div class="handburger-menu">
+            <i class="fa-regular fa-bars fa-lg" (click)="sidebarVisible=true"></i>
+        </div>
+        <div class="Header">
+            <h5 class="text-uppercase">{{Header}}</h5>
+        </div>
+        <div class="log-in-out-container">
+            <i class="fa-solid fa-user fa-lg"></i>
+            <i class="fa-solid fa-arrows-rotate fa-lg"></i>
+        </div>
+    </div>
+    
+</nav>
+<app-sidebar [(visible)]="sidebarVisible" (header)="setHeader($event)"/>
+<div class="overlay" [ngClass]="{'d-none': !sidebarVisible}"></div>
