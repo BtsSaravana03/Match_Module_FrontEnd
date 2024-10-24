@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { firstValueFrom } from 'rxjs';
-import { api_url } from "../app/variable";
+import { api_url } from "../variable";
 @Injectable({
   providedIn: 'root'
 })

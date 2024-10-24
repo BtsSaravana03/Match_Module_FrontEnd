@@ -1,0 +1,17 @@
+.field-wrap{
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    @media screen and (max-width:750px) {
+        flex-wrap: wrap;
+    }
+    .field-container{
+        padding-top: 10px;
+        width: 100%;
+        label.field-label{
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding-bottom: 10px;
+        }
+    }
+}

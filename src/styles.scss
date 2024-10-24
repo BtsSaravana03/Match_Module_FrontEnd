@@ -1,15 +1,22 @@
-@import './variable';
+@font-face {
+    font-family: 'Helvetica';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Helvetica'), url('../public/fonts/Helvetica.woff') format('woff');
+}
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     body{
-        font-family: $font-primary;
-        font-optical-sizing: auto;
+        font-family: "Poppins", sans-serif;
         h1,h2,h3,h4,h5,h6{
-            font-family: $header-font;
+            font-family: "Poppins", sans-serif;
             font-weight: 700;
             margin-bottom: 0;
         }
     }
+}
+.custom-cell-style{
+    padding: 5px 15px;
 }

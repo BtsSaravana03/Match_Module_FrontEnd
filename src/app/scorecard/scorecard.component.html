@@ -1,0 +1,17 @@
+<div class="innings-tab-wrapper">
+  <dx-tabs [width]="tabWidth" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''"
+  [showNavButtons]="true" [dataSource]="totalInnings()" [selectedIndex]="selectedIndex" [orientation]="'horizontal'" (onSelectionChanged)="onInningsChange($event)"
+   [stylingMode]="'secondary'">
+   <div *dxTemplate="let data of 'item'">
+    <div class="tab-content">
+      <div class="tab-team-text">{{data.BattingClubPrefix}}</div>
+      <div>Innings {{ data.InningsID }}</div>
+    </div>
+  </div>
+</dx-tabs>
+</div>
+<app-batting-card [ballArray]="ballArray()" [currentInnings]="currentInnings" />
+<br />
+<app-fall-of-wickets [ballArray]="ballArray()" [currentInnings]="currentInnings" />
+<br />
+<app-bowling-card [ballArray]="ballArray()" [currentInnings]="currentInnings" />

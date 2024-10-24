@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit } from '@angular/core';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { AppService } from '../../services/app.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,11 +10,24 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
+  private appService = inject(AppService);
+  private destroyRef = inject(DestroyRef);
   visibility = input<boolean>(true);
   sidebarVisible:boolean = false;
-  Header = 'Ball by Ball';
+  Header = '';
+  ngOnInit(): void {
+    const subscription = this.appService.navbarHeader_observable$.subscribe(updated=>{
+      this.Header = updated;
+    })
+    this.destroyRef.onDestroy(()=>{
+      subscription.unsubscribe();
+    })
+  }
   setHeader(h:string){
     this.Header = h;
+  }
+  onMatchSelection(){
+    this.appService.toggleMatchSelection(true);
   }
 }

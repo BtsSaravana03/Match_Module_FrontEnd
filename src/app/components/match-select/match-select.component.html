@@ -1,0 +1,20 @@
+<dx-popup [width]="width" [height]="height" [hideOnOutsideClick]="false" [showCloseButton]="false"
+  [(visible)]="showPopup" [showTitle]="false" [dragEnabled]="false">
+  <div *dxTemplate="let data of 'content'">
+    <div class="field-wrap">
+        <div class="field-container">
+            <label class="field-label">Tournament</label>
+            <dx-select-box #selectBox [dataSource]="CompDataSource" [acceptCustomValue]="false" displayExpr="Name"
+              valueExpr="ID" searchExpr="Name" [searchEnabled]="true" (onSelectionChanged)="getMatches($event)"></dx-select-box>
+          </div>
+          <div class="field-container">
+              <label class="field-label">Match</label>
+              <dx-select-box #selectBox [dataSource]="MatchDataSource" [acceptCustomValue]="false" displayExpr="MatchName"
+                valueExpr="ID" searchExpr="MatchName" [searchEnabled]="true" (onSelectionChanged)="onMatchSelected($event)" [disabled]="selectedComp === undefined"></dx-select-box>
+            </div>
+    </div>
+    
+  </div>
+  <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="center" [options]="generateButton" [disabled]="selectedMatch === undefined">
+  </dxi-toolbar-item>
+</dx-popup>

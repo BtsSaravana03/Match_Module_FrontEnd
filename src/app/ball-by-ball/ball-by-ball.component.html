@@ -1,1 +1,10 @@
-<p>ball-by-ball works!</p>
+
+    <dx-data-grid [dataSource]="ballArray()" [allowColumnReordering]="false" keyExpr="AutoId" [showColumnLines]="true"
+    [showRowLines]="true" [showBorders]="true" class="custom-data-grid">
+    <dxi-column dataField="StrikerName" caption="Batsman Name" ></dxi-column>
+    <dxi-column dataField="Overs" caption="Overs" ></dxi-column>
+    <dxi-column dataField="BowlerName" caption="Bowler Name" ></dxi-column>
+    <dxi-column dataField="Runs" caption="Runs" ></dxi-column>
+    <dxo-export [enabled]="true" [allowExportSelectedData]="false" [formats]="['xlsx', 'pdf']"></dxo-export>
+  </dx-data-grid>
+

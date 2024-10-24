@@ -34,7 +34,8 @@
     header = output<string>()
     sidebarWidth: string = '300px';
     navigation = [
-      {path:'/ballbyball', icon: 'fa-solid fa-tennis-ball', name:'Ball By Ball'}
+      {path:'/ballbyball', icon: 'fa-solid fa-tennis-ball', name:'Ball By Ball'},
+      {path:'/scorecard', icon: 'fa-solid fa-credit-card-front', name:'Scorecard'}
     ];
     @HostListener('window:resize', ['$event'])
     onResize(event: Event) {

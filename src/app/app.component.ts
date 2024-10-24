@@ -1,16 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { licenseKey } from '../devextreme-license';
 import config from 'devextreme/core/config';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { MatchSelectComponent } from './components/match-select/match-select.component';
+import { AppService } from './services/app.service';
 config({licenseKey})
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,NavbarComponent],
+  imports: [RouterOutlet,NavbarComponent,MatchSelectComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  navbarVisible:boolean = true;
+export class AppComponent implements OnInit {
+  private appService = inject(AppService);
+  private destroy = inject(DestroyRef);
+  navbarVisible!:boolean;
+  generateMatches!:boolean;
+
+  ngOnInit(): void {
+    const navSubscription = this.appService.nav_observable$.subscribe(updated=>{
+      this.navbarVisible = updated;
+    })
+    const matchSelection = this.appService.matchSelection_observable$.subscribe(updated=>{
+      this.generateMatches = updated;
+    })
+    this.destroy.onDestroy(()=>{
+      navSubscription.unsubscribe();
+      matchSelection.unsubscribe();
+    })
+  }
 }

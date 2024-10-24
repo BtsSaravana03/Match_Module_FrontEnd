@@ -1,36 +1,11 @@
-<!-- <nav class="main-menu" [ngClass]="{'display-none': !visible()}">
-    <ul>
-        <li *ngFor="let m of navigation" [routerLink]="[m.path]" routerLinkActive="active">
-            <a>
-                <i class="fa {{m.icon}} fa-2x"></i>
-                <span class="nav-text">
-                   {{m.name}}
-                </span>
-            </a>
-        </li>
-    </ul>
-
-    <ul class="logout">
-        <li>
-           <a href="#">
-                 <i class="fa fa-power-off fa-2x"></i>
-                <span class="nav-text">
-                    Logout
-                </span>
-            </a>
-        </li>  
-    </ul>
-</nav> -->
-
 <section id="sidebar" [ngClass]="{'d-none': !visible()}" [@slideInOut]="{ value: visible() ? 'in' : 'out', params: { sidebarWidth: sidebarWidth }}">
   <div class="close-container">
-    <h5>Menu</h5>
+    <img src="../../../../../images/cricket-21-logo.png" alt="logo">
     <i class="fa-regular fa-xmark fa-lg" (click)="visible.set(false)"></i>
   </div>
   <ul class="nav-links">
     @for (item of navigation; track $index) {
-        <li><a [routerLink]="[item.path]" routerLinkActive="active"  (click)="setHeader(item.name)"><i class="{{item.icon}} me-2"></i> {{item.name}}</a></li>
+        <li [routerLink]="[item.path]" routerLinkActive="active"  (click)="setHeader(item.name)"><a><i class="{{item.icon}} me-2"></i> {{item.name}}</a></li>
     }
-   
   </ul>
 </section>

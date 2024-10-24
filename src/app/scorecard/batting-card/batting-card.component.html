@@ -1,0 +1,27 @@
+<dx-data-grid [dataSource]="battingCard" [allowColumnReordering]="false" keyExpr="strikerID" [showColumnLines]="true" [sorting]="{mode:'none'}"
+  [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
+  [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxi-column dataField="strikerName" caption="Batsman" [width]="230" [fixed]="true"></dxi-column>
+  <dxi-column dataField="dismissalSts" caption=""></dxi-column>
+  <dxi-column dataField="runs" caption="Runs"></dxi-column>
+  <dxi-column dataField="balls" caption="Balls"></dxi-column>
+  <dxi-column dataField="strikeRate" caption="Strike Rate"></dxi-column>
+  <dxi-column dataField="dot" caption="Dots"></dxi-column>
+  <dxi-column dataField="_1s" caption="1s"></dxi-column>
+  <dxi-column dataField="_2s" caption="2s"></dxi-column>
+  <dxi-column dataField="_3s" caption="3s"></dxi-column>
+  <dxi-column dataField="_4s" caption="4s"></dxi-column>
+  <dxi-column dataField="_6s" caption="6s"></dxi-column>
+  <dxi-column dataField="dotPer" caption="Dot%"></dxi-column>
+  <dxi-column dataField="bdryPer" caption="Bdry%" ></dxi-column>
+</dx-data-grid>
+
+<!-- <div class="extras-row">
+    <div class="extras-label">Extras:</div>
+    <div class="extras-value">LB: 1, W: 2, N:3</div>
+  </div>
+  <div class="total-row">
+    <div class="total-label">Total:</div>
+    <div class="total-value">(4 Wickets; 5 Overs)</div>
+  </div> -->
