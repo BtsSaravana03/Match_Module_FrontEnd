@@ -1,5 +1,7 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import Enumerable from 'linq';
+import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
+import { VideoService } from '../../components/video/video.service';
 
 @Component({
   selector: 'app-fall-of-wickets',
@@ -10,7 +12,8 @@ import Enumerable from 'linq';
 })
 export class FallOfWicketsComponent {
   currentInnings = input.required<number>();
-  ballArray = input.required<any[]>();
+  private video = inject(VideoService);
+  ballArray = input.required<BallData[]|[]>();
   wicketsCard:any[] = [];
   constructor(){
     effect(()=>{
@@ -26,7 +29,8 @@ export class FallOfWicketsComponent {
     .select((e,i)=>{
       this.wicketsCard.push({
         teamRuns:e.TeamRuns,
-        order:e.DismissedOrder||(i+1),
+        //order:e.DismissedOrder||(i+1),
+        order:(i+1),
         strikerName:e.DismissedBatterName,
         over:e.Overs,
         ballId:e.BallId,
@@ -34,6 +38,8 @@ export class FallOfWicketsComponent {
       })
     })
     .toArray()
-    console.log(this.wicketsCard);
+  }
+  onClick(e:any){
+    this.video.LibraryBallVideo(e.strikerId,'BatsmanWickets',this.currentInnings());
   }
 }

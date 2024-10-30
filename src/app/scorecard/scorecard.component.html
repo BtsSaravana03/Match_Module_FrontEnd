@@ -1,17 +1,24 @@
-<div class="innings-tab-wrapper">
-  <dx-tabs [width]="tabWidth" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''"
-  [showNavButtons]="true" [dataSource]="totalInnings()" [selectedIndex]="selectedIndex" [orientation]="'horizontal'" (onSelectionChanged)="onInningsChange($event)"
-   [stylingMode]="'secondary'">
-   <div *dxTemplate="let data of 'item'">
-    <div class="tab-content">
-      <div class="tab-team-text">{{data.BattingClubPrefix}}</div>
-      <div>Innings {{ data.InningsID }}</div>
+
+<app-summary-header [summary]="summary" [matchDetails]="matchDetails()" [currentInnings]="currentInnings"/>
+@if (totalInnings().length>0) {
+  <div class="innings-tab-wrapper">
+    <dx-tabs [width]="tabWidth" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''" [focusStateEnabled]="false"
+    [showNavButtons]="true" [dataSource]="totalInnings()" [selectedItem]="totalInnings()[currentInnings-1]" [orientation]="'horizontal'" (onSelectionChanged)="onInningsChange($event)"
+     [stylingMode]="'secondary'">
+     <div *dxTemplate="let data of 'item'">
+      <div class="tab-content">
+        <div class="tab-team-text">{{data.BattingClubPrefix}}</div>
+        <div>Innings {{ data.InningsID }}</div>
+      </div>
     </div>
+  </dx-tabs>
   </div>
-</dx-tabs>
-</div>
-<app-batting-card [ballArray]="ballArray()" [currentInnings]="currentInnings" />
-<br />
-<app-fall-of-wickets [ballArray]="ballArray()" [currentInnings]="currentInnings" />
-<br />
-<app-bowling-card [ballArray]="ballArray()" [currentInnings]="currentInnings" />
+}
+@if(ballArray().length>0){
+  <app-batting-card [ballArray]="ballArray()" [currentInnings]="currentInnings" [summary]="summary"/>
+  <br />
+  <app-fall-of-wickets [ballArray]="ballArray()" [currentInnings]="currentInnings" />
+  <br />
+  <app-bowling-card [ballArray]="ballArray()" [currentInnings]="currentInnings" />
+}
+<app-video [currentInnings]="currentInnings"/>

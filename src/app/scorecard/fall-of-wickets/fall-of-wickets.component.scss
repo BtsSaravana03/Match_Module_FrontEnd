@@ -2,10 +2,15 @@
     display: flex;
     gap: 5px;
     .wicket-item{
+        cursor: pointer;
         display: flex;
         gap: 5px;
         p{
             margin: 0px;
+            font-size: 0.9rem;
+            &.dim-text{
+                color: #827b7b;
+            }
         }
     }
 }

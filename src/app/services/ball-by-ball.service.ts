@@ -1,33 +1,59 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpServices } from './http.service';
-import { BehaviorSubject } from 'rxjs';
+import {inject,Injectable,OnDestroy} from '@angular/core';
+import {HttpServices} from './http.service';
+import {BehaviorSubject,catchError,from,interval,retry,startWith,Subject,switchMap,takeUntil,throwError} from 'rxjs';
+import {BallData} from '../ball-by-ball/ball-by-ball.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BallByBallService {
+export class BallByBallService implements OnDestroy {
   private httpService = inject(HttpServices);
-  private ballByBall$ = new BehaviorSubject<any[]>([]);
-  private matchDetails$ = new BehaviorSubject<any[]>([]);
+  private ballByBall$ = new BehaviorSubject < BallData[] | [] > ([]);
+  private matchDetails$ = new BehaviorSubject < any[] > ([]);
   ballObservable$ = this.ballByBall$.asObservable();
   matchObservable$ = this.matchDetails$.asObservable();
-  dismissalTypes:any[] = [];
-  competitionID!:number;
-  matchID!:number;
+  dismissalTypes: any[] = [];
+  competitionID!: number;
+  matchID!: number;
+  private destroy$ = new Subject < void > ();
 
-  async generate_ballbyball(compid:number,matchid:number){
+  generate_ballbyball(compid: number, matchid: number) {
     this.competitionID = compid;
     this.matchID = matchid;
-    const res = await this.httpService.getData(`ballbyball/${matchid}`);
-    if(res.status === 200){
-      this.ballByBall$.next(res.data);
-    }
+    this.destroy$.next();
+
+    interval(30000).pipe(
+      startWith(0),
+      switchMap(() =>
+        from(this.httpService.getData(`ballbyball/${this.matchID}`)).pipe(
+          retry(3),
+          catchError(err => {
+            console.error('Polling error:', err);
+            return err;
+          })
+        )
+      ),
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (res: any) => {
+        if (res.status === 200) {
+         // console.log(res.data);
+          this.ballByBall$.next(res.data);
+        }
+      },
+      error: (err) => console.error('Polling subscription error:', err)
+    });
   }
-  async getCurrentMatchDetails(matchid:number){
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  async getCurrentMatchDetails(matchid: number) {
     const res = await this.httpService.getData(`home/getMatchDetails/${matchid}`);
-    this.matchDetails$.next(res?res[0]:[]);
+    this.matchDetails$.next(res ? res[0] : []);
   }
-  async getDismissalTypes(){
+  async getDismissalTypes() {
     const res = await this.httpService.getData(`home/getDismissalTypeMaster`);
     this.dismissalTypes = res;
   }

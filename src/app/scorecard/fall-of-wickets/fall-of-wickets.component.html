@@ -1,15 +1,15 @@
 @if(wicketsCard.length>0){
-    <h3>Fall of Wickets</h3>
-    <div class="fow-wrap">
+    <h6>Fall of Wickets</h6>
+    <div class="fow-wrap mt-3">
         @for (m of wicketsCard; track $index) {
-            <div class="wicket-item">
+            <div class="wicket-item" (click)="onClick(m)">
                 <div>
                     <p><strong>{{m.teamRuns}}/{{m.order}}</strong></p>
                 </div>
                 <div>
-                    <p>({{m.strikerName}}, {{m.over}} ov)
+                    <p class="dim-text">({{m.strikerName}}, {{m.over}} ov)
                         @if (wicketsCard.length-1!==$index) {
-                            <span>,</span>
+                            <span> <i class="fa-solid fa-circle-small"></i> </span>
                         }
                         
                     </p>

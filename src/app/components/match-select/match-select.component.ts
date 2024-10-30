@@ -44,20 +44,24 @@ export class MatchSelectComponent implements OnInit {
   async ngOnInit (){
     this.resizeObservable$ = fromEvent(window,'resize');
     this.resizeSubscription$ = this.resizeObservable$.subscribe(e => {
-      if(window.innerWidth < 750){
-        this.width = '99%';
-        this.height = '300px';
-      }
-      else{
-        this.width = '700px';
-        this.height = '200px';
-      }
+     this.onResize();
     })
+    this.onResize();
     this.destroyRef.onDestroy(()=>{
       this.resizeSubscription$.unsubscribe();
     })
     this.getCompetitions();
     const res = await this.ballService.getDismissalTypes();
+  }
+  onResize(){
+    if(window.innerWidth < 750){
+      this.width = '99%';
+      this.height = '300px';
+    }
+    else{
+      this.width = '700px';
+      this.height = '200px';
+    }
   }
   async getCompetitions(){
     this.MatchDataSource = [];

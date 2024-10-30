@@ -1,0 +1,20 @@
+@if(currentInningsData && currentInningsData.length>0){
+<div class="scoreboard-master-wrap container" [style.width]="width">
+  <div class="team-wrap">
+    <div class="team-logo">
+      {{currentInningsData[0].BattingClubPrefix}}
+    </div>
+    <div class="team-name">
+        {{currentInningsData[0].BattingClubName}}
+    </div>
+  </div>
+  <div class="score-wrap">
+    <div class="score">
+        {{currentInningsSummary.length>0?currentInningsSummary[0].TeamTotal:0}}/{{currentInningsSummary.length>0?currentInningsSummary[0].Dismissals:0}}
+    </div>
+    <div class="overs">
+        ({{currentInningsSummary.length>0?currentInningsSummary[0].Overs:0}})
+    </div>
+  </div>
+</div>
+}

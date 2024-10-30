@@ -1,8 +1,11 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { checkSR } from '../../scripts/generic';
 import { getDismissalString } from '../../scripts/cricket_gen';
 import Enumerable from 'linq';
+import { BattingCard, BattingCardSummary } from './batting-card.interface';
+import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
+import { VideoService } from '../../components/video/video.service';
 
 @Component({
   selector: 'app-batting-card',
@@ -11,11 +14,15 @@ import Enumerable from 'linq';
   templateUrl: './batting-card.component.html',
   styleUrl: './batting-card.component.scss'
 })
+
 export class BattingCardComponent {
+  private videoService = inject(VideoService);
   currentInnings = input.required<number>();
-  ballArray = input.required<any[]>();
-  battingCard:any[] = [];
+  ballArray = input.required<BallData[]>();
+  summary = input.required<BattingCardSummary[]>();
+  battingCard:BattingCard[]|[] = [];
   nonStrikerDismissal:any = {};
+  
   constructor(){
     effect(()=>{
       if(this.ballArray() && this.currentInnings()){
@@ -31,19 +38,19 @@ export class BattingCardComponent {
       .select(g => {
         const [striker_id, striker_name] = g.key().split('##');
         return {
-            strikerID: striker_id,
+            strikerID: parseInt(striker_id),
             strikerName: striker_name,
             runs: g.sum(i => i.Batruns),
-            balls: g.count(i => i.Batballs),
-            strikeRate: checkSR((g.sum(i => i.Batruns) / g.count(i => i.Batballs)) * 100),
+            balls: g.count(i => i.Batballs===1),
+            strikeRate: checkSR((g.sum(i => i.Batruns) / g.count(i => i.Batballs===1)) * 100),
             dot: g.count(i => i.Batruns === 0),
-            _1s: g.sum(i => (i.Batruns === 1 && i.ExtraTypeID === 0) ? 1 : 0),
-            _2s: g.sum(i => (i.Batruns === 2 && i.ExtraTypeID === 0) ? 1 : 0),
-            _3s: g.sum(i => (i.Batruns === 3 && i.ExtraTypeID === 0) ? 1 : 0),
+            _1s: g.sum(i => (i.Batruns === 1 && i.ExtraTypeId === 0) ? 1 : 0),
+            _2s: g.sum(i => (i.Batruns === 2 && i.ExtraTypeId === 0) ? 1 : 0),
+            _3s: g.sum(i => (i.Batruns === 3 && i.ExtraTypeId === 0) ? 1 : 0),
             _4s: g.count(i => i.isFour === 1),
             _6s: g.count(i => i.isSix === 1),
-            dotPer: checkSR((g.count(i => i.Batruns === 0) / g.count(i => i.Batballs)) * 100),
-            bdryPer: checkSR(((g.sum(i => (i.isFour === 1 ? 4 : 0)) + (g.sum(i => (i.isSix === 1 ? 6 : 0)))) / g.count(i => i.Batballs)) * 100),
+            dotPer: checkSR((g.count(i => i.Batruns === 0) / g.count(i => i.Batballs===1)) * 100),
+            bdryPer: checkSR(((g.sum(i => (i.isFour === 1 ? 4 : 0)) + (g.sum(i => (i.isSix === 1 ? 6 : 0)))) / g.count(i => i.Batballs===1)) * 100),
             wkt: g.count(i => i.Dismissal === 1),
             dismissalSts: g.count(i => i.Dismissal === 1)===0?'Not Out': this.setDismissal(g.first(i => i.Dismissal === 1))
         };
@@ -63,4 +70,52 @@ export class BattingCardComponent {
     }
     return getDismissalString(ball);
   }
+  onCellClick(event:any){
+    const clickedColumn = event.column.dataField;
+    const clickedCellValue = event.value;
+    const clickedRowData:BattingCard = event.data;
+    const innings = this.currentInnings();
+    switch (clickedColumn) {
+      case 'dismissalSts':
+        this.videoService.LibraryBallVideo(clickedRowData.strikerID,'BatsmanWickets',innings);
+        break;
+      case 'runs':
+        this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Runs',innings);
+        break;
+      case 'balls':
+        this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Ball',innings);
+        break;
+      case 'dot':
+        this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Dots',innings);
+        break;
+
+      case '_1s':
+        this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Ones',innings);
+        break;
+
+      case '_2s':
+        this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Twos',innings);
+        break;
+
+      case '_3s':
+        this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Threes',innings);
+        break;
+
+      case '_4s':
+        this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Fours',innings);
+        break;
+
+      case '_6s':
+        this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Sixs',innings);
+        break;
+      default:
+        break;
+    }
+  }
+  setExtras(): (info: any) => string {
+    return (info: any) => {
+        return `Extras: ${this.summary()[0]?.ExtrasBreakup || ''}`;
+    };
+  }
+  
 }

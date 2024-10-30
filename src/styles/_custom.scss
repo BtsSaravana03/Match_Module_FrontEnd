@@ -8,16 +8,23 @@
             background-color: #eeeeee;
             padding: 8px 15px;
             font-family: 'Helvetica';
-            text-align: center!important;
         }
     } 
+    .dx-datagrid-table .dx-row td,.dx-datagrid-table .dx-footer-row td{
+        padding: 6px 15px;
+        font-family: 'Helvetica';
+        &.video-class:hover{
+            background-color: #e5edff;
+            cursor: pointer;
+        }
+    }
+
     .dx-bordered-bottom-view{
         border-radius: 0 0 5px 5px;
         .dx-datagrid-content{
             table td{
                 padding: 6px 15px;
                 font-family: 'Helvetica';
-                text-align: center!important;
             }
         } 
     }

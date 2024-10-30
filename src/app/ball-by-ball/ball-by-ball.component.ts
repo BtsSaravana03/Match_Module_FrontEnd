@@ -7,6 +7,7 @@ import { saveAs } from 'file-saver-es';
 import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
 import { exportDataGrid as exportDataGridToXLSX } from 'devextreme/excel_exporter';
 import { AppService } from '../services/app.service';
+import { BallData } from './ball-by-ball.interface';
 
 @Component({
   selector: 'app-ball-by-ball',
@@ -20,7 +21,7 @@ export class BallByBallComponent implements OnInit {
   private ballbyballService = inject(BallByBallService);
   private appService = inject(AppService);
   private destroyRef = inject(DestroyRef);
-  ballArray = signal<any[]>([]);
+  ballArray = signal<BallData[]|[]>([]);
   matchDetails = signal<any[]>([]);
   ngOnInit(): void {
     this.appService.updateNavHeader('Ball By Ball');
