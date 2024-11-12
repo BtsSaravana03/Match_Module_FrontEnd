@@ -15,12 +15,13 @@ import { api_url } from '../../variable';
 })
 export class VideoComponent {
   private videoService = inject(VideoService); 
-  @ViewChild('video', { static: true }) videoElement!: ElementRef;
-  currentInnings = input.required<number>();
+  @ViewChild('videoPlayer', { static: true }) videoElement!: HTMLVideoElement;
+  selctedInnings = input.required<number>();
+  matchInfo = input.required<any>()
   videos = signal<VideoBalls[]|[]>([]);
   videoSrc = signal<string>("");
   videoIndex = signal<number>(0);
-  Trim = true;
+  Trim = false;
   trimEnd:number = 0;
   videoPopup:boolean = false;
   currentTab:"Bat"|"Bowl" = "Bat";
@@ -36,58 +37,67 @@ export class VideoComponent {
      this.onResize();
     })
     this.onResize();
+    
   }
   onResize(){
-    if(window.innerWidth < 1150){
+    if(window.innerWidth < 1200){
       this.width = '100%';
       this.height = '100%';
     }
     else{
-      this.width = '80%';
-      this.height = '80%';
+      this.width = '70%';
+      this.height = '70%';
     }
   }
- async show() {
-    this.videoIndex.set(0);
-    this.videoService.currentVideoIndex.set(0);
+ async show(index?:number) {
+    //console.log(this.matchInfo());
+    let i =index?index:0;
+    this.videoIndex.set(i);
+    this.videoService.currentVideoIndex.set(i);
     this.videos.set(this.videoService.videoArray());
     if(this.currentTab==='Bowl'){
-      this.currentTittle =this.videos()[0]?.StrikerName||'';
+      this.currentTittle =this.videos()[i]?.StrikerName||'';
     }else{
-      this.currentTittle =this.videos()[0]?.BowlerName||'';
+      this.currentTittle =this.videos()[i]?.BowlerName||'';
     }
     if(this.videos().length>0){
-      this.onVideoClick(this.videos()[0]?.VideoPath,0);
+      this.onVideoClick(this.videos()[i]?.VideoPath,i);
     }else{
       this.currentTittle = '';
     }
   }
   hide(){
-    this.videoElement?.nativeElement.pause();
+    this.videoElement?.pause();
+  }
+  formatDate(inputDate:string){
+    const date = new Date(inputDate);
+    return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getFullYear()).slice(2)}`;
   }
   onVideoClick(link: string, index: number) {
     this.videoIndex.set(index);
+    let ball = this.videos()[index];
     this.videoService.currentVideoIndex.set(index);
-    if(this.videos()[index].VideoMode === 1){
-      let _p = api_url + 'MatchVideos/' +link;
+    if(ball.VideoMode === 1){
+      let _p = api_url +link;
       this.videoSrc.set(_p)
     }
-    else if(this.videos()[index].VideoMode === 2){
-      
-      let _p = api_url + 'MatchVideos/'
+    else if(ball.VideoMode === 2){
+      let folder = this.matchInfo().MtcVideos+' '+this.formatDate(this.matchInfo()?.Date)+ball.InningsID;
+      let _p = api_url +folder+'/'+folder+'_'+ball.BallID+'.mp4';
+      this.videoSrc.set(_p);
     }
     else{
       this.videoSrc.set('');
     }
     //this.videoSrc.set(link);
-    const startTrim = this.videos()[index].StartTimeTrim;
+    const startTrim = ball.StartTimeTrim;
   
     if (this.Trim && startTrim) {
-      if (this.videoElement && this.videoElement.nativeElement) {
-        this.videoElement.nativeElement.currentTime = startTrim; 
-        this.videoElement.nativeElement.load();
+      if (this.videoElement) {
+        //this.videoElement.nativeElement.currentTime = startTrim; 
+        this.videoElement.load();
       }
-      this.trimEnd = parseFloat(this.videos()[index].EndTimeTrim);
+      this.trimEnd = parseFloat(ball.EndTimeTrim);
     }
   }
   playNext(){
@@ -101,6 +111,7 @@ export class VideoComponent {
     this.Trim = element.checked;
   }
   onVideoProgress(video: HTMLVideoElement) {
+    if(!this.videoElement) this.videoElement = video;
     if (this.trimEnd && this.Trim && video.currentTime >= this.trimEnd) {
       video.currentTime = this.trimEnd;
       this.playNext();

@@ -2,20 +2,23 @@ import {inject,Injectable,OnDestroy} from '@angular/core';
 import {HttpServices} from './http.service';
 import {BehaviorSubject,catchError,from,interval,retry,startWith,Subject,switchMap,takeUntil,throwError} from 'rxjs';
 import {BallData} from '../ball-by-ball/ball-by-ball.interface';
+import { FilterService } from '../components/filter/filter.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BallByBallService implements OnDestroy {
   private httpService = inject(HttpServices);
-  private ballByBall$ = new BehaviorSubject < BallData[] | [] > ([]);
-  private matchDetails$ = new BehaviorSubject < any[] > ([]);
+  private filterService = inject(FilterService);
+
+  private ballByBall$ = new BehaviorSubject <BallData[]>([]);
+  private matchDetails$ = new BehaviorSubject <any[]>([]);
   ballObservable$ = this.ballByBall$.asObservable();
   matchObservable$ = this.matchDetails$.asObservable();
   dismissalTypes: any[] = [];
   competitionID!: number;
   matchID!: number;
-  private destroy$ = new Subject < void > ();
+  private destroy$ = new Subject <void>();
 
   generate_ballbyball(compid: number, matchid: number) {
     this.competitionID = compid;
@@ -37,8 +40,8 @@ export class BallByBallService implements OnDestroy {
     ).subscribe({
       next: (res: any) => {
         if (res.status === 200) {
-         // console.log(res.data);
-          this.ballByBall$.next(res.data);
+          const filteredData = this.filterService.filterBallData(res.data);
+          this.ballByBall$.next(filteredData);
         }
       },
       error: (err) => console.error('Polling subscription error:', err)

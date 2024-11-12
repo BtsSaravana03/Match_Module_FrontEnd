@@ -7,12 +7,13 @@
             <h5 class="text-uppercase">{{Header}}</h5>
         </div>
         <div class="log-in-out-container">
-            <!-- <i class="fa-solid fa-user fa-lg" ></i> -->
-            <i class="fa-solid fa-right-left fa-lg" title="Match Selection" (click)="onMatchSelection()"></i>
-            <!-- <i class="fa-solid fa-arrows-rotate fa-lg"></i> -->
+            <!-- <i class="fa-solid fa-filter fa-lg" title="filter" id="filter"></i> -->
+             <img src="../../../../images/filter-icon.png" alt="filter" id="filter" width="30px">
+             <i class="fa-solid fa-right-left fa-lg" title="Match Selection" (click)="onMatchSelection()"></i>
         </div>
     </div>
     
 </nav>
 <app-sidebar [(visible)]="sidebarVisible" (header)="setHeader($event)"/>
 <div class="overlay" [ngClass]="{'d-none': !sidebarVisible}"></div>
+<app-filter target="#filter" [mobile_view]="isMobile" />

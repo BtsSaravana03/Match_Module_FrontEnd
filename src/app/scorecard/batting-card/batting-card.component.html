@@ -1,25 +1,60 @@
-<dx-data-grid [dataSource]="battingCard" [allowColumnReordering]="false" keyExpr="strikerID" [showColumnLines]="true"
-  [sorting]="{mode:'none'}" [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
-  [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" (onCellClick)="onCellClick($event)">
-  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-  <dxi-column dataField="strikerName" caption="Batsman" [width]="230" [fixed]="true" alignment="center"></dxi-column>
-  <dxi-column dataField="dismissalSts" caption="" alignment="left" cssClass="video-class"></dxi-column>
-  <dxi-column dataField="runs" caption="R" alignment="center" title="Runs" cssClass="video-class"></dxi-column>
-  <dxi-column dataField="balls" caption="B" alignment="center" title="Balls" cssClass="video-class"></dxi-column>
-  <dxi-column dataField="strikeRate" caption="SR" alignment="center" title="Strike Rate"></dxi-column>
-  <dxi-column dataField="dot" caption="DB" alignment="center" title="Dot Balls" cssClass="video-class"></dxi-column>
-  <dxi-column dataField="_1s" caption="1s" alignment="center" cssClass="video-class"></dxi-column>
-  <dxi-column dataField="_2s" caption="2s" alignment="center" cssClass="video-class"></dxi-column>
-  <dxi-column dataField="_3s" caption="3s" alignment="center" cssClass="video-class"></dxi-column>
-  <dxi-column dataField="_4s" caption="4s" alignment="center" cssClass="video-class"></dxi-column>
-  <dxi-column dataField="_6s" caption="6s" alignment="center" cssClass="video-class"></dxi-column>
-  <dxi-column dataField="dotPer" caption="Dot%" alignment="center"></dxi-column>
-  <dxi-column dataField="bdryPer" caption="Bdry%" alignment="center" title="Boundary%"></dxi-column>
-  <!-- <dxo-summary>
-    <dxi-total-item
-      column="strikerName"
-      [customizeText]="setExtras()"
-    >
-    </dxi-total-item>
-  </dxo-summary> -->
+<dx-data-grid [dataSource]="battingCard" keyExpr="strikerID" [showColumnLines]="true"
+  [sorting]="{mode:'none'}" [showRowLines]="true" [showBorders]="true"  [elementAttr]="{ class: 'custom-data-grid' }"
+  [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" [dataRowTemplate]="'battingCardTemplate'">
+  <!-- <dxo-column-fixing [enabled]="true"></dxo-column-fixing> -->
+  <dxi-column dataField="strikerName" caption="Batsman"></dxi-column>
+  <dxi-column dataField="dismissalSts" caption="" alignment="left" cssClass="video-class" *ngIf="!isMobile()"></dxi-column>
+  <dxi-column dataField="runs" caption="R" alignment="right" title="Runs" cssClass="video-class" ></dxi-column>
+  <dxi-column dataField="balls" caption="B" alignment="right" title="Balls" cssClass="video-class"></dxi-column>
+  <dxi-column dataField="strikeRate" caption="SR" alignment="right" title="Strike Rate"></dxi-column>
+  <dxi-column dataField="dot" caption="DB" alignment="right" title="Dot Balls" cssClass="video-class"></dxi-column>
+  <dxi-column dataField="_1s" caption="1s" alignment="right" cssClass="video-class"></dxi-column>
+  <dxi-column dataField="_2s" caption="2s" alignment="right" cssClass="video-class"></dxi-column>
+  <dxi-column dataField="_3s" caption="3s" alignment="right" cssClass="video-class"></dxi-column>
+  <dxi-column dataField="_4s" caption="4s" alignment="right" cssClass="video-class"></dxi-column>
+  <dxi-column dataField="_6s" caption="6s" alignment="right" cssClass="video-class"></dxi-column>
+  <dxi-column dataField="dotPer" caption="Dot%" alignment="right"></dxi-column>
+  <dxi-column dataField="bdryPer" caption="Bdry%" alignment="right" title="Boundary%"></dxi-column>
+  
+    <ng-container *dxTemplate="let m of 'battingCardTemplate'; let i = index">
+      <tr class="main-row" role="row">
+        <td class="gridcell" [ngClass]="{'not-out-class':m.data.dismissalSts === 'Not Out' }">{{ m.data.strikerName }}</td>
+        <td class="gridcell" *ngIf="!isMobile()" [ngClass]="{'video-class': m.data.dismissalSts !== 'Not Out'}" (click)="onCellClick(m,'dismissalSts')">{{ m.data.dismissalSts }}</td>
+        <td class="gridcell video-class text-right" (click)="onCellClick(m,'runs')">{{ m.data.runs }}</td>
+        <td class="gridcell video-class text-right" (click)="onCellClick(m,'balls')">{{ m.data.balls }}</td>
+        <td class="gridcell text-right" >{{ m.data.strikeRate }}</td>
+        <td class="gridcell video-class text-right" (click)="onCellClick(m,'dot')">{{ m.data.dot }}</td>
+        <td class="gridcell video-class text-right" (click)="onCellClick(m,'_1s')">{{ m.data._1s }}</td>
+        <td class="gridcell video-class text-right" (click)="onCellClick(m,'_2s')">{{ m.data._2s }}</td>
+        <td class="gridcell video-class text-right" (click)="onCellClick(m,'_3s')">{{ m.data._3s }}</td>
+        <td class="gridcell video-class text-right" (click)="onCellClick(m,'_4s')">{{ m.data._4s }}</td>
+        <td class="gridcell video-class text-right" (click)="onCellClick(m,'_6s')">{{ m.data._6s }}</td>
+        <td class="gridcell text-right">{{ m.data.dotPer }}</td>
+        <td class="gridcell text-right">{{ m.data.bdryPer }}</td>
+      </tr>
+      <tr class="dismissal-row" role="row" *ngIf="isMobile()">
+        <td colspan="12" role="gridcell" style="padding-top: 0px" (click)="onCellClick(m,'dismissalSts')"
+          ><div style="font-size: 0.75rem;">{{ m.data.dismissalSts }}</div></td
+        >
+      </tr>
+      <ng-container *ngIf="isLastRow(m.data)">
+        <tr class="custom-footer-row" role="row">
+          <td class="gridcell"><small>Extras</small></td>
+          <td class="gridcell" [attr.colspan]="!isMobile() ? 12 : 11">
+            @if(summary()[selctedInnings()-1]){
+              <small>{{summary()[selctedInnings()-1].ExtrasTotal}} <span *ngIf="summary()[selctedInnings()-1].ExtrasTotal>0">({{summary()[selctedInnings()-1].ExtrasBreakup}})</span></small>
+            }
+          </td>
+        </tr>
+        <tr class="custom-footer-row total-row" role="row">
+          <td class="gridcell"><strong>Total</strong></td>
+          <td class="gridcell" [attr.colspan]="!isMobile() ? 12 : 11">
+            @if(summary()[selctedInnings()-1]){
+              <strong>{{summary()[selctedInnings()-1].TeamTotal}}/{{summary()[selctedInnings()-1].Dismissals}}</strong>
+            }
+          </td>
+        </tr>
+      </ng-container>
+    </ng-container>
+  
 </dx-data-grid>

@@ -12,11 +12,14 @@ import { calculateOvers } from '../scripts/cricket_gen';
 import { BattingCardSummary } from './batting-card/batting-card.interface';
 import { SummaryHeaderComponent } from "./summary-header/summary-header.component";
 import { VideoComponent } from "../components/video/video.component";
+import { CommonModule } from '@angular/common';
+import { InningsTabComponent } from "../components/innings-tab/innings-tab.component";
+import { InningsService } from '../components/innings-tab/innings.service';
 
 @Component({
   selector: 'app-scorecard',
   standalone: true,
-  imports: [BattingCardComponent, DxTabsModule, BowlingCardComponent, FallOfWicketsComponent, SummaryHeaderComponent, VideoComponent],
+  imports: [BattingCardComponent, DxTabsModule, BowlingCardComponent, FallOfWicketsComponent, SummaryHeaderComponent, VideoComponent, CommonModule, InningsTabComponent],
   templateUrl: './scorecard.component.html',
   styleUrl: './scorecard.component.scss',
   encapsulation:ViewEncapsulation.None
@@ -25,25 +28,27 @@ export class ScorecardComponent implements OnInit {
   private ballbyballService = inject(BallByBallService);
   private destroyRef = inject(DestroyRef);
   private appService = inject(AppService);
+  private InningService = inject(InningsService);
 
   ballArray = signal<BallData[]|[]>([]);
   summary:[]|BattingCardSummary[] = [];
   matchDetails = signal<any>({});
   totalInnings = signal<any[]>([]);
-  currentInnings:number = 1;
-  selectexIndex:number = 0;
-  tabWidth:any = '200px';
+  selctedInnings:number = 1;
+  currentInnings:number|undefined;
+  isMobile:boolean = false;
   resizeObservable$!:Observable<Event>;
 
   ngOnInit(): void {
     this.appService.updateNavHeader('Scorecard');
     const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
       this.ballArray.set(updated);
-      this.generateSummary()
+      this.currentInnings = this.ballArray()[this.ballArray().length-1]?.InningsId||undefined;
+      this.generateSummary();
     })
     const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated=>{
       this.matchDetails.set(updated);
-      this.currentInnings = 1;
+      this.selctedInnings = 1;
       this.totalInnings.set(this.matchDetails()?.inningsData||[]);
       this.onWindowResize();
     })
@@ -51,24 +56,27 @@ export class ScorecardComponent implements OnInit {
     const resizeSubscription:Subscription = this.resizeObservable$.subscribe(()=>{
       this.onWindowResize();
     })
-
+    const InnSub = this.InningService.InningsObserver$.subscribe(updated =>{
+      this.selctedInnings = updated;
+    })
     this.destroyRef.onDestroy(()=>{
       subscription.unsubscribe();
       matchSubscription.unsubscribe();
       resizeSubscription.unsubscribe();
+      InnSub.unsubscribe();
     })
   }
   onWindowResize(){
-    if(window.innerWidth < 567){
-      this.tabWidth = '100%';
+    if(window.innerWidth < 773){
+      this.isMobile = true;
     }
     else{
-      this.tabWidth = `${(this.totalInnings()?.length||2)*100}px`;
+      this.isMobile = false;
     }
   }
   generateSummary(){
     this.summary = Enumerable.from(this.ballArray())
-      .groupBy(i => i.InningsId === this.currentInnings).select(g => {
+      .groupBy(i => i.InningsId === this.selctedInnings).select(g => {
         const extrasByType = {
           overstep: g.where(i => i.ExtraTypeId === 1 || i.ExtraTypeId === 5 || i.ExtraTypeId === 6)
             .sum(i => i.ExtraTypeId === 1 ? i.Extras : 1),
@@ -79,10 +87,10 @@ export class ScorecardComponent implements OnInit {
             .sum(i => i.ExtraTypeId === 4 ? i.Extras : i.Extras - 1)
         };
         const extrasBreakupParts = [];
-        if (extrasByType.overstep > 0) extrasBreakupParts.push(`Overstep: ${extrasByType.overstep}`);
-        if (extrasByType.wide > 0) extrasBreakupParts.push(`Wide: ${extrasByType.wide}`);
-        if (extrasByType.legbyes > 0) extrasBreakupParts.push(`Legbyes: ${extrasByType.legbyes}`);
-        if (extrasByType.byes > 0) extrasBreakupParts.push(`Byes: ${extrasByType.byes}`);
+        if (extrasByType.overstep > 0) extrasBreakupParts.push(`NB: ${extrasByType.overstep}`);
+        if (extrasByType.wide > 0) extrasBreakupParts.push(`W: ${extrasByType.wide}`);
+        if (extrasByType.legbyes > 0) extrasBreakupParts.push(`LB: ${extrasByType.legbyes}`);
+        if (extrasByType.byes > 0) extrasBreakupParts.push(`B: ${extrasByType.byes}`);
         const extrasBreakup = extrasBreakupParts.length > 0 ? extrasBreakupParts.join(', ') : '';
 
         return {
@@ -96,9 +104,7 @@ export class ScorecardComponent implements OnInit {
         }
       }).orderBy(i=> i.Innings).toArray();
   }
-  onInningsChange(e:any){
-    if(e.addedItems.length>0){
-      this.currentInnings = e?.addedItems[0]?.InningsID||1;
-    }
+  onInningsChange(e:number){
+    this.selctedInnings = e;
   }
 }

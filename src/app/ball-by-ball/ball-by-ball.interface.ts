@@ -55,4 +55,11 @@ export interface BallData {
     DismissedBatterName: string | null;
     Batwkts: number;
     Maiden: number;
+    TeamWickets:number;
+    DismissalTypeDesc:string;
+    Partnerid:string;
+    PM_X:number;
+    PM_Y:number;
+    PM_X_CM:number;
+    PM_Y_CM:number;
 }

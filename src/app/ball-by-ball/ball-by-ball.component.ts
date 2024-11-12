@@ -8,33 +8,49 @@ import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
 import { exportDataGrid as exportDataGridToXLSX } from 'devextreme/excel_exporter';
 import { AppService } from '../services/app.service';
 import { BallData } from './ball-by-ball.interface';
+import { VideoService } from '../components/video/video.service';
+import { VideoComponent } from "../components/video/video.component";
+import { InningsService } from '../components/innings-tab/innings.service';
+import Enumerable from 'linq';
 
 @Component({
   selector: 'app-ball-by-ball',
   standalone: true,
-  imports: [DxDataGridModule],
+  imports: [DxDataGridModule, VideoComponent],
   templateUrl: './ball-by-ball.component.html',
   styleUrl: './ball-by-ball.component.scss',
-  encapsulation:ViewEncapsulation.ShadowDom
+  encapsulation:ViewEncapsulation.None
 })
 export class BallByBallComponent implements OnInit {
   private ballbyballService = inject(BallByBallService);
+  private videoService = inject(VideoService);
   private appService = inject(AppService);
   private destroyRef = inject(DestroyRef);
-  ballArray = signal<BallData[]|[]>([]);
+  private InningService = inject(InningsService);
+
+  ballArray = signal<BallData[]>([]);
   matchDetails = signal<any[]>([]);
+  selctedInnings:number = 1;
+  ballArrayFiltered = signal<BallData[]>([]);
+
   ngOnInit(): void {
     this.appService.updateNavHeader('Ball By Ball');
     const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
       this.ballArray.set(updated);
+      this.generateBallByBall();
     })
-    const matchSubscription = this.ballbyballService.ballObservable$.subscribe(updated=>{
+    const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated=>{
       this.matchDetails.set(updated);
+    })
+    const InnSub = this.InningService.InningsObserver$.subscribe(updated=>{
+      this.selctedInnings = updated;
+      this.generateBallByBall();
     })
     this.destroyRef.onDestroy(()=>{
       subscription.unsubscribe();
       matchSubscription.unsubscribe();
     })
+    
   }
   onExporting(e:any) {
     if (e.format === 'pdf') {
@@ -60,5 +76,13 @@ export class BallByBallComponent implements OnInit {
       });
       e.cancel = true;
     }
+  }
+  generateBallByBall(){
+    const Data = Enumerable.from(this.ballArray())
+    .where(i => i.InningsId === this.selctedInnings).toArray();
+    this.ballArrayFiltered.set(Data);
+  }
+  onCellClick(index:number){
+    this.videoService.PlayBallbyball(index);
   }
 }

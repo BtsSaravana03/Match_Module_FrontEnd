@@ -1,0 +1,22 @@
+@if (totalInnings().length>0) {
+<div class="innings-tab-wrapper">
+    <dx-tabs [width]="tabWidth" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''" [focusStateEnabled]="false" [className]="'innings-template'"
+    [showNavButtons]="true" [dataSource]="totalInnings()" [selectedItem]="totalInnings()[selctedInnings-1]" [orientation]="'horizontal'" (onSelectionChanged)="onInningsChange($event)"
+     [stylingMode]="'secondary'">
+     <div *dxTemplate="let data of 'item'">
+      <div class="tab-content">
+        <div>
+          <span class="tab-team-text" >
+            @if(isMobile){
+              {{data.BattingClubPrefix}}
+            }@else{
+              {{data.BattingClubName}}
+            }
+            
+          </span> 
+           {{ data.InningsID }}<span *ngIf="data.InningsID===1">st</span><span *ngIf="data.InningsID===2">nd</span><span *ngIf="data.InningsID===3">rd</span><span *ngIf="data.InningsID>=4">th</span> innings</div>
+      </div>
+    </div>
+  </dx-tabs>
+  </div>
+}

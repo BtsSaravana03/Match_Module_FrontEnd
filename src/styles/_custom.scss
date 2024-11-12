@@ -13,9 +13,18 @@
     .dx-datagrid-table .dx-row td,.dx-datagrid-table .dx-footer-row td{
         padding: 6px 15px;
         font-family: 'Helvetica';
-        &.video-class:hover{
-            background-color: #e5edff;
-            cursor: pointer;
+        &.partnership-highlight{
+            background-color: #ebf0fa;
+        }
+        &.video-class{
+            text-decoration: underline;
+            &:hover{
+                background-color: #e5edff;
+                cursor: pointer;
+            }
+        }
+        &.not-out-class{
+            border-left: 2px solid #c0d2fc!important;
         }
     }
 
@@ -33,3 +42,23 @@
 .dx-widget {
     font-family: "Poppins", sans-serif;
 }
+
+.innings-tab-wrapper{
+    display: flex;
+    justify-content: end;
+    flex-grow: 1;
+    width: 100%;
+    min-width: 200px;
+    overflow: clip;
+    margin-bottom: 10px;
+}
+.tab-content {
+    div{
+        font-size: 0.9rem;
+    }
+    .tab-team-text{
+        font-weight: 600;
+        font-family: 'Helvetica';
+        padding-bottom: 4px;
+    }
+  }

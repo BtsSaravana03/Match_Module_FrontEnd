@@ -1,0 +1,19 @@
+export interface Partnership{
+    PartnershipID:string;
+    Player_1_Name:string;
+    Player_2_Name:string;
+    Player_1_0s:number;
+    Player_2_0s:number;
+    Player_1_1s:number;
+    Player_2_1s:number;
+    Player_1_2s:number;
+    Player_2_2s:number;
+    Player_1_3s:number;
+    Player_2_3s:number;
+    Player_1_4s:number;
+    Player_2_4s:number;
+    Player_1_6s:number;
+    Player_2_6s:number;
+    Wicket:number;
+    Runs:string;
+}

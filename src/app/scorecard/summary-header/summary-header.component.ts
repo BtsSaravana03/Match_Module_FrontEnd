@@ -1,22 +1,30 @@
-import { Component, effect, input, OnInit } from '@angular/core';
+import { Component, effect, input } from '@angular/core';
 import { BattingCardSummary, MatchData } from '../batting-card/batting-card.interface';
-import { fromEvent, Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import Enumerable from 'linq';
 
+interface TeamSummary{
+  TeamID:number,
+  Total:number,
+  Dismissal:number,
+  isCurrentInn:boolean,
+  Overs:number
+};
 @Component({
   selector: 'app-summary-header',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './summary-header.component.html',
   styleUrl: './summary-header.component.scss'
 })
-export class SummaryHeaderComponent implements OnInit {
+export class SummaryHeaderComponent {
   summary = input.required<BattingCardSummary[]>();
-  currentInningsSummary:BattingCardSummary[]|[] = []
   matchDetails = input.required<MatchData>();
-  currentInnings = input.required<number>();
-  currentInningsData:any[] = []
-  width:string = '500px'
-  resizeObservable$!:Observable<Event>;
+  selctedInnings = input.required<number>();
+  currentInnings = input.required<number|undefined>();
+  isMobile = input.required<boolean>();
+  TeamASummary:TeamSummary[]|[]= [];
+  TeamBSummary:TeamSummary[]|[]= [];
 
   constructor(){
     effect(()=>{
@@ -25,31 +33,33 @@ export class SummaryHeaderComponent implements OnInit {
       }
     })
   }
-  
-  ngOnInit(): void {
-    this.resizeObservable$ = fromEvent(window,'resize');
-    const sub = this.resizeObservable$.subscribe(()=>{
-      this.onResize()
-    })
-    this.onResize();
-  }
-
-  onResize(){
-    if(window.innerWidth < 510){
-      this.width = '100%';
-    }else{
-      this.width = '500px';
-    }
-  }
   updateSummary(){
-    if(this.currentInnings){
-      this.currentInningsData = this.matchDetails()?.inningsData?.filter(i =>{
-        return i.InningsID === this.currentInnings()
-      });
-      this.currentInningsSummary = this.summary()?.filter(i =>{
-        return i.Innings === this.currentInnings()
-      })
+    this.TeamASummary = [];
+    this.TeamBSummary = [];
+    if(this.matchDetails().inningsData && this.matchDetails().inningsData.length>0){
+      this.TeamASummary = Enumerable.from(this.summary())
+      .where(i=> i.BattingClubId === this.matchDetails()?.inningsData[0]?.BattingClubID)
+      .groupBy(i=> `${i.BattingClubId}-${i.Innings}`).select(g=>{
+        return{
+          TeamID: g.first()?.BattingClubId,
+          Total:g.first()?.TeamTotal,
+          Dismissal:g.first()?.Dismissals,
+          isCurrentInn:g.first().Innings===this.currentInnings()?true:false,
+          Overs:g.first()?.Overs
+        }
+      }).toArray();
+      this.TeamBSummary = Enumerable.from(this.summary())
+      .where(i=> i.BattingClubId === this.matchDetails()?.inningsData[0]?.BowlingClubID)
+      .groupBy(i=> `${i.BattingClubId}-${i.Innings}`).select(g=>{
+        return{
+          TeamID: g.first()?.BattingClubId,
+          Total:g.first()?.TeamTotal,
+          Dismissal:g.first()?.Dismissals,
+          isCurrentInn:g.first().Innings===this.currentInnings()?true:false,
+          Overs:g.first()?.Overs
+        }
+      }).toArray();
     }
-   
+    
   }
 }

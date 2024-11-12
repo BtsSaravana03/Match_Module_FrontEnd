@@ -1,10 +1,34 @@
-
-    <dx-data-grid [dataSource]="ballArray()" [allowColumnReordering]="false" keyExpr="AutoId" [showColumnLines]="true"
-    [showRowLines]="true" [showBorders]="true" class="custom-data-grid">
-    <dxi-column dataField="StrikerName" caption="Batsman Name" ></dxi-column>
-    <dxi-column dataField="Overs" caption="Overs" ></dxi-column>
-    <dxi-column dataField="BowlerName" caption="Bowler Name" ></dxi-column>
-    <dxi-column dataField="Runs" caption="Runs" ></dxi-column>
-    <dxo-export [enabled]="true" [allowExportSelectedData]="false" [formats]="['xlsx', 'pdf']"></dxo-export>
-  </dx-data-grid>
-
+<div class="container-fluid">
+  <dx-data-grid [dataSource]="ballArrayFiltered()" keyExpr="AutoId" [showColumnLines]="true" [sorting]="{mode:'multiple'}"
+  [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
+  [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+  <!-- <dxo-column-fixing [enabled]="true"></dxo-column-fixing> -->
+  <dxo-header-filter [visible]="true"></dxo-header-filter>
+  <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+  <dxi-column dataField="InningsId" caption="Inn" alignment="left"></dxi-column>
+  <dxi-column dataField="StrikerName" caption="Batsman Name" alignment="left"></dxi-column>
+  <dxi-column dataField="StrokeName" caption="Stroke" alignment="left"></dxi-column>
+  <dxi-column dataField="Overs" caption="Overs" alignment="left"></dxi-column>
+  <dxi-column dataField="BowlerName" caption="Bowler Name" alignment="left"></dxi-column>
+  <dxi-column dataField="DeliveryStyleName" caption="Delivery Style" alignment="left"></dxi-column>
+  <dxi-column dataField="Runs" caption="Runs" alignment="left"></dxi-column>
+  <dxi-column dataField="Dismissal" caption="Wkt" alignment="left" cellTemplate="dismissalTemplate"></dxi-column>
+  <dxi-column dataField="isFour" caption="IsFour" alignment="left"></dxi-column>
+  <dxi-column dataField="isSix" caption="IsSix" alignment="left"></dxi-column>
+  <dxi-column caption="TeamScore" alignment="left" cellTemplate="TeamScoreTemplate"></dxi-column>
+  <dxi-column dataField="DismissalTypeDesc" caption="DismissalType" alignment="left"></dxi-column>
+  <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
+  <dxo-export [enabled]="true" [allowExportSelectedData]="false" [formats]="['xlsx', 'pdf']"></dxo-export>
+  <div *dxTemplate="let data of 'cellTemplate'">
+    <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick(data.rowIndex)"></i>
+  </div>
+  <div *dxTemplate="let d of 'dismissalTemplate'">
+    @if(d.data.Dismissal===1){W}@else {-}
+  </div>
+  <div *dxTemplate="let d of 'TeamScoreTemplate'">
+    {{d.data.TeamRuns}}/{{d.data.TeamWickets}}
+  </div>
+  <dxo-scrolling mode="infinite"></dxo-scrolling>
+</dx-data-grid>
+</div>
+<app-video [selctedInnings]="1" [matchInfo]="matchDetails()" />

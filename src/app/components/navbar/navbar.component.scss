@@ -1,9 +1,7 @@
 $height : 4rem;
-$width : 100vw;
 $background : #fff;
 $color:#242424;
 .navbar-wrap{
-    width: $width;
     height: $height;
     background-color: $background;
     color: $color;
@@ -17,6 +15,7 @@ $color:#242424;
     .log-in-out-container{
         display: flex;
         gap: 10px;
+        align-items: center;
     }
     i{
         cursor: pointer;

@@ -1,48 +1,105 @@
-.scoreboard-master-wrap {
-  width: 320px;
-  display: flex;
-  justify-content: space-between;
-  background: #cccaca30;
-  padding: 20px;
-  border-radius: 5px;
-  align-items: center;
-  gap: 20px;
+// .scoreboard-master-wrap {
+//   width: 320px;
+//   display: flex;
+//   justify-content: space-between;
+//   background: #cccaca30;
+//   padding: 20px;
+//   border-radius: 5px;
+//   align-items: center;
+//   gap: 20px;
 
-  .team-wrap {
-    display: flex;
-    flex-direction: column;
-    
+//   .team-wrap {
+//     display: flex;
+//     flex-direction: column;
 
-    .team-logo {
-      width: 50px;
-      height: 50px;
-      background: lightgrey;
+
+//     .team-logo {
+//       width: 50px;
+//       height: 50px;
+//       background: lightgrey;
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//       border-radius: 5px;
+//       border: 1px solid #b8b3b3;
+//       font-weight: 600;
+//     }
+
+//     .team-name {
+//         margin-top: 10px;
+//         font-weight: 500;
+//         text-transform: uppercase;
+//         padding-left: 5px;
+//     }
+//   }
+
+//   .score-wrap {
+//     .score {
+//       font-size: 2rem;
+//       font-weight: 600;
+//     }
+
+//     .overs {
+//       font-weight: 400;
+//       color: #787272;
+//       text-align: center;
+//     }
+//   }
+// }
+
+
+#summary-header {
+  margin-bottom: 10px;
+
+  .wrap {
+    background-image: linear-gradient(111.4deg, rgba(7, 7, 9, 1) 6.5%, rgba(27, 24, 113, 1) 93.2%);
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #e5e8f0;
+    padding: 10px 20px;
+
+    .team-score {
+
+    }
+
+    .batting-team,
+    .bowling-team {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      font-size: larger;
+      font-weight: 600;
       align-items: center;
-      border-radius: 5px;
-      border: 1px solid #b8b3b3;
-      font-weight: 600;
-    }
+      min-height: 50px;
 
-    .team-name {
-        margin-top: 10px;
-        font-weight: 500;
+      .name {
         text-transform: uppercase;
-        padding-left: 5px;
-    }
-  }
+        font-size: 35px;
+      }
+      
+      p {
+        color: #fff;
+        margin: 0px;
 
-  .score-wrap {
-    .score {
-      font-size: 2rem;
-      font-weight: 600;
-    }
+        &.score {
+          color: #fff;
+          .text-dim {
+            color: #fff;
+            opacity: 0.6;
+          }
 
-    .overs {
-      font-weight: 400;
-      color: #787272;
-      text-align: center;
+          .text-dark-d {
+            color: #fff;
+            opacity: 1;
+          }
+
+          .overs-display {
+            font-size: small;
+            padding-right: 5px;
+            font-weight: 400;
+            vertical-align: middle;
+          }
+        }
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, effect, inject, input } from '@angular/core';
+import { Component, DestroyRef, effect, inject, input, OnInit } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { checkSR } from '../../scripts/generic';
 import { getDismissalString } from '../../scripts/cricket_gen';
@@ -6,34 +6,39 @@ import Enumerable from 'linq';
 import { BattingCard, BattingCardSummary } from './batting-card.interface';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { VideoService } from '../../components/video/video.service';
+import { CommonModule } from '@angular/common';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-batting-card',
   standalone: true,
-  imports: [DxDataGridModule],
+  imports: [DxDataGridModule,CommonModule],
   templateUrl: './batting-card.component.html',
   styleUrl: './batting-card.component.scss'
 })
 
-export class BattingCardComponent {
+export class BattingCardComponent{
   private videoService = inject(VideoService);
-  currentInnings = input.required<number>();
+  selctedInnings = input.required<number>();
   ballArray = input.required<BallData[]>();
   summary = input.required<BattingCardSummary[]>();
   battingCard:BattingCard[]|[] = [];
   nonStrikerDismissal:any = {};
+  isMobile = input.required<boolean>();
+  
   
   constructor(){
     effect(()=>{
-      if(this.ballArray() && this.currentInnings()){
+      if(this.ballArray() && this.selctedInnings()){
         this.generateBattingCard();
       }
     })
   }
+  
   generateBattingCard(){
     this.nonStrikerDismissal = [];
     this.battingCard = Enumerable.from(this.ballArray())
-      .where(i => i.InningsId === this.currentInnings())
+      .where(i => i.InningsId === this.selctedInnings())
       .groupBy(i => `${i.StrikerID}##${i.StrikerName}`)
       .select(g => {
         const [striker_id, striker_name] = g.key().split('##');
@@ -70,11 +75,10 @@ export class BattingCardComponent {
     }
     return getDismissalString(ball);
   }
-  onCellClick(event:any){
-    const clickedColumn = event.column.dataField;
-    const clickedCellValue = event.value;
+  onCellClick(event:any,clickedColumn:string){
+    //const clickedColumn = event.column.dataField;
     const clickedRowData:BattingCard = event.data;
-    const innings = this.currentInnings();
+    const innings = this.selctedInnings();
     switch (clickedColumn) {
       case 'dismissalSts':
         this.videoService.LibraryBallVideo(clickedRowData.strikerID,'BatsmanWickets',innings);
@@ -117,5 +121,36 @@ export class BattingCardComponent {
         return `Extras: ${this.summary()[0]?.ExtrasBreakup || ''}`;
     };
   }
+
+  addCustomRows() {
+    // setTimeout(() => {
+    //   const gridElement = document.querySelector('.custom-data-grid .dx-datagrid-rowsview .dx-datagrid-table tbody');
+    //   if (gridElement) {
+    //     // Create custom row 1
+    //     const customRow1 = document.createElement('tr');
+    //     customRow1.classList.add('custom-footer-row');
+    //     customRow1.innerHTML = `
+    //       <td class="gridcell">Extras</td>
+    //       <td class="gridcell"></td>
+    //       <td class="gridcell" colspan='12'></td>
+    //     `;
   
+    //     // Create custom row 2
+    //     const customRow2 = document.createElement('tr');
+    //     customRow2.classList.add('custom-footer-row');
+    //     customRow2.innerHTML = `
+    //        <td class="gridcell">Extras</td>
+    //       <td class="gridcell"></td>
+    //       <td class="gridcell" colspan='12'></td>
+    //     `;
+  
+    //     gridElement.appendChild(customRow1);
+    //     gridElement.appendChild(customRow2);
+    //   }
+    // }, 100);
+  }  
+  isLastRow(data: any): boolean {
+    return this.battingCard[this.battingCard.length - 1] === data;
+  }
 }
+

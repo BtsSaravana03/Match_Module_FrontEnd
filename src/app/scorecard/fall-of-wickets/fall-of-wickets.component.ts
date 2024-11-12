@@ -11,13 +11,13 @@ import { VideoService } from '../../components/video/video.service';
   styleUrl: './fall-of-wickets.component.scss'
 })
 export class FallOfWicketsComponent {
-  currentInnings = input.required<number>();
+  selctedInnings = input.required<number>();
   private video = inject(VideoService);
   ballArray = input.required<BallData[]|[]>();
   wicketsCard:any[] = [];
   constructor(){
     effect(()=>{
-      if(this.ballArray() && this.currentInnings()){
+      if(this.ballArray() && this.selctedInnings()){
         this.generateFallOfWickets();
       }
     })
@@ -25,7 +25,7 @@ export class FallOfWicketsComponent {
   generateFallOfWickets(){
     this.wicketsCard = [];
     const filteredBalls = Enumerable.from(this.ballArray())
-    .where(w => w.InningsId === this.currentInnings() && w.Dismissal===1)
+    .where(w => w.InningsId === this.selctedInnings() && w.Dismissal===1)
     .select((e,i)=>{
       this.wicketsCard.push({
         teamRuns:e.TeamRuns,
@@ -40,6 +40,6 @@ export class FallOfWicketsComponent {
     .toArray()
   }
   onClick(e:any){
-    this.video.LibraryBallVideo(e.strikerId,'BatsmanWickets',this.currentInnings());
+    this.video.LibraryBallVideo(e.strikerId,'BatsmanWickets',this.selctedInnings());
   }
 }

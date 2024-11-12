@@ -16,19 +16,19 @@ import { VideoService } from '../../components/video/video.service';
 })
 export class BowlingCardComponent {
   private video = inject(VideoService);
-  currentInnings = input.required<number>();
+  selctedInnings = input.required<number>();
   ballArray = input.required<BallData[]>();
   bowlingCard:BowlingCard[]|[] = [];
   constructor(){
     effect(()=>{
-      if(this.ballArray() && this.currentInnings()){
+      if(this.ballArray() && this.selctedInnings()){
         this.generateBowlingCard();
       }
     })
   }
   generateBowlingCard(){
     this.bowlingCard = Enumerable.from(this.ballArray())
-      .where(i => i.InningsId === this.currentInnings())
+      .where(i => i.InningsId === this.selctedInnings())
       .groupBy(i => `${i.BowlerID}##${i.BowlerName}`)
       .select(g => {
         const [bowler_id, bowler_name] = g.key().split('##');
@@ -61,7 +61,7 @@ export class BowlingCardComponent {
   onCellClick(event: any) {
     const clickedColumn = event.column.dataField;
     const clickedRowData:BowlingCard = event.data;
-    const innings = this.currentInnings();
+    const innings = this.selctedInnings();
     switch (clickedColumn) {
       case 'overs':
         this.video.LibraryBallVideo(clickedRowData.bowlerId,'Overs',innings);

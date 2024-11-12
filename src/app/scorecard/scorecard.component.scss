@@ -1,23 +1,15 @@
 @import '../../styles/custom';
-
-.innings-tab-wrapper{
-    display: flex;
-    justify-content: end;
-    flex-grow: 1;
-    width: 100%;
-    min-width: 200px;
-    overflow: clip;
-    margin-bottom: 10px;
-}
-.tab-content {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    white-space: pre-line; 
-    line-height: 1.2; 
-    .tab-team-text{
-        font-weight: 600;
-        font-family: 'Helvetica';
-        padding-bottom: 4px;
+.innings-template{
+    .dx-tabs-wrapper{
+        justify-content: end;
+        @media screen and (max-width:567px) {
+            justify-content: center;
+        }
+        .dx-item{
+            max-width: fit-content;
+            @media screen and (max-width:567px) {
+                max-width: unset;
+            }
+        }
     }
-  }
+}

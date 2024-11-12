@@ -1,4 +1,4 @@
-@if(currentInningsData && currentInningsData.length>0){
+<!-- @if(currentInningsData && currentInningsData.length>0){
 <div class="scoreboard-master-wrap container" [style.width]="width">
   <div class="team-wrap">
     <div class="team-logo">
@@ -17,4 +17,43 @@
     </div>
   </div>
 </div>
+} -->
+@if(matchDetails().inningsData && matchDetails().inningsData.length>0){
+  <section id="summary-header">
+    <div class="wrap">
+      <div class="team-score">
+        <div class="batting-team">
+          <p class="name">{{isMobile()?matchDetails().inningsData[0].BattingClubPrefix:matchDetails().inningsData[0].BattingClubName}}</p>
+          
+          <p class="score">
+            @for (m of TeamASummary; track $index) {
+             
+              @if(m.TeamID === matchDetails().inningsData[0].BattingClubID){
+                <span class="overs-display" *ngIf="m.isCurrentInn">({{m.Overs}})</span>
+                <span [ngClass]="{'text-dim':!m.isCurrentInn,'text-dark-d':m.isCurrentInn}">{{m.Total}}<span *ngIf="m.Dismissal !== 10">/{{m.Dismissal}}</span></span>
+              }
+              <span *ngIf="TeamASummary[$index+1]"> & </span>
+            }
+          </p>
+        </div>
+        <hr style="margin: 0;border: 1px solid #fff;" />
+        <div class="bowling-team">
+          <p class="name">{{isMobile()?matchDetails().inningsData[0].BowlingClubPrefix:matchDetails().inningsData[0].BowlingClubName}}</p>
+          <p class="score">
+            @for (m of TeamBSummary; track $index) {
+              @if(m.TeamID === matchDetails().inningsData[0].BowlingClubID){
+                <span class="overs-display" *ngIf="m.isCurrentInn">({{m.Overs}})</span>
+                <span [ngClass]="{'text-dim':!m.isCurrentInn,'text-dark-d':m.isCurrentInn}">{{m.Total}}<span *ngIf="m.Dismissal !== 10">/{{m.Dismissal}}</span></span>
+              }
+              <span *ngIf="TeamBSummary[$index+1]"> & </span>
+            }
+          </p>
+        </div>
+        
+      </div>
+      <div class="team-status">
+  
+      </div>
+    </div>
+  </section>
 }
