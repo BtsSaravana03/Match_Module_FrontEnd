@@ -16,8 +16,8 @@ import { api_url } from '../../variable';
 export class VideoComponent {
   private videoService = inject(VideoService); 
   @ViewChild('videoPlayer', { static: true }) videoElement!: HTMLVideoElement;
-  selctedInnings = input.required<number>();
-  matchInfo = input.required<any>()
+  selctedInnings = input<number>();
+  matchInfo = input<any>();
   videos = signal<VideoBalls[]|[]>([]);
   videoSrc = signal<string>("");
   videoIndex = signal<number>(0);

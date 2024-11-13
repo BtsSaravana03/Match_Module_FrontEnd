@@ -1,6 +1,21 @@
 @import '../../../styles/custom';
-#pitchmap-container{
-    // width: 300px;
-    margin: 0 auto;
+
+#pitchmap-container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+
+  #pitchmapSVG_Container {
     border: 1px solid lightgrey;
+
+  }
+  #pitchmapSVG{
+    circle{
+        cursor: pointer;
+    }
+  }
+}
+
+body {
+  overflow: hidden;
 }
