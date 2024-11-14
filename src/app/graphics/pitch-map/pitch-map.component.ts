@@ -6,6 +6,7 @@ import { check, checkInf } from '../../scripts/generic';
 import { VideoComponent } from "../../components/video/video.component";
 import { VideoService } from '../../components/video/video.service';
 import { DxPopoverModule } from 'devextreme-angular';
+import { GraphicsService } from '../graphics.service';
 
 interface Range {
   Balls:number;
@@ -29,6 +30,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   private destroyRef = inject(DestroyRef);
   private appService = inject(AppService);
   private videoService = inject(VideoService);
+  private graphicServices = inject(GraphicsService);
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
   
@@ -41,7 +43,6 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   range10M:Range = this.rangeDefault;
   pm_width: number = 296;
   pm_height:number = 594;
-  navbarHeight = 100;
   _2mLine_y = 0;
   _4mLine_y = 0;
   _6mLine_y = 0;
@@ -53,18 +54,8 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   constructor(private cdr: ChangeDetectorRef) {}
   @HostListener('window:resize')
   onResize() {
-    const text_Container = 150;
-    const imageWidth = this.pm_width + text_Container;
-    const imageHeight = this.pm_height;
-    const aspectRatio = imageWidth / imageHeight;
-    const availableWidth = window.innerWidth- this.navbarHeight;
-    const availableHeight = window.innerHeight - this.navbarHeight;
-    let scale;
-    if (availableWidth / aspectRatio <= availableHeight) {
-        scale = availableWidth / imageWidth;
-    } else {
-        scale = availableHeight / imageHeight;
-    }
+      const text_Container = 150;
+      let scale = this.graphicServices.getScaling(this.pm_width + text_Container,this.pm_height,window.innerWidth,window.innerHeight);
       const container = this.el.nativeElement.querySelector('#pitchmap-container');
       container.style.transform = `scale(${scale})`;
       container.style.transformOrigin = "top center"; 
@@ -84,12 +75,13 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     this.onResize();
   }
   setPitchmap(){
+    
     this.range2M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range4M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range6M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range8M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range10M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
-    let filtered_balls = this.ballArray();
+    let filtered_balls =this.ballArray();
     const _beforeGreece = 37.79;
     const ballRadius = 5;
     //PitchMap SVG Dimensions
@@ -116,6 +108,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     const svgElement = this.el.nativeElement.querySelector('#pitchmapSVG');
     //Clearing previous balls
     svgElement.innerHTML = '';
+    //const t0 = performance.now();
     filtered_balls.forEach(i => {
       if(i.PM_X && i.PM_Y){
         const pitchReg_x = i.PM_X_CM * scaling_x;
@@ -124,40 +117,13 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
         this.renderer.setAttribute(circle,'class','pitchmap-ball');
         this.renderer.setAttribute(circle, 'cx', (-(pitchReg_x)).toString());
         this.renderer.setAttribute(circle, 'cy', (pitchReg_y).toString());
-        this.renderer.setAttribute(circle, 'r', '5');
+        this.renderer.setAttribute(circle, 'r', ballRadius.toString());
         this.renderer.setAttribute(circle, 'stroke', '#fff');
         this.renderer.setAttribute(circle, 'stroke-width', '0.5px');
         this.renderer.setAttribute(circle, 'id', 'circle'+i.AutoId);
         this.renderer.setAttribute(circle, 'title', 'BowlerName:' );
-        //Set ball color
-        if(i.Dismissal === 1){
-          this.renderer.setAttribute(circle, 'fill', '#B7B7B7');
-        }
-        else{
-          switch(i.Runs){
-            case 0:
-               this.renderer.setAttribute(circle, 'fill', '#000');
-              break;
-            case 1:
-              this.renderer.setAttribute(circle, 'fill', '#E8BF09');
-              break;
-            case 2:
-              this.renderer.setAttribute(circle, 'fill', '#1C8EEE');
-              break;
-            case 3:
-              this.renderer.setAttribute(circle, 'fill', '#38C500');
-              break;
-            case 4:
-              this.renderer.setAttribute(circle, 'fill', '#00068D');
-              break;
-            case 5:
-              this.renderer.setAttribute(circle, 'fill', '#DA6E00');
-              break;
-            case 6:
-              this.renderer.setAttribute(circle, 'fill', '#DE1623');
-              break;
-          }
-        }
+        this.renderer.setAttribute(circle, 'fill', this.graphicServices.getItemColor(i.Dismissal,i.Runs));
+
         this.renderer.listen(circle, 'click', () => {
           this.onBallClick(i);
         });
@@ -170,11 +136,10 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
             this.cdr.detectChanges();
           }
         });
-        this.renderer.listen(circle,'mouseleave',(event:Event) => {
+        this.renderer.listen(circle,'mouseleave',() => {
           this.tooltipTarget;
         })
         this.renderer.appendChild(svgElement, circle);
-
         //Meter stats calculation
         const _y_greece = pitchReg_y + _beforeGreece - ballRadius;
         //#2M Region
@@ -219,6 +184,8 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
         }
       }
     })
+    // const t1 = performance.now();
+    // console.log(`Call to doSomething took ${(t1 - t0)/1000} seconds.`);
   }
   onBallClick(i:BallData){
     this.videoService.PlayGraphicsVideos(i.BallId,i.InningsId);

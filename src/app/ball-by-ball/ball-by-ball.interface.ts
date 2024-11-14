@@ -62,4 +62,6 @@ export interface BallData {
     PM_Y:number;
     PM_X_CM:number;
     PM_Y_CM:number;
+    WW_Angle:number;
+    WW_Distance:number;
 }

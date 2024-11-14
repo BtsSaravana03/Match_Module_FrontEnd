@@ -37,7 +37,8 @@
       {path:'/scorecard', icon: 'fa-solid fa-credit-card-front', name:'Scorecard'},
       {path:'/ballbyball', icon: 'fa-solid fa-tennis-ball', name:'Ball By Ball'},
       {path:'/partnership', icon: 'fa-duotone fa-solid fa-handshake-simple', name:'Partnership'},
-      {path:'/graphics/pitchmap', icon: 'fa-sharp fa-solid fa-light-switch', name:'Pitch Map'}
+      {path:'/graphics/pitchmap', icon: 'fa-sharp fa-solid fa-light-switch', name:'Pitch Map'},
+      {path:'/graphics/wagonwheel', icon: 'fa-sharp fa-regular fa-chart-radar', name:'Wagon Wheel'}
     ];
     @HostListener('window:resize', ['$event'])
     onResize(event: Event) {
