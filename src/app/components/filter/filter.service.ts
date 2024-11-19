@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Filter } from './filter.interface';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
-import { BallByBallService } from '../../services/ball-by-ball.service';
 import { InningsService } from '../innings-tab/innings.service';
 
 

@@ -1,11 +1,47 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BallData } from '../ball-by-ball/ball-by-ball.interface';
+import { BowlingTypes, GraphicsFilter } from './graphics.interface';
+import { HttpServices } from '../services/http.service';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GraphicsService {
-  navbarHeight = 100;
+  private HttpServices = inject(HttpServices);
+  filter:GraphicsFilter= {
+    Innings: 1,
+    BowlingType:[],
+    BattingType:[],
+    Batsman:[],
+    Bowlers:[]
+  };
+  private triggerFilter$ = new Subject <void>();
+  filterObservable = this.triggerFilter$.asObservable();
+  navbarHeight = 130;
+  triggerFilter(){
+    this.triggerFilter$.next();
+  }
+  applyFilter(balls:BallData[]):BallData[]{
+    let filtered = balls;
+    filtered = balls.filter(i => {
+      if(i.InningsId !== this.filter.Innings) return false;
+      if(this.filter.BattingType.length> 0){
+        if(i.StBattingTypeID === null || !this.filter.BattingType.includes(i.StBattingTypeID)) return false
+      }
+      if(this.filter.BowlingType.length> 0){
+        if(i.BwBowlingTypeID === null || !this.filter.BowlingType.includes(i.BwBowlingTypeID)) return false
+      }
+      if(this.filter.Batsman.length >0){
+        if(!this.filter.Batsman.includes(i.StrikerID)) return false;
+      }
+      if(this.filter.Bowlers.length >0){
+        if(!this.filter.Bowlers.includes(i.BowlerID)) return false;
+      }
+      return true;
+    })
+    return filtered;
+  }
 
   getScaling(svg_W:number,svg_H:number,window_W:number,window_H:number):number{
     const imageWidth = svg_W;
@@ -52,5 +88,9 @@ export class GraphicsService {
       }
     }
     return color;
+  }
+  async getBowlingTypes():Promise<BowlingTypes[]>{
+    let response = await this.HttpServices.getData('home/getBowlingTypes');
+    return response;
   }
 }

@@ -78,6 +78,7 @@ export class VideoService {
       this.playVideo();
   }
   PlayGraphicsVideos(ballId:number,Innings:number){
+    this.videoComponent?.setCurrentTab('Bat');
     let videos = Enumerable.from(this.ballArray())
     .where(i=> i.BallId === ballId && i.InningsId===Innings)
     .groupBy(

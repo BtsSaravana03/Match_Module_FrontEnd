@@ -7,6 +7,7 @@ import { VideoComponent } from "../../components/video/video.component";
 import { VideoService } from '../../components/video/video.service';
 import { DxPopoverModule } from 'devextreme-angular';
 import { GraphicsService } from '../graphics.service';
+import { BallDetailsPopoverComponent } from "../ball-details-popover/ball-details-popover.component";
 
 interface Range {
   Balls:number;
@@ -20,7 +21,7 @@ interface Range {
 @Component({
   selector: 'app-pitch-map',
   standalone: true,
-  imports: [VideoComponent,DxPopoverModule],
+  imports: [VideoComponent, DxPopoverModule, BallDetailsPopoverComponent],
   templateUrl: './pitch-map.component.html',
   styleUrl: './pitch-map.component.scss',
   encapsulation:ViewEncapsulation.None
@@ -28,11 +29,11 @@ interface Range {
 export class PitchMapComponent implements OnInit,AfterViewInit {
   private ballbyballService = inject(BallByBallService);
   private destroyRef = inject(DestroyRef);
-  private appService = inject(AppService);
   private videoService = inject(VideoService);
   private graphicServices = inject(GraphicsService);
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
+  private cdr = inject(ChangeDetectorRef);
   
   ballArray = signal<BallData[]>([]);
   rangeDefault:Range = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0}
@@ -51,7 +52,6 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   tooltipTarget:string|undefined;
   targetBall:BallData|undefined;
 
-  constructor(private cdr: ChangeDetectorRef) {}
   @HostListener('window:resize')
   onResize() {
       const text_Container = 150;
@@ -62,26 +62,28 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.appService.updateNavHeader('PitchMap');
     const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
       this.ballArray.set(updated);
       this.setPitchmap();
     })
+    const filter = this.graphicServices.filterObservable.subscribe(updated => {
+      this.setPitchmap();
+    })
     this.destroyRef.onDestroy(()=>{
       subscription.unsubscribe();
+      filter.unsubscribe();
     })
   }
   ngAfterViewInit(): void {
     this.onResize();
   }
   setPitchmap(){
-    
+    let filtered_balls = this.graphicServices.applyFilter(this.ballArray());
     this.range2M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range4M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range6M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range8M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range10M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
-    let filtered_balls =this.ballArray();
     const _beforeGreece = 37.79;
     const ballRadius = 5;
     //PitchMap SVG Dimensions
@@ -110,7 +112,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     svgElement.innerHTML = '';
     //const t0 = performance.now();
     filtered_balls.forEach(i => {
-      if(i.PM_X && i.PM_Y){
+      if(i.PM_X !== null && i.PM_Y !== null){
         const pitchReg_x = i.PM_X_CM * scaling_x;
         const pitchReg_y = (i.PM_Y_CM * scaling_y) - ballRadius;
         const circle = this.renderer.createElement('circle', 'svg');

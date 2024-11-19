@@ -4,22 +4,25 @@
 >
   <div *dxTemplate="let data of 'content'">
     <div id="filter-wrap">
-      <div class="group">
-        <div class="label">
-          <h5>Select Innings</h5>
+      @if(totalInnings().length>0){
+        <div class="group">
+          <div class="label">
+            <h5>Select Innings</h5>
+          </div>
+          <div>
+            <dx-radio-group [items]="totalInnings()" [(value)]="appliedFilters.innings" valueExpr="InningsID"
+              layout="horizontal" itemTemplate="InningsTemplate">
+              <div *dxTemplate="let data of 'InningsTemplate'">
+                {{data.InningsID}}<span>@if(data.InningsID === 1){st}@else if(data.InningsID===2){nd}
+                  @else if(data.InningsID===3){rd}@else{th}</span>
+                Inn
+              </div>
+            </dx-radio-group>
+          </div>
         </div>
-        <div>
-          <dx-radio-group [items]="totalInnings()" [(value)]="appliedFilters.innings" valueExpr="InningsID"
-            layout="horizontal" itemTemplate="InningsTemplate">
-            <div *dxTemplate="let data of 'InningsTemplate'">
-              {{data.InningsID}}<span>@if(data.InningsID === 1){st}@else if(data.InningsID===2){nd}
-                @else if(data.InningsID===3){rd}@else{th}</span>
-              Inn
-            </div>
-          </dx-radio-group>
-        </div>
-      </div>
-      <hr style="border: 1px solid lightgray;margin-top: 0;" />
+        <hr style="border: 1px solid lightgray;margin-top: 0;" />
+      }
+      
       <div class="group">
         <div class="label mb-2">
           <h5>Over</h5>

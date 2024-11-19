@@ -2,6 +2,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    #WagonWheel{
+        #OverlayLayer{
+            #WW_Lines{
+                line, circle{
+                    cursor: pointer;
+                }
+            }
+        }
+    }
 }
 
 body {

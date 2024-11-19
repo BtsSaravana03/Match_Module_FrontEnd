@@ -1,0 +1,13 @@
+<div class="container d-flex align-items-center">
+  <div class="flex-fill">
+    <dx-tabs [dataSource]="tabs" [selectedIndex]="selectedIndex" (onItemClick)="navigateToTab($event)" [focusStateEnabled]="false"
+      [scrollByContent]="true"></dx-tabs>
+  </div>
+  <div>
+    <button class="btn filter" id="Filter"><i class="fa-solid fa-sliders-simple"></i></button>
+  </div>
+</div>
+<div class="mt-3">
+  <router-outlet></router-outlet>
+</div>
+<app-graphics-filter [mobile_view]="isMobile" target='#Filter' [ballArray]="ballArray()" [SelectedInnings]="appliedFilters.Innings"/>

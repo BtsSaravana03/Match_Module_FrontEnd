@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mt-3">
   <app-innings-tab (inningsChange)="onInningsChange($event)" />
   <dx-data-grid [dataSource]="Partnership()" [allowColumnReordering]="false" keyExpr="Wicket" [showColumnLines]="true"
     [sorting]="{mode:'none'}" [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"

@@ -56,9 +56,9 @@ export class VideoComponent {
     this.videoService.currentVideoIndex.set(i);
     this.videos.set(this.videoService.videoArray());
     if(this.currentTab==='Bowl'){
-      this.currentTittle =this.videos()[i]?.StrikerName||'';
-    }else{
       this.currentTittle =this.videos()[i]?.BowlerName||'';
+    }else{
+      this.currentTittle =this.videos()[i]?.StrikerName||'';
     }
     if(this.videos().length>0){
       this.onVideoClick(this.videos()[i]?.VideoPath,i);
@@ -116,5 +116,8 @@ export class VideoComponent {
       video.currentTime = this.trimEnd;
       this.playNext();
     }
+  }
+  setCurrentTab(type:"Bat"|"Bowl"){
+    this.currentTab = type;
   }
 }

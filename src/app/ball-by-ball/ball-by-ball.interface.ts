@@ -64,4 +64,10 @@ export interface BallData {
     PM_Y_CM:number;
     WW_Angle:number;
     WW_Distance:number;
+    WW_DistancePercentage:number;
+    SZ_X_CM:number;
+    SZ_Y_CM:number;
+    BwBowlingTypeID:number|null;
+    StBattingTypeID:number|null;
+    SpinOrPace:number;
 }

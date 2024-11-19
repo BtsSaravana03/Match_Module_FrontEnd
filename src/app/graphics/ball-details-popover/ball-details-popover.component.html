@@ -1,0 +1,9 @@
+<dx-popover [target]="target()" showEvent="mouseenter" hideEvent="mouseleave" position="right">
+    <div *dxTemplate="let data = model; of: 'content'">
+      <span><strong class="me-1">Batsman:</strong> {{targetBall()?.StrikerName}}</span><br />
+      <span><strong class="me-1">Bowler:</strong> {{targetBall()?.BowlerName}}</span><br />
+      <span><strong class="me-1">Innings:</strong> {{targetBall()?.InningsId}}</span><br />
+      <span><strong class="me-1">Over: </strong> {{targetBall()?.Overs}}</span><br />
+      <span><strong class="me-1">Score: </strong> {{targetBall()?.TeamRuns}}/{{targetBall()?.TeamWickets}}</span>
+    </div>
+  </dx-popover>
