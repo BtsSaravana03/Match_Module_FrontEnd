@@ -3,6 +3,7 @@ import { BallData } from '../ball-by-ball/ball-by-ball.interface';
 import { BowlingTypes, GraphicsFilter } from './graphics.interface';
 import { HttpServices } from '../services/http.service';
 import { Subject } from 'rxjs/internal/Subject';
+import { saveSvgAsPng } from 'save-svg-as-png';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +56,7 @@ export class GraphicsService {
     } else {
         scale = availableHeight / imageHeight;
     }
-    return scale;
+    return Math.min(scale, 1.5);
   }
   getItemColor(Dismissal:number,Runs:number):string{
     let color = '#000';
@@ -92,5 +93,14 @@ export class GraphicsService {
   async getBowlingTypes():Promise<BowlingTypes[]>{
     let response = await this.HttpServices.getData('home/getBowlingTypes');
     return response;
+  }
+  downloadSvg(item:string) {
+    const svgElement = document.querySelector('#svg_Wrap') as SVGElement;
+    if (svgElement) {
+      saveSvgAsPng(svgElement, `${item}_${Date.now()}`, {
+        scale: 2,
+        backgroundColor: '#ffffff'
+      });
+    }
   }
 }

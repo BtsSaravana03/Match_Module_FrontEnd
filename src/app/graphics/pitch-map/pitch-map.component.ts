@@ -1,6 +1,5 @@
-import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, ElementRef, HostListener, inject, OnInit, Renderer2, signal, viewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, ElementRef, HostListener, inject, OnInit, Renderer2, signal, ViewEncapsulation } from '@angular/core';
 import { BallByBallService } from '../../services/ball-by-ball.service';
-import { AppService } from '../../services/app.service';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { check, checkInf } from '../../scripts/generic';
 import { VideoComponent } from "../../components/video/video.component";
@@ -8,6 +7,7 @@ import { VideoService } from '../../components/video/video.service';
 import { DxPopoverModule } from 'devextreme-angular';
 import { GraphicsService } from '../graphics.service';
 import { BallDetailsPopoverComponent } from "../ball-details-popover/ball-details-popover.component";
+import {saveSvgAsPng} from "save-svg-as-png";
 
 interface Range {
   Balls:number;
@@ -42,8 +42,9 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   range6M:Range = this.rangeDefault;
   range8M:Range = this.rangeDefault;
   range10M:Range = this.rangeDefault;
-  pm_width: number = 296;
-  pm_height:number = 594;
+  pm_width = 296;
+  pm_height = 594;
+  text_Container = 150;
   _2mLine_y = 0;
   _4mLine_y = 0;
   _6mLine_y = 0;
@@ -54,8 +55,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
 
   @HostListener('window:resize')
   onResize() {
-      const text_Container = 150;
-      let scale = this.graphicServices.getScaling(this.pm_width + text_Container,this.pm_height,window.innerWidth,window.innerHeight);
+      let scale = this.graphicServices.getScaling(this.pm_width + this.text_Container,this.pm_height,window.innerWidth,window.innerHeight);
       const container = this.el.nativeElement.querySelector('#pitchmap-container');
       container.style.transform = `scale(${scale})`;
       container.style.transformOrigin = "top center"; 
@@ -192,4 +192,5 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   onBallClick(i:BallData){
     this.videoService.PlayGraphicsVideos(i.BallId,i.InningsId);
   }
+ 
 }

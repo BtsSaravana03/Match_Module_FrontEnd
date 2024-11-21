@@ -4,6 +4,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { AppService } from '../../services/app.service';
 import { FilterComponent } from "../filter/filter.component";
 import { fromEvent, Observable, Subscription } from 'rxjs';
+import { LoginServices } from '../../login/login.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,6 +16,7 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 export class NavbarComponent implements OnInit {
   private appService = inject(AppService);
   private destroyRef = inject(DestroyRef);
+  private loginService = inject(LoginServices);
   
   visibility = input<boolean>(true);
   sidebarVisible:boolean = false;
@@ -48,5 +50,8 @@ export class NavbarComponent implements OnInit {
     else{
       this.isMobile = false;
     }
+  }
+  onLogout(){
+    this.loginService.logout();
   }
 }

@@ -5,15 +5,19 @@
   display: flex;
   justify-content: center;
 
-  #pitchmapSVG_Container {
-    border: 1px solid #d3d3d3;
+  #svg_Wrap {
+    #pitchmapSVG_Container {
+      border: 1px solid #d3d3d3;
 
-  }
-  #pitchmapSVG{
-    circle{
+    }
+
+    #pitchmapSVG {
+      circle {
         cursor: pointer;
+      }
     }
   }
+
 }
 
 body {

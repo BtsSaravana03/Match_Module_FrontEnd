@@ -1,0 +1,23 @@
+<div id="login">
+<div class="form-container">
+	<p class="title">Login</p>
+	<form class="form" [formGroup]="LoginForm" (ngSubmit)="onSubmit()">
+		<div class="input-group">
+			<label for="username">Username</label>
+			<input type="text" formControlName="username" id="username" autofocus>
+		</div>
+		<div class="input-group">
+			<label for="password">Password</label>
+			<input type="password" type="password" formControlName="password" id="password" autocomplete="off">
+		</div>
+        <div class="forgot">
+            @if(errorMessage){
+                <p class="noopener noreferrer">{{errorMessage}}</p>
+            }
+        </div>
+        
+		<button class="sign mt-3" [disabled]="!LoginForm.valid">Sign in</button>
+	</form>
+	
+</div>
+</div>

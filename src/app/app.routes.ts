@@ -8,6 +8,7 @@ import { BeehiveComponent } from './graphics/beehive/beehive.component';
 import { GraphicsComponent } from './graphics/graphics.component';
 import { BattingStatsComponent } from './batting-stats/batting-stats.component';
 import { BowlingStatsComponent } from './bowling-stats/bowling-stats.component';
+import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
     {path:'ballbyball',component:BallByBallComponent},
@@ -36,5 +37,6 @@ export const routes: Routes = [
     },
     {path:'battingstats',component:BattingStatsComponent},
     {path:'bowlingstats',component:BowlingStatsComponent},
-    {path:'',redirectTo:'scorecard',pathMatch:'full'}
+    {path:'login',component:LoginComponent},
+    {path:'',redirectTo:'login',pathMatch:'full'}
 ];

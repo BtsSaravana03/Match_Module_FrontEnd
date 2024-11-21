@@ -15,6 +15,7 @@ export interface BattingStats {
     _6s: number;             
     dotPer: number | string; 
     bdryPer: number | string;
+    BowlingType:string|null;
   }
 
   export interface BattingStatsTest {

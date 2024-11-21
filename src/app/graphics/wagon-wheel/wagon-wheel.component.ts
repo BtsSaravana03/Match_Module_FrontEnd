@@ -6,6 +6,7 @@ import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { GraphicsService } from '../graphics.service';
 import { VideoComponent } from "../../components/video/video.component";
 import { BallDetailsPopoverComponent } from "../ball-details-popover/ball-details-popover.component";
+import { saveSvgAsPng } from 'save-svg-as-png';
 
 @Component({
   selector: 'app-wagon-wheel',
@@ -33,7 +34,7 @@ export class WagonWheelComponent {
   @HostListener('window:resize')
   onResize() {
       let scale = this.graphicServices.getScaling(this.ww_Width,this.ww_Height,window.innerWidth,window.innerHeight);
-      const container = this.el.nativeElement.querySelector('#WagonWheel');
+      const container = this.el.nativeElement.querySelector('#WW_Wrap');
       container.style.transform = `scale(${scale})`;
       container.style.transformOrigin = "top center"; 
   }
@@ -65,7 +66,11 @@ export class WagonWheelComponent {
     filtered_balls.forEach(i => {
       if(i.WW_Angle && i.WW_DistancePercentage){
         const radian = i.WW_Angle * (Math.PI/180);
-        const DistanceToPx = (i.WW_DistancePercentage/100) * circleRadius;
+        let DistancePer = i.WW_DistancePercentage;
+        if(i.isFour===1){
+          DistancePer = 100;
+        }
+        const DistanceToPx = (DistancePer/100) * circleRadius;
         const x2 = x1 + DistanceToPx * (Math.cos(radian));
         const y2 = y1 + DistanceToPx * (Math.sin(radian));
         //Plot Line
@@ -109,4 +114,5 @@ export class WagonWheelComponent {
   onBallClick(i:BallData){
     this.videoService.PlayGraphicsVideos(i.BallId,i.InningsId);
   }
+
 }

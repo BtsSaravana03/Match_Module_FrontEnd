@@ -16,5 +16,26 @@ export class HttpServices {
       console.error('Error fetching data', error);
       throw error;
     }
-  }    
+  }  
+  async postData(url: string, params?: any): Promise<any> {
+    try {
+        const response = await fetch(api_url + url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error in postData:', error);
+        throw error;
+    }
+  }
 }

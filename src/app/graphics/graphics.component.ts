@@ -1,9 +1,9 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { DxTabsModule } from 'devextreme-angular';
 import { AppService } from '../services/app.service';
 import { FilterComponent } from "./filter/filter.component";
-import { fromEvent, Observable, Subscription } from 'rxjs';
+import { filter, fromEvent, Observable, Subscription } from 'rxjs';
 import { InningsService } from '../components/innings-tab/innings.service';
 import { BowlingTypes, GraphicsFilter } from './graphics.interface';
 import { GraphicsService } from './graphics.service';
@@ -42,6 +42,7 @@ export class GraphicsComponent {
     { text: 'Beehive', route: 'beehive' },
   ];
   resizeObservable$!:Observable<Event>;
+  currentChildRoute:string|null = null;
 
   ngOnInit() {
     this.appService.updateNavHeader('Graphics');
@@ -58,10 +59,23 @@ export class GraphicsComponent {
     this.destroyRef.onDestroy(()=>{
       InningSub.unsubscribe();
       subscription.unsubscribe();
-    })
+    });
+    this.router.events
+    .pipe(filter((event: any) => event instanceof NavigationEnd))
+    .subscribe(() => {
+        this.currentChildRoute = this.getCurrentChildRoute();
+    });
+    this.currentChildRoute = this.getCurrentChildRoute();
     this.onWindowResize();
     
   }
+  getCurrentChildRoute(): string | null {
+    let child = this.route.firstChild;
+    while (child?.firstChild) {
+        child = child.firstChild;
+    }
+    return child?.snapshot.url.map(segment => segment.path).join('/') || null;
+}
   onWindowResize(){
     if(window.innerWidth < 773){
       this.isMobile = true;
@@ -74,5 +88,8 @@ export class GraphicsComponent {
     const selectedTab = this.tabs[event.itemIndex];
     this.router.navigate([selectedTab.route], { relativeTo: this.route });
   }
-  
+  downloadSvg(){
+    if(this.currentChildRoute)
+      this.GraphicService.downloadSvg(this.currentChildRoute);
+  }
 }

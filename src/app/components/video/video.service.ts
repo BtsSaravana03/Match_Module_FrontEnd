@@ -338,4 +338,94 @@ export class VideoService {
 
     return false;
   }
+  statsVideos(type:string,Innings:number,addonParam:any){
+    let videos = Enumerable.from(this.ballArray())
+    .where((i:BallData) => this.statVideoFilter(type,i,addonParam) && Innings===i.InningsId)
+    .groupBy(
+      (x: BallData) => `${x.MatchId}-${x.BowlingClubID}-${x.deviceTime_Start}-${x.deviceTime_End}-${x.MatchId}-${x.StrikerName}-${x.InningsId}-${x.BallId}-${x.hlsPath}-${x.Overs}-${x.BowlerName}-${x.Runs}`
+    )
+    .select((group) => {
+      const maxByField = <T>(field: keyof T) => group.max((item: any) => item[field]);
+      return {
+        MatchID: group.first().MatchId,
+        MatchName: group.first().StrikerName,
+        BowlingStyle: group.first().DeliveryStyle,
+        DeliveryStyleID: group.first().DeliveryStyle,
+        StrikerName: group.first().StrikerName,
+        StrikerID: group.first().StrikerID,
+        BowlerName: group.first().BowlerName,
+        BowlerID: group.first().BowlerID,
+        Runs: group.first().Runs,
+        competitionid: group.first().BowlingClubID,
+        InningsID: group.first().InningsId,
+        VideoPath: group.first().hlsPath,
+        BallID: group.first().BallId,
+        Overs: group.first().Overs,
+        StartTimeTrim: group.first().deviceTime_Start,
+        EndTimeTrim: group.first().deviceTime_End,
+        StrokeName: maxByField('StrokeType'),
+        StrokeID: group.first().StrokeType,
+        DeliveryStyleName: maxByField('DeliveryStyle'),
+        VenueName: maxByField('BowlingEnd'),
+        Dismissal: maxByField('Dismissal'),
+        TeamScore: maxByField('TeamRuns'),
+        BatsmenScore: maxByField('Batruns'),
+        ReplayVideo: maxByField('hlsPath'),
+        Ballspeed: maxByField('Penalty'),
+        VideoNA: group.first().isNoBall,
+        VideoMode: group.first().VideoMode,
+      };
+    })
+    .toArray();
+    this.videoArray.set(videos);
+    this.playVideo();
+  }
+  statVideoFilter(type:string,ball:BallData,addonParam:any):boolean{
+    if(type === 'Batting_Innings'){
+      this.setTab('Bat');
+      return true;
+    }
+    else if(type === 'Batting_Day'){
+      this.setTab('Bat');
+      if(ball.Day === addonParam){
+        return true
+      }
+    }
+    else if(type === 'Batting_Session'){
+      this.setTab('Bat');
+      if(ball.Session === addonParam){
+        return true
+      }
+    }
+    else if(type === 'Batting_BowlType'){
+      this.setTab('Bat');
+      let isPace = addonParam==='Pace'?1:2;
+      if(ball.SpinOrPace === isPace){
+        return true
+      }
+    }
+    else if(type === 'Bowling_Innings'){
+      this.setTab('Bowl');
+      if(ball.Day === addonParam){
+        return true
+      }
+    }
+    else if(type === 'Bowling_Day'){
+      this.setTab('Bowl');
+      if(ball.Session === addonParam){
+        return true
+      }
+    }
+    else if(type === 'Bowling_Session'){
+      this.setTab('Bowl');
+    }
+    else if(type === 'Bowling_BowlType'){
+      this.setTab('Bowl');
+      let isPace = addonParam==='Pace'?1:2;
+      if(ball.SpinOrPace === isPace){
+        return true
+      }
+    }
+    return false;
+  }
 }

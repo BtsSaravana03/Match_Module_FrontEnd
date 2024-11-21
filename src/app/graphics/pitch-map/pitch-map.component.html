@@ -1,124 +1,157 @@
 <div id="pitchmap-container">
   <section>
-    <svg id="pitchmapSVG_Container" [attr.width]="pm_width" [attr.height]="pm_height" data-name="Layer 1"
-      xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="'0 0 ' + pm_width + ' ' + pm_height"
-      preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <style>
-          .pm-cls-1,
-          .pm-cls-2,
-          .pm-cls-3,
-          .pm-cls-4 {
-            fill: none;
-            stroke-miterlimit: 10;
-          }
+    <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="'0 0 ' + (pm_width + text_Container) + ' ' + pm_height"
+      [attr.width]="pm_width + text_Container" [attr.height]="pm_height" id="svg_Wrap">
+      <g transform="translate(0, 0)">
+        <svg id="pitchmapSVG_Container" [attr.width]="pm_width" [attr.height]="pm_height" data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="'0 0 ' + pm_width + ' ' + pm_height"
+          preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <style>
+              .pm-cls-1,
+              .pm-cls-2,
+              .pm-cls-3,
+              .pm-cls-4 {
+                fill: none;
+                stroke-miterlimit: 10;
+              }
 
-          .pm-cls-1 {
-            stroke: #ed1c24;
-            stroke-dasharray: 4;
-          }
+              .pm-cls-1 {
+                stroke: #ed1c24;
+                stroke-dasharray: 4;
+              }
 
-          .pm-cls-2 {
-            stroke: #231f20;
-          }
+              .pm-cls-2 {
+                stroke: #231f20;
+              }
 
-          .pm-cls-3,
-          .pm-cls-4 {
-            stroke: #6d6e71;
-          }
+              .pm-cls-3,
+              .pm-cls-4 {
+                stroke: #6d6e71;
+              }
 
-          .pm-cls-4 {
-            stroke-dasharray: 4 4;
-          }
+              .pm-cls-4 {
+                stroke-dasharray: 4 4;
+              }
 
-          .pm-cls-5 {
-            fill: #58595b;
-          }
+              .pm-cls-5 {
+                fill: #58595b;
+              }
 
-          .pm-cls-6 {
-            font-size: 10px;
-            fill: #808285;
-            font-family: Arial-BoldMT, Arial;
-            font-weight: 700;
-          }
+              .pm-cls-6 {
+                font-size: 10px;
+                fill: #808285;
+                font-family: Arial-BoldMT, Arial;
+                font-weight: 700;
+              }
 
-        </style>
-      </defs>
-      <line class="pm-cls-1" x1="136.53" y1="39.83" x2="136.53" y2="590.04" />
-      <line class="pm-cls-1" x1="147.93" y1="39.83" x2="147.93" y2="590.04" />
-      <line class="pm-cls-1" x1="159.38" y1="39.83" x2="159.38" y2="590.04" />
-      <line class="pm-cls-2" x1="277.34" y1="0" x2="277.34" y2="87.66" />
-      <line class="pm-cls-2" x1="0.08" y1="87.55" x2="297.48" y2="87.55" />
-      <line class="pm-cls-2" x1="18.26" y1="39.49" x2="278" y2="39.49" />
-      <line class="pm-cls-2" x1="17.94" y1="0" x2="17.94" y2="87.66" />
-      <!-- 2M LINE -->
-      <line class="pm-cls-4" x1="0" [attr.y1]="_2mLine_y" x2="296.4" [attr.y2]="_2mLine_y" />
-      <!-- 4M LINE -->
-      <line class="pm-cls-4" x1="0" [attr.y1]="_4mLine_y" x2="296.4" [attr.y2]="_4mLine_y" />
-      <!-- 6M LINE -->
-      <line class="pm-cls-4" x1="0" [attr.y1]="_6mLine_y" x2="296.4" [attr.y2]="_6mLine_y" />
-      <!-- 8M LINE -->
-      <line class="pm-cls-4" x1="0" [attr.y1]="_8mLine_y" x2="296.4" [attr.y2]="_8mLine_y" />
-      <!-- 10M LINE -->
-      <line class="pm-cls-4" x1="0" [attr.y1]="_10mLine_y" x2="296.4" [attr.y2]="_10mLine_y" />
+            </style>
+          </defs>
+          <rect x="0" y="0" [attr.width]="pm_width" [attr.height]="pm_height" stroke="#d3d3d3" fill="none"
+            stroke-width="1" />
+          <line class="pm-cls-1" x1="136.53" y1="39.83" x2="136.53" y2="590.04" />
+          <line class="pm-cls-1" x1="147.93" y1="39.83" x2="147.93" y2="590.04" />
+          <line class="pm-cls-1" x1="159.38" y1="39.83" x2="159.38" y2="590.04" />
+          <line class="pm-cls-2" x1="277.34" y1="0" x2="277.34" y2="87.66" />
+          <line class="pm-cls-2" x1="0.08" y1="87.55" x2="297.48" y2="87.55" />
+          <line class="pm-cls-2" x1="18.26" y1="39.49" x2="278" y2="39.49" />
+          <line class="pm-cls-2" x1="17.94" y1="0" x2="17.94" y2="87.66" />
+          <!-- 2M LINE -->
+          <line class="pm-cls-4" x1="0" [attr.y1]="_2mLine_y" x2="296.4" [attr.y2]="_2mLine_y" />
+          <!-- 4M LINE -->
+          <line class="pm-cls-4" x1="0" [attr.y1]="_4mLine_y" x2="296.4" [attr.y2]="_4mLine_y" />
+          <!-- 6M LINE -->
+          <line class="pm-cls-4" x1="0" [attr.y1]="_6mLine_y" x2="296.4" [attr.y2]="_6mLine_y" />
+          <!-- 8M LINE -->
+          <line class="pm-cls-4" x1="0" [attr.y1]="_8mLine_y" x2="296.4" [attr.y2]="_8mLine_y" />
+          <!-- 10M LINE -->
+          <line class="pm-cls-4" x1="0" [attr.y1]="_10mLine_y" x2="296.4" [attr.y2]="_10mLine_y" />
 
-      <svg xmlns="http://www.w3.org/2000/svg" id="pitchmapSVG"
-        [attr.viewBox]="'-151 -37.79 ' + pm_width + ' ' + pm_height" x="0" y="0" width="100%" height="100%">
+          <svg xmlns="http://www.w3.org/2000/svg" id="pitchmapSVG"
+            [attr.viewBox]="'-151 -37.79 ' + pm_width + ' ' + pm_height" x="0" y="0" width="100%" height="100%">
 
-      </svg>
-      <rect class="pm-cls-5" x="135.3" y="37.79" width="5.53" height="3.7" />
-      <rect class="pm-cls-5" x="145.6" y="37.79" width="5.53" height="3.7" />
-      <rect class="pm-cls-5" x="154.7" y="37.79" width="5.53" height="3.7" />
-      <text class="pm-cls-6" [attr.transform]="'translate(278.87, ' + (_2mLine_y - 5) + ')'">2m</text>
-      <text class="pm-cls-6" [attr.transform]="'translate(278.87, ' + (_4mLine_y - 5) + ')'">4m</text>
-      <text class="pm-cls-6" [attr.transform]="'translate(278.87, ' + (_6mLine_y - 5) + ')'">6m</text>
-      <text class="pm-cls-6" [attr.transform]="'translate(278.87, ' + (_8mLine_y - 5) + ')'">8m</text>
-      <text class="pm-cls-6" [attr.transform]="'translate(273.87, ' + (_10mLine_y - 5) + ')'">10m</text>
+          </svg>
+          <rect class="pm-cls-5" x="135.3" y="37.79" width="5.53" height="3.7" />
+          <rect class="pm-cls-5" x="145.6" y="37.79" width="5.53" height="3.7" />
+          <rect class="pm-cls-5" x="154.7" y="37.79" width="5.53" height="3.7" />
+          <text class="pm-cls-6" [attr.transform]="'translate(278.87, ' + (_2mLine_y - 5) + ')'">2m</text>
+          <text class="pm-cls-6" [attr.transform]="'translate(278.87, ' + (_4mLine_y - 5) + ')'">4m</text>
+          <text class="pm-cls-6" [attr.transform]="'translate(278.87, ' + (_6mLine_y - 5) + ')'">6m</text>
+          <text class="pm-cls-6" [attr.transform]="'translate(278.87, ' + (_8mLine_y - 5) + ')'">8m</text>
+          <text class="pm-cls-6" [attr.transform]="'translate(273.87, ' + (_10mLine_y - 5) + ')'">10m</text>
+        </svg>
+      </g>
+      <g [attr.transform]="'translate('+pm_width+', 0)'">
+        <svg xmlns="http://www.w3.org/2000/svg" [attr.width]="150" [attr.height]="pm_height"
+          [attr.viewBox]="'0 0 ' + 150 + ' ' + pm_height">
+          <defs>
+            <style> 
+              text tspan{
+                font-family: Poppins, Arial;
+              }
+              .cls-1,.cls-3,.cls-4,.cls-5{stroke:#fff;stroke-miterlimit:10;stroke-width:0.5px;}
+              .cls-2{font-size:10px;fill:#231f20;font-family: Poppins, Arial;}
+            </style>
+          </defs>>
+          <g [attr.transform]="'translate(10 ,'+ range2M.y+')'" style="font-size: 12px;">
+            <text x="0" y="0">
+              <tspan x="0" dy="1.2em">{{range2M.Balls}} Balls</tspan>
+              <tspan x="0" dy="1.2em">{{range2M.Runs}} Runs / {{range2M.Wickets}} Wickets</tspan>
+              <tspan x="0" dy="1.2em">{{range2M.SR}} SR / {{range2M.Avg}} AVG</tspan>
+            </text>
+          </g>
+          <g [attr.transform]="'translate(10 ,'+ range4M.y+')'" style="font-size: 12px;">
+            <text x="0" y="0">
+              <tspan x="0" dy="1.2em">{{range4M.Balls}} Balls</tspan>
+              <tspan x="0" dy="1.2em">{{range4M.Runs}} Runs / {{range4M.Wickets}} Wickets</tspan>
+              <tspan x="0" dy="1.2em">{{range4M.SR}} SR / {{range4M.Avg}} AVG</tspan>
+            </text>
+          </g>
+          <g [attr.transform]="'translate(10 ,'+ range6M.y+')'" style="font-size: 12px;">
+            <text x="0" y="0">
+              <tspan x="0" dy="1.2em">{{range6M.Balls}} Balls</tspan>
+              <tspan x="0" dy="1.2em">{{range6M.Runs}} Runs / {{range6M.Wickets}} Wickets</tspan>
+              <tspan x="0" dy="1.2em">{{range6M.SR}} SR / {{range6M.Avg}} AVG</tspan>
+            </text>
+          </g>
+          <g [attr.transform]="'translate(10 ,'+ range8M.y+')'" style="font-size: 12px;">
+            <text x="0" y="0">
+              <tspan x="0" dy="1.2em">{{range8M.Balls}} Balls</tspan>
+              <tspan x="0" dy="1.2em">{{range8M.Runs}} Runs / {{range8M.Wickets}} Wickets</tspan>
+              <tspan x="0" dy="1.2em">{{range8M.SR}} SR / {{range8M.Avg}} AVG</tspan>
+            </text>
+          </g>
+          <g [attr.transform]="'translate(10 ,'+ range10M.y+')'" style="font-size: 12px;">
+            <text x="0" y="0">
+              <tspan x="0" dy="1.2em">{{range10M.Balls}} Balls</tspan>
+              <tspan x="0" dy="1.2em">{{range10M.Runs}} Runs / {{range10M.Wickets}} Wickets</tspan>
+              <tspan x="0" dy="1.2em">{{range10M.SR}} SR / {{range10M.Avg}} AVG</tspan>
+            </text>
+          </g>
+          <g id="Legends" data-name="Legends" [attr.transform]="'translate(10 ,'+ (pm_height - 105)+')'">
+            <g id="Layer_1-2" data-name="Layer 1">
+              <circle class="cls-1" cx="5.36" cy="98.29" r="5.11" fill="#DE1623" />
+              <text class="cls-2" transform="translate(14.06 101.81)">6</text>
+              <circle class="cls-3" cx="5.67" cy="82.36" r="5.11" fill="#DA6E00" />
+              <text class="cls-2" transform="translate(14.37 85.88)">5</text>
+              <circle class="cls-4" cx="5.36" cy="67.29" r="5.11" fill="#00068D" />
+              <text class="cls-2" transform="translate(14.06 70.81)">4</text>
+              <circle class="cls-5" cx="5.67" cy="51.36" r="5.11" fill="#38C500" />
+              <text class="cls-2" transform="translate(14.37 54.88)">3</text>
+              <circle class="cls-4" cx="5.36" cy="36.29" r="5.11" fill="#1C8EEE" />
+              <text class="cls-2" transform="translate(14.06 39.81)">2</text>
+              <circle class="cls-5" cx="5.67" cy="20.36" r="5.11" fill="#E8BF09" />
+              <text class="cls-2" transform="translate(14.37 23.88)">1</text>
+              <circle class="cls-5" cx="5.67" cy="5.36" r="5.11" fill="#000" />
+              <text class="cls-2" transform="translate(14.37 8.88)">0</text>
+            </g>
+          </g>
+        </svg>
+      </g>
     </svg>
   </section>
 
-
-  <section>
-    <svg xmlns="http://www.w3.org/2000/svg" [attr.width]="150" [attr.height]="pm_height"
-      [attr.viewBox]="'0 0 ' + 150 + ' ' + pm_height">
-
-      <g [attr.transform]="'translate(10 ,'+ range2M.y+')'" style="font-size: 12px;">
-        <text x="0" y="0">
-          <tspan x="0" dy="1.2em">{{range2M.Balls}} Balls</tspan>
-          <tspan x="0" dy="1.2em">{{range2M.Runs}} Runs / {{range2M.Wickets}} Wickets</tspan>
-          <tspan x="0" dy="1.2em">{{range2M.SR}} SR / {{range2M.Avg}} AVG</tspan>
-        </text>
-      </g>
-      <g [attr.transform]="'translate(10 ,'+ range4M.y+')'" style="font-size: 12px;">
-        <text x="0" y="0">
-          <tspan x="0" dy="1.2em">{{range4M.Balls}} Balls</tspan>
-          <tspan x="0" dy="1.2em">{{range4M.Runs}} Runs / {{range4M.Wickets}} Wickets</tspan>
-          <tspan x="0" dy="1.2em">{{range4M.SR}} SR / {{range4M.Avg}} AVG</tspan>
-        </text>
-      </g>
-      <g [attr.transform]="'translate(10 ,'+ range6M.y+')'" style="font-size: 12px;">
-        <text x="0" y="0">
-          <tspan x="0" dy="1.2em">{{range6M.Balls}} Balls</tspan>
-          <tspan x="0" dy="1.2em">{{range6M.Runs}} Runs / {{range6M.Wickets}} Wickets</tspan>
-          <tspan x="0" dy="1.2em">{{range6M.SR}} SR / {{range6M.Avg}} AVG</tspan>
-        </text>
-      </g>
-      <g [attr.transform]="'translate(10 ,'+ range8M.y+')'" style="font-size: 12px;">
-        <text x="0" y="0">
-          <tspan x="0" dy="1.2em">{{range8M.Balls}} Balls</tspan>
-          <tspan x="0" dy="1.2em">{{range8M.Runs}} Runs / {{range8M.Wickets}} Wickets</tspan>
-          <tspan x="0" dy="1.2em">{{range8M.SR}} SR / {{range8M.Avg}} AVG</tspan>
-        </text>
-      </g>
-      <g [attr.transform]="'translate(10 ,'+ range10M.y+')'" style="font-size: 12px;">
-        <text x="0" y="0">
-          <tspan x="0" dy="1.2em">{{range10M.Balls}} Balls</tspan>
-          <tspan x="0" dy="1.2em">{{range10M.Runs}} Runs / {{range10M.Wickets}} Wickets</tspan>
-          <tspan x="0" dy="1.2em">{{range10M.SR}} SR / {{range10M.Avg}} AVG</tspan>
-        </text>
-      </g>
-    </svg>
-  </section>
 </div>
-<app-ball-details-popover [target]="tooltipTarget" [targetBall]="targetBall"/>
+
+<app-ball-details-popover [target]="tooltipTarget" [targetBall]="targetBall" />
 <app-video />

@@ -1,4 +1,4 @@
-<nav class="navbar-wrap" [ngClass]="{'d-none': !visibility}">
+<nav class="navbar-wrap" [ngClass]="{'d-none': !visibility()}">
     <div class="navbar-content container">
         <div class="handburger-menu">
             <i class="fa-regular fa-bars fa-lg" (click)="sidebarVisible=true"></i>
@@ -10,6 +10,7 @@
             <!-- <i class="fa-solid fa-filter fa-lg" title="filter" id="filter"></i> -->
              <img src="../../../../images/filter-icon.png" alt="filter" id="filter" width="30px">
              <i class="fa-solid fa-right-left fa-lg" title="Match Selection" (click)="onMatchSelection()"></i>
+             <i class="fa-solid fa-right-from-bracket fa-lg" title="Logout" (click)="onLogout()"></i>
         </div>
     </div>
     

@@ -1,1 +1,109 @@
-<p>bowling-stats works!</p>
+<div class="container mt-4">
+    <dx-data-grid [dataSource]="Table_Inn" [allowColumnReordering]="false" keyExpr="Innings" [showColumnLines]="true" [sorting]="{mode:'none'}"
+    [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
+    [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+    <dxi-column dataField="Innings" caption="Innings" alignment="left"></dxi-column>
+    <dxi-column dataField="Runs" caption="Runs" alignment="left" ></dxi-column>
+    <dxi-column dataField="Balls" caption="Balls" alignment="left" ></dxi-column>
+    <dxi-column dataField="Out" caption="Out" alignment="left"  ></dxi-column>
+    <dxi-column dataField="Maiden" caption="Maiden" alignment="left"></dxi-column>
+    <dxi-column dataField="BPD" caption="BPD" alignment="left" title="Ball per Dismissal" ></dxi-column>
+    <dxi-column dataField="AVG" caption="AVG" alignment="left" title="Average" ></dxi-column>
+    <dxi-column dataField="strikeRate" caption="SR" alignment="left" title="Strike Rate" ></dxi-column>
+    <dxi-column dataField="dot" caption="0s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_1s" caption="1s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_2s" caption="2s" alignment="left"></dxi-column>
+    <dxi-column dataField="_3s" caption="3s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_4s" caption="4s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_6s" caption="6s" alignment="left"></dxi-column>
+    <dxi-column dataField="dotPer" caption="Dot%" alignment="left"></dxi-column>
+    <dxi-column dataField="bdryPer" caption="Bdry%" alignment="left" title="Boundary%"></dxi-column>
+    <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
+    <div *dxTemplate="let data of 'cellTemplate'">
+      <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick('Bowling_Innings',data.data.InningsId)"></i>
+    </div>
+  </dx-data-grid>
+  <br />
+  @if(isTestMatch){
+    <dx-data-grid [dataSource]="Table_Day" [allowColumnReordering]="false" keyExpr="Day" [showColumnLines]="true" [sorting]="{mode:'none'}"
+    [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
+    [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+    <dxi-column dataField="Day" caption="Day" alignment="left"></dxi-column>
+    <dxi-column dataField="Runs" caption="Runs" alignment="left" ></dxi-column>
+    <dxi-column dataField="Balls" caption="Balls" alignment="left" ></dxi-column>
+    <dxi-column dataField="Out" caption="Out" alignment="left"  ></dxi-column>
+    <dxi-column dataField="Maiden" caption="Maiden" alignment="left"></dxi-column>
+    <dxi-column dataField="BPD" caption="BPD" alignment="left" title="Ball per Dismissal" ></dxi-column>
+    <dxi-column dataField="AVG" caption="AVG" alignment="left" title="Average" ></dxi-column>
+    <dxi-column dataField="strikeRate" caption="SR" alignment="left" title="Strike Rate" ></dxi-column>
+    <dxi-column dataField="dot" caption="0s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_1s" caption="1s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_2s" caption="2s" alignment="left"></dxi-column>
+    <dxi-column dataField="_3s" caption="3s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_4s" caption="4s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_6s" caption="6s" alignment="left"></dxi-column>
+    <dxi-column dataField="dotPer" caption="Dot%" alignment="left"></dxi-column>
+    <dxi-column dataField="bdryPer" caption="Bdry%" alignment="left" title="Boundary%"></dxi-column>
+    <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
+    <div *dxTemplate="let data of 'cellTemplate'">
+      <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick('Bowling_Day',data.data.Day)"></i>
+    </div>
+    </dx-data-grid>
+  
+    <br />
+  
+    <dx-data-grid [dataSource]="Table_Session" [allowColumnReordering]="false" keyExpr="Session" [showColumnLines]="true" [sorting]="{mode:'none'}"
+    [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
+    [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+    <dxi-column dataField="Day" caption="Day" alignment="left"></dxi-column>
+    <dxi-column dataField="Session" caption="Session" alignment="left"></dxi-column>
+    <dxi-column dataField="Runs" caption="Runs" alignment="left" ></dxi-column>
+    <dxi-column dataField="Balls" caption="Balls" alignment="left" ></dxi-column>
+    <dxi-column dataField="Out" caption="Out" alignment="left"  ></dxi-column>
+    <dxi-column dataField="Maiden" caption="Maiden" alignment="left"></dxi-column>
+    <dxi-column dataField="BPD" caption="BPD" alignment="left" title="Ball per Dismissal" ></dxi-column>
+    <dxi-column dataField="AVG" caption="AVG" alignment="left" title="Average" ></dxi-column>
+    <dxi-column dataField="strikeRate" caption="SR" alignment="left" title="Strike Rate" ></dxi-column>
+    <dxi-column dataField="dot" caption="0s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_1s" caption="1s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_2s" caption="2s" alignment="left"></dxi-column>
+    <dxi-column dataField="_3s" caption="3s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_4s" caption="4s" alignment="left" ></dxi-column>
+    <dxi-column dataField="_6s" caption="6s" alignment="left"></dxi-column>
+    <dxi-column dataField="dotPer" caption="Dot%" alignment="left"></dxi-column>
+    <dxi-column dataField="bdryPer" caption="Bdry%" alignment="left" title="Boundary%"></dxi-column>
+    <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
+    <div *dxTemplate="let data of 'cellTemplate'">
+      <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick('Bowling_Session',data.data.Session)"></i>
+    </div>
+    </dx-data-grid>
+  
+    <br />
+  }
+  <dx-data-grid [dataSource]="Table_BowlingType" [allowColumnReordering]="false" keyExpr="BowlingType" [showColumnLines]="true" [sorting]="{mode:'none'}"
+  [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
+  [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+  <dxi-column dataField="BowlingType" caption="BowlingType" alignment="left"></dxi-column>
+  <dxi-column dataField="Runs" caption="Runs" alignment="left" ></dxi-column>
+  <dxi-column dataField="Balls" caption="Balls" alignment="left" ></dxi-column>
+  <dxi-column dataField="Out" caption="Out" alignment="left"  ></dxi-column>
+  <dxi-column dataField="Maiden" caption="Maiden" alignment="left"></dxi-column>
+  <dxi-column dataField="BPD" caption="BPD" alignment="left" title="Ball per Dismissal" ></dxi-column>
+  <dxi-column dataField="AVG" caption="AVG" alignment="left" title="Average" ></dxi-column>
+  <dxi-column dataField="strikeRate" caption="SR" alignment="left" title="Strike Rate" ></dxi-column>
+  <dxi-column dataField="dot" caption="0s" alignment="left" ></dxi-column>
+  <dxi-column dataField="_1s" caption="1s" alignment="left" ></dxi-column>
+  <dxi-column dataField="_2s" caption="2s" alignment="left"></dxi-column>
+  <dxi-column dataField="_3s" caption="3s" alignment="left" ></dxi-column>
+  <dxi-column dataField="_4s" caption="4s" alignment="left" ></dxi-column>
+  <dxi-column dataField="_6s" caption="6s" alignment="left"></dxi-column>
+  <dxi-column dataField="dotPer" caption="Dot%" alignment="left"></dxi-column>
+  <dxi-column dataField="bdryPer" caption="Bdry%" alignment="left" title="Boundary%"></dxi-column>
+  <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
+  <div *dxTemplate="let data of 'cellTemplate'">
+    <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick('Bowling_BowlType',data.data.BowlingType)"></i>
+  </div>
+  </dx-data-grid>
+    
+  </div>
+  <app-video />

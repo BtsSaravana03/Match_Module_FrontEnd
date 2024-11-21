@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   private appService = inject(AppService);
   private destroy = inject(DestroyRef);
   navbarVisible!:boolean;
-  generateMatches!:boolean;
+  generateMatches:boolean = false;
 
   ngOnInit(): void {
     const navSubscription = this.appService.nav_observable$.subscribe(updated=>{

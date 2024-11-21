@@ -7,11 +7,13 @@ import Enumerable from 'linq';
 import { checkSR } from '../scripts/generic';
 import { BattingStats, BattingStatsTest } from './batting-stats.interface';
 import { DxDataGridModule } from 'devextreme-angular';
+import { VideoService } from '../components/video/video.service';
+import { VideoComponent } from "../components/video/video.component";
 
 @Component({
   selector: 'app-batting-stats',
   standalone: true,
-  imports: [DxDataGridModule],
+  imports: [DxDataGridModule, VideoComponent],
   templateUrl: './batting-stats.component.html',
   styleUrl: './batting-stats.component.scss',
   encapsulation:ViewEncapsulation.None
@@ -21,6 +23,7 @@ export class BattingStatsComponent {
   private destroyRef = inject(DestroyRef);
   private appService = inject(AppService);
   private InningService = inject(InningsService);
+  private videoService = inject(VideoService);
 
   ballArray = signal<BallData[]>([]);
   matchDetails = signal<any>({});
@@ -33,7 +36,7 @@ export class BattingStatsComponent {
 
 
   ngOnInit(): void {
-    this.appService.updateNavHeader('Scorecard');
+    this.appService.updateNavHeader('Batting Stats');
     const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
       this.ballArray.set(updated);
       this.generateBattingstats();
@@ -59,6 +62,7 @@ export class BattingStatsComponent {
             .count(over => over.sum(ball => ball.Bowlruns) === 0 && over.count() === 6);
       return {
         Innings:g.first().InningsId,
+        BowlingType:null,
         Runs: g.sum(i => i.Batruns),
         Balls: g.sum(i => i.Batballs),
         Out: g.count(i => i.Dismissal===1),
@@ -134,12 +138,13 @@ export class BattingStatsComponent {
     }).toArray();
 
     this.Table_BowlingType = Enumerable.from(this.ballArray())
-    .where(i => i.InningsId === this.selctedInnings && i.SpinOrPace !== null)
+    .where(i => i.InningsId === this.selctedInnings && (i.SpinOrPace !== null && i.SpinOrPace !== 0))
     .groupBy(i => i.SpinOrPace)
     .select(g => {
       const maiden = g.groupBy(i => i.OverId && i.ExtraTypeId===0)
             .count(over => over.sum(ball => ball.Bowlruns) === 0 && over.count() === 6);
       return {
+        BowlingType: g.first().SpinOrPace===1?'Pace':'Spin',
         Innings:g.first().InningsId,
         Runs: g.sum(i => i.Batruns),
         Balls: g.sum(i => i.Batballs),
@@ -159,4 +164,7 @@ export class BattingStatsComponent {
       }
     }).toArray();
   } 
+  onCellClick(type:string,data:any){
+    this.videoService.statsVideos(type,this.selctedInnings,data);
+  }
 }
