@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { licenseKey } from '../devextreme-license';
 import config from 'devextreme/core/config';
@@ -11,7 +11,8 @@ config({licenseKey})
   standalone: true,
   imports: [RouterOutlet,NavbarComponent,MatchSelectComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  encapsulation:ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
   private appService = inject(AppService);

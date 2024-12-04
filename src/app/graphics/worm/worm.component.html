@@ -1,0 +1,37 @@
+<div class="container mt-3">
+    <dx-chart id="worm" [dataSource]="worm" *ngIf="worm.length > 0">
+      <!-- Line Chart for Team A -->
+      <dxi-series 
+        [valueField]="'Runs'" 
+        [argumentField]="'Over'" 
+        [name]="clubName" 
+        type="line" 
+        [label]="{ visible: true, position: 'outside', customizeText: customizeLabelText }">
+      </dxi-series>
+      
+      <!-- Line Chart for Team B -->
+      <!-- <dxi-series 
+        [valueField]="'RunsTeamB'" 
+        [argumentField]="'Over'" 
+        [name]="matchDetails().ClubBPrefix" 
+        type="line" 
+        [label]="{ visible: true, position: 'outside', customizeText: customizeLabelText }">
+      </dxi-series> -->
+      
+      <!-- Argument Axis -->
+      <dxo-argument-axis
+        [tickInterval]="1"
+        [valueMarginsEnabled]="false"
+        [grid]="{ visible: false }"
+        [label]="{ format: { type: 'decimal' } }"
+        [title]="{ text: 'Overs' }">
+      </dxo-argument-axis>
+  
+      <!-- Value Axis -->
+      <dxi-value-axis [grid]="{ visible: false }" [title]="{ text: 'Runs' }"></dxi-value-axis>
+  
+      <!-- Legend -->
+      <dxo-legend [visible]="true" horizontalAlignment="center"></dxo-legend>
+    </dx-chart>
+  </div>
+  

@@ -29,7 +29,7 @@ export class MatchSelectComponent implements OnInit {
   MatchDataSource:any[] = [];
   generateButton: DxButtonTypes.Properties = {
     width: 300,
-    text: 'Generate',
+    text: 'Submit',
     type: 'default',
     stylingMode: 'contained',
     onClick: async () => {

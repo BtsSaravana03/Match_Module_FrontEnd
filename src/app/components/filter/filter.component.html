@@ -4,7 +4,7 @@
 >
   <div *dxTemplate="let data of 'content'">
     <div id="filter-wrap">
-      @if(totalInnings().length>0){
+      <!-- @if(totalInnings().length>0){
         <div class="group">
           <div class="label">
             <h5>Select Innings</h5>
@@ -21,8 +21,7 @@
           </div>
         </div>
         <hr style="border: 1px solid lightgray;margin-top: 0;" />
-      }
-      
+      } -->
       <div class="group">
         <div class="label mb-2">
           <h5>Over</h5>
@@ -43,14 +42,35 @@
         </div>
       </div>
       <hr style="border: 1px solid lightgray;" />
+      @if(matchDetails()?.MatchOvers === 20 || matchDetails()?.MatchOvers === 50){
+        <div class="group">
+          <div class="label mb-2">
+            <h5>Phase of play</h5>
+          </div>
+          <div class="group-items">
+            @if(matchDetails()?.MatchOvers === 20){
+              <dx-check-box [(value)]="appliedFilters.phase.Powerplay" text="1-6"></dx-check-box>&nbsp;
+              <dx-check-box [(value)]="appliedFilters.phase.MiddleOvers" text="7-15"></dx-check-box>&nbsp;
+              <dx-check-box [(value)]="appliedFilters.phase.DeathOvers" text="16-20"></dx-check-box>&nbsp;
+            }
+            @if(matchDetails()?.MatchOvers === 50){
+              <dx-check-box [(value)]="appliedFilters.phase.Powerplay" text="1-10"></dx-check-box>&nbsp;
+              <dx-check-box [(value)]="appliedFilters.phase.MiddleOvers" text="11-40"></dx-check-box>&nbsp;
+              <dx-check-box [(value)]="appliedFilters.phase.DeathOvers" text="41-50"></dx-check-box>&nbsp;
+            }
+
+          </div>
+        </div>
+        <hr style="border: 1px solid lightgray;" />
+      }
       <div class="group">
         <dx-check-box [(value)]="appliedFilters.runs._0" text="0s"></dx-check-box>&nbsp;
         <dx-check-box [(value)]="appliedFilters.runs._1" text="1s"></dx-check-box>&nbsp;
         <dx-check-box [(value)]="appliedFilters.runs._2" text="2s"></dx-check-box>&nbsp;
         <dx-check-box [(value)]="appliedFilters.runs._3" text="3s"></dx-check-box>&nbsp;
         <dx-check-box [(value)]="appliedFilters.runs._4" text="4s"></dx-check-box>&nbsp;
-        <dx-check-box [(value)]="appliedFilters.runs._6" text="6s"></dx-check-box>
-        <!-- <dx-check-box [(value)]="appliedFilters.runs.wickets" text="Wkt"></dx-check-box> -->
+        <dx-check-box [(value)]="appliedFilters.runs._6" text="6s"></dx-check-box>&nbsp;
+        <dx-check-box [(value)]="appliedFilters.runs.wickets" text="Wkt"></dx-check-box>
       </div>
     </div>
     <div class="mt-4" style="text-align: end;">

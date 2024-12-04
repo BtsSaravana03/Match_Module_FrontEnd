@@ -40,6 +40,8 @@ export class GraphicsComponent {
     { text: 'Pitch Map', route: 'pitchmap' },
     { text: 'Wagon Wheel', route: 'wagonwheel' },
     { text: 'Beehive', route: 'beehive' },
+    { text: 'Manhatten', route: 'manhatten' },
+    { text: 'Worm', route: 'worm' }
   ];
   resizeObservable$!:Observable<Event>;
   currentChildRoute:string|null = null;

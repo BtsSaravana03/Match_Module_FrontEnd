@@ -1,0 +1,34 @@
+<div class="container mt-3">
+    <dx-data-grid 
+    [dataSource]="OverStats" 
+    [allowColumnReordering]="true" 
+    [allowColumnResizing]="true" 
+    [columnAutoWidth]="true"
+    [showColumnLines]="true" 
+    [showRowLines]="true" 
+    [showBorders]="true" 
+    [wordWrapEnabled]="true"
+    keyExpr="OverNumber"
+    [sorting]="{ mode: 'none' }"
+    [elementAttr]="{ class: 'custom-data-grid' }">
+    <dxi-column dataField="OverNumber" caption="Over #" width="100"></dxi-column>
+    <dxi-column caption="RUNS" alignment="center" cssClass="spanHeader">
+      <dxi-column dataField="TeamARuns" [caption]="matchDetails().ClubAPrefix"></dxi-column>
+      <dxi-column dataField="TeamBRuns" [caption]="matchDetails().ClubBPrefix"></dxi-column>
+    </dxi-column>
+    <dxi-column caption="WICKETS" alignment="center" cssClass="spanHeader">
+      <dxi-column dataField="TeamAWickets" [caption]="matchDetails().ClubAPrefix"></dxi-column>
+      <dxi-column dataField="TeamBWickets" [caption]="matchDetails().ClubBPrefix"></dxi-column>
+    </dxi-column>
+  
+    <dxi-column caption="BOUNDARIES" alignment="center" cssClass="spanHeader">
+      <dxi-column dataField="TeamABoundary" [caption]="matchDetails().ClubAPrefix"></dxi-column>
+      <dxi-column dataField="TeamBBoundary" [caption]="matchDetails().ClubBPrefix"></dxi-column>
+    </dxi-column>
+    <dxi-column caption="SCORE" alignment="center" cssClass="spanHeader">
+      <dxi-column dataField="TeamAScore" [caption]="matchDetails().ClubAPrefix" alignment="right"></dxi-column>
+      <dxi-column dataField="TeamBScore" [caption]="matchDetails().ClubBPrefix" alignment="right"></dxi-column>
+    </dxi-column>
+  </dx-data-grid>
+  
+</div>

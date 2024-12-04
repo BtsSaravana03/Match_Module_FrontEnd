@@ -1,0 +1,40 @@
+<div class="container mt-3">
+    <dx-chart id="manhatten" [dataSource]="manhatten" *ngIf="manhatten.length > 0">
+      <!-- Team A Data -->
+      <dxi-series [valueField]="'Runs'" [argumentField]="'Over'" [name]="clubName" type="bar"
+      [label]="{ visible: true, position: 'outside', customizeText: customizeLabelText }">
+      </dxi-series>
+      <!-- Team B Data -->
+      <!-- <dxi-series [valueField]="'RunsTeamB'" [argumentField]="'Over'" [name]="matchDetails().ClubBPrefix" type="bar"
+      [label]="{ visible: true, position: 'outside', customizeText: customizeLabelText }">
+      </dxi-series> -->
+  
+
+      <dxo-argument-axis
+        [tickInterval]="1"
+        [valueMarginsEnabled]="false"
+        [grid]="{ visible: false }"
+        [label]="{ format: { type: 'decimal' } }"
+        [title]="{ text: 'Overs' }">
+      </dxo-argument-axis>
+  
+      <!-- Value Axis -->
+      <dxi-value-axis [grid]="{ visible: false }" [title]="{ text: 'Runs' }"></dxi-value-axis>
+  
+      <!-- Legend -->
+      <dxo-legend [visible]="true" horizontalAlignment="center"></dxo-legend>
+  
+      <!-- <ng-template #customTemplate let-item="data">
+        <svg class="homeTeamBall" height="100" width="100">
+          <circle
+            *ngFor="let _ of [].constructor(item.wickets); let i = index"
+            r="5"
+            cx="15"
+            [attr.cy]="15 + (i * 10)"
+            fill="red">
+          </circle>
+        </svg>
+      </ng-template> -->
+    </dx-chart>
+  </div>
+  

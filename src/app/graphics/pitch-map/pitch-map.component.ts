@@ -85,7 +85,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     this.range8M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range10M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     const _beforeGreece = 37.79;
-    const ballRadius = 5;
+    const ballRadius = 4;
     //PitchMap SVG Dimensions
     const width = this.pm_width;
     const height = this.pm_height;

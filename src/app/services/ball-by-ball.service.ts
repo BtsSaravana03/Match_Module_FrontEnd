@@ -15,6 +15,7 @@ export class BallByBallService implements OnDestroy {
   private matchDetails$ = new BehaviorSubject <any[]>([]);
   ballObservable$ = this.ballByBall$.asObservable();
   matchObservable$ = this.matchDetails$.asObservable();
+  matchDetails:any = [];
   dismissalTypes: any[] = [];
   competitionID!: number;
   matchID!: number;
@@ -40,7 +41,7 @@ export class BallByBallService implements OnDestroy {
     ).subscribe({
       next: (res: any) => {
         if (res.status === 200) {
-          const filteredData = this.filterService.filterBallData(res.data);
+          const filteredData = this.filterService.filterBallData(res.data, this.matchDetails);
           this.ballByBall$.next(filteredData);
         }
       },
@@ -54,6 +55,8 @@ export class BallByBallService implements OnDestroy {
   }
   async getCurrentMatchDetails(matchid: number) {
     const res = await this.httpService.getData(`home/getMatchDetails/${matchid}`);
+    this.matchDetails = res[0];
+    console.log(res[0]);
     this.matchDetails$.next(res ? res[0] : []);
   }
   async getDismissalTypes() {

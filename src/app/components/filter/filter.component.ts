@@ -27,7 +27,12 @@ export class FilterComponent implements OnInit {
     innings: 1,
     ball: {from: null,to: null},
     over: { from:null,to: null},
-    runs: {_0: false,_1: false,_2: false, _3: false, _4: false,_6: false,wickets: false}
+    runs: {_0: false,_1: false,_2: false, _3: false, _4: false,_6: false,wickets: false},
+    phase: {
+      Powerplay: false,
+      MiddleOvers: false,
+      DeathOvers: false
+    }
   };
   mobile_view = input.required<boolean>();
   slideAnimation = {
@@ -42,6 +47,18 @@ export class FilterComponent implements OnInit {
     const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated=>{
       this.matchDetails.set(updated);
       this.totalInnings.set(this.matchDetails()?.inningsData||[]);
+      this.appliedFilters = {
+        innings: 1,
+        ball: {from: null,to: null},
+        over: { from:null,to: null},
+        runs: {_0: false,_1: false,_2: false, _3: false, _4: false,_6: false,wickets: false},
+        phase: {
+          Powerplay: false,
+          MiddleOvers: false,
+          DeathOvers: false
+        }
+      }
+      this.applyFilter();
     })
     this.destroyRef.onDestroy(()=>{
       matchSubscription.unsubscribe();
@@ -52,6 +69,7 @@ export class FilterComponent implements OnInit {
     if(this.matchDetails().ID){
       this.ballbyballService.generate_ballbyball(this.matchDetails().CompetitionID,this.matchDetails().ID);
     }
+    if(this.popoverComponent()?.instance)
     this.popoverComponent()?.instance.hide();
   }
 }

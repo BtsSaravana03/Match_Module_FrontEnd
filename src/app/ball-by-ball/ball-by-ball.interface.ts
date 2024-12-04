@@ -15,6 +15,9 @@ export interface BallData {
     EndOver: number;
     ExtraTypeId: number;
     Extras: number;
+    FielderId:number|null;
+    FielderName:string|null;
+    FieldType:number|null;
     InningsId: number;
     MatchId: number;
     NonStrikerID: number;
@@ -70,4 +73,6 @@ export interface BallData {
     BwBowlingTypeID:number|null;
     StBattingTypeID:number|null;
     SpinOrPace:number;
+    MissRun:number;
+    SaveRun:number
 }

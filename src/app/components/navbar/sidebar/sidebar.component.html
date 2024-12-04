@@ -1,11 +1,13 @@
-<section id="sidebar" [ngClass]="{'d-none': !visible()}" [@slideInOut]="{ value: visible() ? 'in' : 'out', params: { sidebarWidth: sidebarWidth }}">
+<section id="sidebar" [ngClass]="{'d-none': !visible()}"
+  [@slideInOut]="{ value: visible() ? 'in' : 'out', params: { sidebarWidth: sidebarWidth }}">
   <div class="close-container">
     <img src="../../../../../images/cricket-21-logo.png" alt="logo">
     <i class="fa-regular fa-xmark fa-lg" (click)="visible.set(false)"></i>
   </div>
   <ul class="nav-links">
-    @for (item of navigation; track $index) {
-        <li [routerLink]="[item.path]" routerLinkActive="active"  (click)="setHeader(item.name)"><a><i class="{{item.icon}} me-2"></i> {{item.name}}</a></li>
-    }
+    <li *ngFor="let item of navigation; let i = index" [routerLink]="[item.path]" routerLinkActive="active"
+      (click)="setHeader(item.name)" [class.d-none]="item.Disable && !matchDetails()?.isLimitedOvers">
+      <a><i class="{{item.icon}} me-2"></i> {{item.name}}</a>
+    </li>
   </ul>
 </section>

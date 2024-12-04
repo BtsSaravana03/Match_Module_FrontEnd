@@ -1,8 +1,9 @@
   import { CommonModule } from '@angular/common';
-  import { Component, HostListener, model, output } from '@angular/core';
+  import { Component, DestroyRef, HostListener, inject, model, output, signal } from '@angular/core';
   import { RouterLink, RouterLinkActive } from '@angular/router';
   import { trigger, state, style, animate, transition } from '@angular/animations';
   import { DxDrawerModule } from 'devextreme-angular';
+import { BallByBallService } from '../../../services/ball-by-ball.service';
 
   @Component({
     selector: 'app-sidebar',
@@ -30,16 +31,22 @@
     ]
   })
   export class SidebarComponent {
+    private ballbyballService = inject(BallByBallService);
+    private destroyRef = inject(DestroyRef);
+    matchDetails = signal<any>({});
     visible = model();
     header = output<string>()
     sidebarWidth: string = '300px';
     navigation = [
       {path:'/scorecard', icon: 'fa-solid fa-credit-card-front', name:'Scorecard'},
       {path:'/ballbyball', icon: 'fa-solid fa-tennis-ball', name:'Ball By Ball'},
+      {path:'/matchoverview', icon: 'fa-solid fa-circle-info', name:'Match Overview',Disable:true},
       {path:'/partnership', icon: 'fa-duotone fa-solid fa-handshake-simple', name:'Partnership'},
       {path:'/graphics', icon: 'fa-sharp fa-regular fa-chart-radar', name:'Graphics'},
       {path:'/battingstats', icon: 'fa-solid fa-chart-line-up', name:'Batting Stats'},
       {path:'/bowlingstats', icon: 'fa-solid fa-chart-simple', name:'Bowling Stats'},
+      {path:'/overcomparison', icon: 'fa-solid fa-code-compare', name:'Over Comparison',Disable:true},
+      {path:'/fielding', icon: 'fa-duotone fa-light fa-light-switch', name:'Fielding',Disable:true}
       // {path:'/graphics/pitchmap', icon: 'fa-sharp fa-solid fa-light-switch', name:'Pitch Map'},
       // {path:'/graphics/wagonwheel', icon: 'fa-sharp fa-regular fa-chart-radar', name:'Wagon Wheel'},
       // {path:'/graphics/beehive', icon: 'fa-brands fa-hive', name:'Beehive'}
@@ -54,6 +61,15 @@
         this.sidebarWidth = '300px';
       }
     }
+    ngOnInit(): void {
+      const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated=>{
+        this.matchDetails.set(updated);
+      })
+      this.destroyRef.onDestroy(()=>{
+        matchSubscription.unsubscribe();
+      });
+    }
+
     setHeader(name:string){
       this.header.emit(name);
       this.visible.set(false);

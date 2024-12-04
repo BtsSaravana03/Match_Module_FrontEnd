@@ -23,6 +23,7 @@
 
               .pm-cls-2 {
                 stroke: #231f20;
+                stroke-width: 0.5px;
               }
 
               .pm-cls-3,
@@ -37,14 +38,12 @@
               .pm-cls-5 {
                 fill: #58595b;
               }
-
               .pm-cls-6 {
                 font-size: 10px;
                 fill: #808285;
                 font-family: Arial-BoldMT, Arial;
                 font-weight: 700;
               }
-
             </style>
           </defs>
           <rect x="0" y="0" [attr.width]="pm_width" [attr.height]="pm_height" stroke="#d3d3d3" fill="none"
@@ -85,7 +84,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" [attr.width]="150" [attr.height]="pm_height"
           [attr.viewBox]="'0 0 ' + 150 + ' ' + pm_height">
           <defs>
-            <style> 
+            <style>
               text tspan{
                 font-family: Poppins, Arial;
               }
@@ -150,7 +149,6 @@
       </g>
     </svg>
   </section>
-
 </div>
 
 <app-ball-details-popover [target]="tooltipTarget" [targetBall]="targetBall" />

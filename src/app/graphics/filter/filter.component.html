@@ -10,10 +10,22 @@
        <div class="mt-3">
         <h6 class="text-secondary">Bowling Types</h6>
         <div class="check-group mt-2">
-          @for (m of BowlingTypes; track $index) {
+          <!-- @for (m of BowlingTypes; track $index) {
           <dx-check-box [value]="appliedFilters.BowlingType.includes(m.Id)" [text]="m.Prefix"
             (onValueChanged)="onCheckboxChange('BowlingType',m.Id,$event.value)"></dx-check-box>
-          }
+          } -->
+          <dx-check-box [value]="appliedFilters.BowlingType.includes(1)" text="RAP"
+          (onValueChanged)="onCheckboxChange('BowlingType',1,$event.value)"></dx-check-box>
+          <dx-check-box [value]="appliedFilters.BowlingType.includes(2)" text="LAP"
+          (onValueChanged)="onCheckboxChange('BowlingType',2,$event.value)"></dx-check-box>
+          <dx-check-box [value]="appliedFilters.BowlingType.includes(9)" text="RAO"
+          (onValueChanged)="onCheckboxChange('BowlingType',9,$event.value)"></dx-check-box>
+          <dx-check-box [value]="appliedFilters.BowlingType.includes(10)" text="SLAO"
+          (onValueChanged)="onCheckboxChange('BowlingType',10,$event.value)"></dx-check-box>
+          <dx-check-box [value]="appliedFilters.BowlingType.includes(11)" text="RALB"
+          (onValueChanged)="onCheckboxChange('BowlingType',11,$event.value)"></dx-check-box>
+          <dx-check-box [value]="appliedFilters.BowlingType.includes(12)" text="LAC"
+          (onValueChanged)="onCheckboxChange('BowlingType',12,$event.value)"></dx-check-box>
         </div>
         <hr />
         <h6 class="text-secondary">Batting Types</h6>

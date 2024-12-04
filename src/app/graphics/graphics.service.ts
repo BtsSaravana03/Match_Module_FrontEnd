@@ -4,6 +4,7 @@ import { BowlingTypes, GraphicsFilter } from './graphics.interface';
 import { HttpServices } from '../services/http.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { saveSvgAsPng } from 'save-svg-as-png';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,8 @@ export class GraphicsService {
   private triggerFilter$ = new Subject <void>();
   filterObservable = this.triggerFilter$.asObservable();
   navbarHeight = 130;
+  
+  
   triggerFilter(){
     this.triggerFilter$.next();
   }
@@ -30,9 +33,20 @@ export class GraphicsService {
       if(this.filter.BattingType.length> 0){
         if(i.StBattingTypeID === null || !this.filter.BattingType.includes(i.StBattingTypeID)) return false
       }
-      if(this.filter.BowlingType.length> 0){
-        if(i.BwBowlingTypeID === null || !this.filter.BowlingType.includes(i.BwBowlingTypeID)) return false
+      if (this.filter.BowlingType.length > 0) {
+        const isBowlingTypeMatch = this.filter.BowlingType.some(type => {
+          if (i.BwBowlingTypeID === null) return false;
+          if (type === 1) {
+            return [1, 3, 5, 7].includes(i.BwBowlingTypeID);
+          } else if (type === 2) {
+            return [2, 4, 6, 8].includes(i.BwBowlingTypeID);
+          } else {
+            return i.BwBowlingTypeID === type;
+          }
+        });
+        if (!isBowlingTypeMatch) return false;
       }
+  
       if(this.filter.Batsman.length >0){
         if(!this.filter.Batsman.includes(i.StrikerID)) return false;
       }
@@ -95,7 +109,10 @@ export class GraphicsService {
     return response;
   }
   downloadSvg(item:string) {
-    const svgElement = document.querySelector('#svg_Wrap') as SVGElement;
+    let svgElement = document.querySelector('#svg_Wrap') as SVGElement;
+    if(item === 'manhatten' || item === 'worm'){
+      svgElement = document.querySelector('#'+item + ' svg') as SVGElement;
+    }
     if (svgElement) {
       saveSvgAsPng(svgElement, `${item}_${Date.now()}`, {
         scale: 2,

@@ -12,11 +12,12 @@ import { VideoService } from '../components/video/video.service';
 import { VideoComponent } from "../components/video/video.component";
 import { InningsService } from '../components/innings-tab/innings.service';
 import Enumerable from 'linq';
+import { InningsTabComponent } from '../components/innings-tab/innings-tab.component';
 
 @Component({
   selector: 'app-ball-by-ball',
   standalone: true,
-  imports: [DxDataGridModule, VideoComponent],
+  imports: [DxDataGridModule, VideoComponent,InningsTabComponent],
   templateUrl: './ball-by-ball.component.html',
   styleUrl: './ball-by-ball.component.scss',
   encapsulation:ViewEncapsulation.None
@@ -50,7 +51,7 @@ export class BallByBallComponent implements OnInit {
       subscription.unsubscribe();
       matchSubscription.unsubscribe();
     })
-    
+
   }
   onExporting(e:any) {
     if (e.format === 'pdf') {
@@ -84,5 +85,23 @@ export class BallByBallComponent implements OnInit {
   }
   onCellClick(index:number){
     this.videoService.PlayBallbyball(index);
+  }
+  getInningPre():string{
+    switch (this.selctedInnings){
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      case 4:
+        return 'th'
+      default:
+        return 'th';
+    }
+  }
+  onInningsChange(e:number){
+    this.selctedInnings = e;
+    this.generateBallByBall();
   }
 }

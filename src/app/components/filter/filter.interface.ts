@@ -27,4 +27,9 @@ export interface Filter {
   ball: { from: number | null; to: number | null };
   over: { from: number | null; to: number | null };
   runs: RunsFilter;
+  phase :{
+    Powerplay: boolean,
+    MiddleOvers: boolean,
+    DeathOvers: boolean
+  }
 }

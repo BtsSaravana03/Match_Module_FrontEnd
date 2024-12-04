@@ -1,5 +1,5 @@
 <nav class="navbar-wrap" [ngClass]="{'d-none': !visibility()}">
-    <div class="navbar-content container">
+    <div class="navbar-content container-fluid">
         <div class="handburger-menu">
             <i class="fa-regular fa-bars fa-lg" (click)="sidebarVisible=true"></i>
         </div>
@@ -13,7 +13,7 @@
              <i class="fa-solid fa-right-from-bracket fa-lg" title="Logout" (click)="onLogout()"></i>
         </div>
     </div>
-    
+
 </nav>
 <app-sidebar [(visible)]="sidebarVisible" (header)="setHeader($event)"/>
 <div class="overlay" [ngClass]="{'d-none': !sidebarVisible}"></div>

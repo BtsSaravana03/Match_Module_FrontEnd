@@ -40,7 +40,7 @@ export class ScorecardComponent implements OnInit {
   resizeObservable$!:Observable<Event>;
 
   ngOnInit(): void {
-    this.appService.updateNavHeader('Scorecard');
+    this.appService.updateNavHeader('');
     const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
       this.ballArray.set(updated);
       this.currentInnings = this.ballArray()[this.ballArray().length-1]?.InningsId||undefined;

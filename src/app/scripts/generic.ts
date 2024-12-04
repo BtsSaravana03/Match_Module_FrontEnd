@@ -1,6 +1,6 @@
 export function check(value:any){
     if (value == 'Infinity')
-      return 'Inf';
+      return '-';
     else if(value.toString() === 'NaN'){
       return '0'
     }
