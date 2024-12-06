@@ -1,11 +1,12 @@
 export interface BattingCardSummary {
     Innings:number,
     TeamTotal: number,
-    ExtrasTotal: number, 
-    ExtrasBreakup: string, 
-    Dismissals: number, 
+    ExtrasTotal: number,
+    ExtrasBreakup: string,
+    Dismissals: number,
     Overs: number,
-    BattingClubId:number
+    BattingClubId:number;
+    RunRate:string;
 }
 export interface BattingCard {
     strikerID: number;
@@ -23,17 +24,22 @@ export interface BattingCard {
     bdryPer: number | string;
     wkt: number;
     dismissalSts: string | null;
+    isLastRow:boolean;
 }
 
 export interface MatchData {
     ID: number;
     ClubA: number;
     ClubB: number;
+    ClubAPrefix:string;
+    ClubBPrefix:string;
+    ClubAFull:string;
+    ClubBFull:string;
     CompetitionID: number;
     Date: string;
     Inningscount: number;
     KnockOut: number;
-    MatchComplete: number;
+    MatchComplete: boolean;
     MatchOvers: number;
     MatchTypeID: number;
     Overtype: number;
@@ -43,7 +49,13 @@ export interface MatchData {
     MatchNameShort: string;
     MatchName: string;
     InnCount: number;
+    StadiumName:string;
+    City:string;
+    CompFullName:string;
+    compprefix:string;
+    isLimitedOvers:number;
     inningsData: InningsData[];
+    result:MatchResult[];
 }
 
 interface InningsData {
@@ -68,4 +80,17 @@ interface InningsData {
     BowlingClubName: string;
     BowlingClubPrefix: string;
 }
-
+export interface MatchResult {
+    AutoNo: number;
+    Matchid: number;
+    ClubID: number;
+    Wickets: number;
+    Runs: number;
+    Result: string;
+    Won: number;
+    Points: string;
+    SuperOver: number;
+    DuckWorthLewis: number;
+    ClubName:string;
+    ClubPrefix:string;
+  }

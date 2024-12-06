@@ -1,3 +1,5 @@
+import { BallData } from "../ball-by-ball/ball-by-ball.interface";
+
 export function getDismissalString(_a:any): string {
     const {DismissalTypeID,DismissalFielder1Name,BowlerName,DismissalFielderID1,BowlerID} = _a;
     switch (DismissalTypeID) {
@@ -11,7 +13,7 @@ export function getDismissalString(_a:any): string {
         case 3: // LBW
             return `lbw b ${BowlerName}`;
         case 4: // Run Out
-            return `run out ${DismissalFielder1Name}`;
+            return `run out ${DismissalFielder1Name??''}`;
         case 5: // Stump
             return `st ${DismissalFielder1Name} b ${BowlerName}`;
         case 6: // Hit Wicket
@@ -38,4 +40,49 @@ export function calculateOvers(totalBalls:number) {
     const fullOvers = Math.floor(totalBalls / 6);
     const remainingBalls = totalBalls % 6;
     return `${fullOvers}.${remainingBalls}`;
+}
+
+export function getCurrentBallDescription(ball: BallData): string {
+    let description = "";
+    // Handle extras
+    switch (ball.ExtraTypeId) {
+        case 1: // Overstep (No Ball)
+            description = "NB";
+            break;
+        case 2: // Wide
+            description = "WD";
+            break;
+        case 3: // Leg Byes
+            description = "LB";
+            break;
+        case 4: // Byes
+            description = "B";
+            break;
+        case 5: // Overstep + Byes
+            description = "NB+B";
+            break;
+        case 6: // Overstep + Leg Byes
+            description = "NB+LB";
+            break;
+    }
+
+    // Handle dismissal (wicket)
+    if (ball.Dismissal === 1) {
+        description += (description ? "+" : "") + "W"; // Combine extras and wicket if both exist
+    }
+
+    // Add runs if applicable
+    if (ball.Runs > 0) {
+        description = `${ball.Runs}${description ? description : ""}`;
+    } else if (!description) {
+        // Default case: Dot ball
+        description = "0";
+    }
+
+    return description;
+}
+export function oversToBalls(overs: number): number {
+    const fullOvers = Math.floor(overs); // Extract the full overs
+    const partialBalls = Math.round((overs - fullOvers) * 10); // Extract the fractional part and convert to balls
+    return fullOvers * 6 + partialBalls; // Total balls = full overs in balls + partial balls
 }

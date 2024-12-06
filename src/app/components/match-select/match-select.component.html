@@ -1,20 +1,32 @@
-<dx-popup [width]="width" [height]="height" [hideOnOutsideClick]="false" [showCloseButton]="false" shadingColor="rgba(255, 255, 255, 1)"
-  [(visible)]="showPopup" [showTitle]="false" [dragEnabled]="false" [attr.class]="'match-selection'">
+<dx-popup [width]="width" [height]="height" [hideOnOutsideClick]="false" [showCloseButton]="false"
+  shadingColor="rgba(255, 255, 255, 1)" [(visible)]="showPopup" [showTitle]="false" [dragEnabled]="false"
+  [attr.class]="'match-selection'">
   <div *dxTemplate="let data of 'content'">
     <div class="field-wrap">
-        <div class="field-container">
-            <label class="field-label">Tournament</label>
-            <dx-select-box #selectBox [dataSource]="CompDataSource" [acceptCustomValue]="false" displayExpr="Name"
-              valueExpr="ID" searchExpr="Name" [searchEnabled]="true" (onSelectionChanged)="getMatches($event)"></dx-select-box>
+      <div class="field-container">
+        <label class="field-label">Tournament</label>
+        <dx-select-box #selectBox [dataSource]="CompDataSource" [acceptCustomValue]="false" displayExpr="Name"
+          valueExpr="ID" searchExpr="Name" [searchEnabled]="true" (onSelectionChanged)="getMatches($event)">
+        </dx-select-box>
+      </div>
+      <div class="field-container">
+        <label class="field-label">Match</label>
+        <dx-select-box #selectBox [dataSource]="MatchDataSource" [acceptCustomValue]="false" displayExpr="MatchNameDate"
+          valueExpr="ID" searchExpr="MatchName" [searchEnabled]="true" (onSelectionChanged)="onMatchSelected($event)"
+          [disabled]="selectedComp === undefined">
+
+          <div *dxTemplate="let data of 'item'">
+            <span title="{{ data.MatchNameDate }}">
+                {{data.MatchNameDate}}
+            </span>
+
           </div>
-          <div class="field-container">
-              <label class="field-label">Match</label>
-              <dx-select-box #selectBox [dataSource]="MatchDataSource" [acceptCustomValue]="false" displayExpr="MatchName"
-                valueExpr="ID" searchExpr="MatchName" [searchEnabled]="true" (onSelectionChanged)="onMatchSelected($event)" [disabled]="selectedComp === undefined"></dx-select-box>
-            </div>
+        </dx-select-box>
+      </div>
     </div>
 
   </div>
-  <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="center" [options]="generateButton" [disabled]="selectedMatch === undefined">
+  <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="center" [options]="generateButton"
+    [disabled]="selectedMatch === undefined">
   </dxi-toolbar-item>
 </dx-popup>

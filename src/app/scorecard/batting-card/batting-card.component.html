@@ -4,7 +4,7 @@
   <!-- <dxo-column-fixing [enabled]="true"></dxo-column-fixing> -->
   <dxi-column dataField="strikerName" caption="Batsman"></dxi-column>
   <dxi-column dataField="dismissalSts" caption="" alignment="left" cssClass="video-class" *ngIf="!isMobile()"></dxi-column>
-  <dxi-column dataField="runs" caption="R" alignment="right" title="Runs" cssClass="video-class" ></dxi-column>
+  <dxi-column dataField="runs" caption="R" alignment="right" title="Runs" [classList]="['video-class','fw-600']" ></dxi-column>
   <dxi-column dataField="balls" caption="B" alignment="right" title="Balls" cssClass="video-class"></dxi-column>
   <dxi-column dataField="strikeRate" caption="SR" alignment="right" title="Strike Rate"></dxi-column>
   <dxi-column dataField="dot" caption="DB" alignment="right" title="Dot Balls" cssClass="video-class"></dxi-column>
@@ -15,7 +15,7 @@
   <dxi-column dataField="_6s" caption="6s" alignment="right" cssClass="video-class"></dxi-column>
   <dxi-column dataField="dotPer" caption="Dot%" alignment="right"></dxi-column>
   <dxi-column dataField="bdryPer" caption="Bdry%" alignment="right" title="Boundary%"></dxi-column>
-  
+
     <ng-container *dxTemplate="let m of 'battingCardTemplate'; let i = index">
       <tr class="main-row" role="row">
         <td class="gridcell" [ngClass]="{'not-out-class':m.data.dismissalSts === 'Not Out' }">{{ m.data.strikerName }}</td>
@@ -37,7 +37,7 @@
           ><div style="font-size: 0.75rem;">{{ m.data.dismissalSts }}</div></td
         >
       </tr>
-      <ng-container *ngIf="isLastRow(m.data)">
+      <ng-container *ngIf="m.data.isLastRow">
         <tr class="custom-footer-row" role="row">
           <td class="gridcell"><small>Extras</small></td>
           <td class="gridcell" [attr.colspan]="!isMobile() ? 12 : 11">
@@ -48,13 +48,16 @@
         </tr>
         <tr class="custom-footer-row total-row" role="row">
           <td class="gridcell"><strong>Total</strong></td>
-          <td class="gridcell" [attr.colspan]="!isMobile() ? 12 : 11">
-            @if(summary()[selctedInnings()-1]){
-              <strong>{{summary()[selctedInnings()-1].TeamTotal}}/{{summary()[selctedInnings()-1].Dismissals}}</strong>
-            }
+          <td class="gridcell">
+                <strong *ngIf="summary()[selctedInnings()-1]">{{summary()[selctedInnings()-1].Overs}} Ov (RR: {{summary()[selctedInnings()-1].RunRate}})</strong>
+          </td>
+          <td class="gridcell text-right">
+            <strong *ngIf="summary()[selctedInnings()-1]">{{summary()[selctedInnings()-1].TeamTotal}}/{{summary()[selctedInnings()-1].Dismissals}}</strong>
+          </td>
+          <td class="gridcell" [attr.colspan]="!isMobile() ? 10 : 9">
           </td>
         </tr>
       </ng-container>
     </ng-container>
-  
+
 </dx-data-grid>

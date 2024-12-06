@@ -23,7 +23,7 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
   private cdr = inject(ChangeDetectorRef);
-  
+
   ballArray = signal<BallData[]>([]);
   bh_Width = 493;
   bh_Height = 355;
@@ -33,7 +33,6 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
   ngOnInit(): void {
     const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
       this.ballArray.set(updated);
-      console.log(updated);
       this.setBeehive();
     })
     const filter = this.graphicServices.filterObservable.subscribe(updated => {
@@ -49,7 +48,7 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
       let scale = this.graphicServices.getScaling(this.bh_Width,this.bh_Height,window.innerWidth,window.innerHeight);
       const container = this.el.nativeElement.querySelector('#beehive-container');
       container.style.transform = `scale(${scale})`;
-      container.style.transformOrigin = "top center"; 
+      container.style.transformOrigin = "top center";
   }
   ngAfterViewInit(): void {
     this.onResize();
@@ -61,7 +60,7 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
     const width = this.bh_Width;
     const height = this.bh_Height;
     //Cricket Pitch Dimensions(in cm)
-    const beehive_width = 200; 
+    const beehive_width = 200;
     const beehive_height = 200;
     // PX/CM Ratio
     const scaling_x = parseFloat((width / beehive_width).toFixed(4));
@@ -99,7 +98,7 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
           this.tooltipTarget;
         })
         this.renderer.appendChild(svgElement, circle);
-        
+
       }
     })
   }

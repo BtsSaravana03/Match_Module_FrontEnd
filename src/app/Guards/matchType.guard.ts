@@ -12,7 +12,7 @@ export class MatchType implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot,state: RouterStateSnapshot): boolean {
     const Match = this.ballbyballService.matchDetails;
-    const condition = Match.isLimitedOvers;
+    const condition = 'isLimitedOvers' in Match;
     if (condition) {
       return true;
     } else {

@@ -1,19 +1,32 @@
-.fow-wrap{
+h6{
+    font-weight: 500;
+    font-size: 16px;
+    color: #625c5cab
+}
+.line-color {
+    border: 1px solid #00000044;
+  }
+  .fow-wrap{
     display: flex;
     gap: 5px;
     flex-wrap: wrap;
     text-wrap: nowrap;
+    margin-top: 10px;
     .wicket-item{
         cursor: pointer;
         display: flex;
         gap: 5px;
-        text-decoration: underline;
+        &:hover{
+            text-decoration: underline;
+            text-decoration-color: #625c5c;
+            p{
+                color: #000;
+            }
+        }
         p{
             margin: 0px;
             font-size: 0.9rem;
-            &.dim-text{
-                color: #827b7b;
-            }
+            color: #464545;
         }
     }
-}
+  }

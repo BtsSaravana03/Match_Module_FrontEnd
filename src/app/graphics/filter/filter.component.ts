@@ -16,9 +16,9 @@ import { BallByBallService } from '../../services/ball-by-ball.service';
 })
 export class FilterComponent implements OnInit,AfterViewInit {
   private GraphicService = inject(GraphicsService);
-  private ballbyballService = inject(BallByBallService); 
+  private ballbyballService = inject(BallByBallService);
   private destroyRef = inject(DestroyRef);
-  
+
   ballArray = input.required<BallData[]>();
   SelectedInnings = input.required<number>();
   BowlingTypes:BowlingTypes[] = [];
@@ -57,7 +57,6 @@ export class FilterComponent implements OnInit,AfterViewInit {
     }
   };
   ngOnChanges(changes:any){
-    console.log(changes);
     if(changes['ballArray'] && changes['ballArray'].previousValue?.length === 0 && changes['ballArray'].currentValue.length > 0){
       this.refreshPlayers();
     }

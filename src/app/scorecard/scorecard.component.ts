@@ -15,6 +15,7 @@ import { VideoComponent } from "../components/video/video.component";
 import { CommonModule } from '@angular/common';
 import { InningsTabComponent } from "../components/innings-tab/innings-tab.component";
 import { InningsService } from '../components/innings-tab/innings.service';
+import { checkInf, checkSR } from '../scripts/generic';
 
 @Component({
   selector: 'app-scorecard',
@@ -30,7 +31,7 @@ export class ScorecardComponent implements OnInit {
   private appService = inject(AppService);
   private InningService = inject(InningsService);
 
-  ballArray = signal<BallData[]|[]>([]);
+  ballArray = signal<BallData[]>([]);
   summary:[]|BattingCardSummary[] = [];
   matchDetails = signal<any>({});
   totalInnings = signal<any[]>([]);
@@ -56,14 +57,14 @@ export class ScorecardComponent implements OnInit {
     const resizeSubscription:Subscription = this.resizeObservable$.subscribe(()=>{
       this.onWindowResize();
     })
-    const InnSub = this.InningService.InningsObserver$.subscribe(updated =>{
-      this.selctedInnings = updated;
-    })
+    // const InnSub = this.InningService.InningsObserver$.subscribe(updated =>{
+    //   this.selctedInnings = updated;
+    // })
     this.destroyRef.onDestroy(()=>{
       subscription.unsubscribe();
       matchSubscription.unsubscribe();
       resizeSubscription.unsubscribe();
-      InnSub.unsubscribe();
+      //InnSub.unsubscribe();
     })
   }
   onWindowResize(){
@@ -92,15 +93,17 @@ export class ScorecardComponent implements OnInit {
         if (extrasByType.legbyes > 0) extrasBreakupParts.push(`LB: ${extrasByType.legbyes}`);
         if (extrasByType.byes > 0) extrasBreakupParts.push(`B: ${extrasByType.byes}`);
         const extrasBreakup = extrasBreakupParts.length > 0 ? extrasBreakupParts.join(', ') : '';
-
+        const TeamTotal = g.last() ?.TeamRuns ?? 0;
+        const overs = parseFloat(calculateOvers(g.count(i => i.Bowlballs === 1)));
         return {
           Innings: g.first().InningsId,
-          TeamTotal: g.last() ?.TeamRuns ?? 0,
+          TeamTotal: TeamTotal,
           ExtrasTotal: Object.values(extrasByType).reduce((acc, val) => acc + val, 0),
           ExtrasBreakup: extrasBreakup,
           Dismissals: g.count(i => i.Dismissal === 1),
-          Overs: parseFloat(calculateOvers(g.count(i => i.Batballs === 1))),
+          Overs: overs,
           BattingClubId:g.first().BattingClubID,
+          RunRate:checkInf(TeamTotal / overs)
         }
       }).orderBy(i=> i.Innings).toArray();
   }

@@ -3,28 +3,46 @@
 .custom-data-grid{
     .dx-datagrid-headers
     {
-        border-radius: 5px 5px 0 0;
+        // border-radius: 5px 5px 0 0;
         .dx-header-row td{
-            background-color: #eeeeee;
+            background-color: #1D575D;
+            border: 1px solid #599096;
             padding: 8px 15px;
             font-family: 'Helvetica';
+            .dx-datagrid-text-content{
+                color: #fff;
+            }
+            // &:first-child{
+            //     border-top-left-radius: 5px;
+            // }
+            // &:last-child{
+            //     border-top-right-radius: 5px;
+            // }
+            &:hover{
+                background-color: #1D575D!important;
+                .dx-datagrid-text-content{
+                    color: #fff;
+                }
+            }
         }
-    } 
+    }
     .dx-datagrid-table .dx-row td,.dx-datagrid-table .dx-footer-row td{
         padding: 6px 15px;
         font-family: 'Helvetica';
         &.partnership-highlight{
-            background-color: #ebf0fa;
+            background-color: #1D575D;
+            color: #fff;
         }
         &.video-class{
             text-decoration: underline;
             &:hover{
-                background-color: #e5edff;
+                background-color: #1D575D;
+                color: #fff;
                 cursor: pointer;
             }
         }
         &.not-out-class{
-            border-left: 2px solid #c0d2fc!important;
+            border-left: 2px solid #1D575D!important;
         }
     }
 
@@ -35,9 +53,9 @@
                 padding: 6px 15px;
                 font-family: 'Helvetica';
             }
-        } 
+        }
     }
-    
+
 }
 .dx-widget {
     font-family: "Poppins", sans-serif;

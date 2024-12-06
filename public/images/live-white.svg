@@ -1,0 +1,26 @@
+<svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>
+#ripple{
+  transform-origin: center;
+  transform: scale(1);
+  fill-opacity:0.5;
+}
+
+#ripple{
+  animation: ripple-animation 1s infinite;
+}
+
+@keyframes ripple-animation{
+  0%{
+    transform: scale(1);
+    fill-opacity:1;
+  }
+  100%{
+    transform: scale(3);
+    fill-opacity:0;
+  }
+}
+</style>
+<circle cx="150" cy="150" r="50" fill="#ffffff"/>
+<circle id="ripple" cx="150" cy="150" r="50" fill="#ffffff"/>
+</svg>

@@ -74,5 +74,5 @@ export interface BallData {
     StBattingTypeID:number|null;
     SpinOrPace:number;
     MissRun:number;
-    SaveRun:number
+    SaveRun:number;
 }

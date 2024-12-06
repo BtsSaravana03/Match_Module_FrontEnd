@@ -13,6 +13,7 @@ import { VideoComponent } from "../components/video/video.component";
 import { InningsService } from '../components/innings-tab/innings.service';
 import Enumerable from 'linq';
 import { InningsTabComponent } from '../components/innings-tab/innings-tab.component';
+import { MatchData } from '../scorecard/batting-card/batting-card.interface';
 
 @Component({
   selector: 'app-ball-by-ball',
@@ -30,7 +31,7 @@ export class BallByBallComponent implements OnInit {
   private InningService = inject(InningsService);
 
   ballArray = signal<BallData[]>([]);
-  matchDetails = signal<any[]>([]);
+  matchDetails = signal<MatchData|{}>({});
   selctedInnings:number = 1;
   ballArrayFiltered = signal<BallData[]>([]);
 

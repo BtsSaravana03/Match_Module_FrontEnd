@@ -36,13 +36,13 @@ export class InningsTabComponent implements OnInit {
     const resizeSubscription:Subscription = this.resizeObservable$.subscribe(()=>{
       this.onWindowResize();
     })
-    const InnSub = this.InningService.InningsObserver$.subscribe(updated =>{
-      this.selctedInnings = updated;
-    })
+    // const InnSub = this.InningService.InningsObserver$.subscribe(updated =>{
+    //   this.selctedInnings = updated;
+    // })
     this.destroyRef.onDestroy(()=>{
       matchSubscription.unsubscribe();
       resizeSubscription.unsubscribe();
-      InnSub.unsubscribe();
+      //InnSub.unsubscribe();
     })
   }
   onWindowResize(){

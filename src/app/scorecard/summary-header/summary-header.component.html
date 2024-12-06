@@ -1,59 +1,193 @@
-<!-- @if(currentInningsData && currentInningsData.length>0){
-<div class="scoreboard-master-wrap container" [style.width]="width">
-  <div class="team-wrap">
-    <div class="team-logo">
-      {{currentInningsData[0].BattingClubPrefix}}
-    </div>
-    <div class="team-name">
-        {{currentInningsData[0].BattingClubName}}
-    </div>
-  </div>
-  <div class="score-wrap">
-    <div class="score">
-        {{currentInningsSummary.length>0?currentInningsSummary[0].TeamTotal:0}}/{{currentInningsSummary.length>0?currentInningsSummary[0].Dismissals:0}}
-    </div>
-    <div class="overs">
-        ({{currentInningsSummary.length>0?currentInningsSummary[0].Overs:0}})
-    </div>
-  </div>
-</div>
-} -->
 @if(matchDetails().inningsData && matchDetails().inningsData.length>0){
-  <section id="summary-header">
-    <div class="wrap">
-      <div class="team-score">
-        <div class="batting-team">
-          <p class="name">{{isMobile()?matchDetails().inningsData[0].BattingClubPrefix:matchDetails().inningsData[0].BattingClubName}}</p>
-          
-          <p class="score">
-            @for (m of TeamASummary; track $index) {
-             
-              @if(m.TeamID === matchDetails().inningsData[0].BattingClubID){
-                <span class="overs-display" *ngIf="m.isCurrentInn">({{m.Overs}})</span>
-                <span [ngClass]="{'text-dim':!m.isCurrentInn,'text-dark-d':m.isCurrentInn}">{{m.Total}}<span *ngIf="m.Dismissal !== 10">/{{m.Dismissal}}</span></span>
-              }
-              <span *ngIf="TeamASummary[$index+1]"> & </span>
-            }
-          </p>
-        </div>
-        <hr style="margin: 0;border: 1px solid #fff;" />
-        <div class="bowling-team">
-          <p class="name">{{isMobile()?matchDetails().inningsData[0].BowlingClubPrefix:matchDetails().inningsData[0].BowlingClubName}}</p>
-          <p class="score">
-            @for (m of TeamBSummary; track $index) {
-              @if(m.TeamID === matchDetails().inningsData[0].BowlingClubID){
-                <span class="overs-display" *ngIf="m.isCurrentInn">({{m.Overs}})</span>
-                <span [ngClass]="{'text-dim':!m.isCurrentInn,'text-dark-d':m.isCurrentInn}">{{m.Total}}<span *ngIf="m.Dismissal !== 10">/{{m.Dismissal}}</span></span>
-              }
-              <span *ngIf="TeamBSummary[$index+1]"> & </span>
-            }
-          </p>
-        </div>
-        
+<section id="summary-header">
+  <div class="wrap">
+    <div class="match-details">
+      <div class="match-date">
+        {{MatchDateFormatted}}
       </div>
-      <div class="team-status">
-  
+      <div class="match-name">
+        {{matchDetails().CompFullName}}
+      </div>
+      <hr />
+      <div class="match-venue">
+        {{matchDetails().StadiumName}}, {{matchDetails().City}}
       </div>
     </div>
-  </section>
+    <div class="status" *ngIf="!matchDetails().MatchComplete">
+      Live
+    </div>
+    <div class="team-score">
+      <div class="batting-team">
+        <p class="name">
+          {{isMobile()?matchDetails().inningsData[0].BattingClubPrefix:matchDetails().inningsData[0].BattingClubName}}
+        </p>
+        <p class="score">
+          @for (m of TeamASummary; track $index) {
+          @if(m.TeamID === matchDetails().inningsData[0].BattingClubID){
+          <span class="overs-display" *ngIf="m.isCurrentInn">({{m.Overs}})</span>
+          <span [ngClass]="{'text-dim':!m.isCurrentInn,'text-dark-d':m.isCurrentInn}">{{m.Total}}<span
+              *ngIf="m.Dismissal !== 10">/{{m.Dismissal}}</span></span>
+          }
+          <span *ngIf="TeamASummary[$index+1]"> & </span>
+          }
+        </p>
+      </div>
+      <hr style="margin: 0;" class="line-color" />
+      <div class="bowling-team">
+        <p class="name">
+          {{isMobile()?matchDetails().inningsData[0].BowlingClubPrefix:matchDetails().inningsData[0].BowlingClubName}}
+        </p>
+        <p class="score">
+          @for (m of TeamBSummary; track $index) {
+          @if(m.TeamID === matchDetails().inningsData[0].BowlingClubID){
+          <span class="overs-display" *ngIf="m.isCurrentInn">({{m.Overs}})</span>
+          <span [ngClass]="{'text-dim':!m.isCurrentInn,'text-dark-d':m.isCurrentInn}">{{m.Total}}<span
+              *ngIf="m.Dismissal !== 10">/{{m.Dismissal}}</span></span>
+          }
+          <span *ngIf="TeamBSummary[$index+1]"> & </span>
+          }
+        </p>
+      </div>
+    </div>
+    <div class="team-status">
+      {{description}}
+    </div>
+    @if(ballArray().length>0){
+        <div class="over-container" #overContainer>
+            <!-- <div class="current-over">
+              OVERS {{CurrentOver}}
+            </div> -->
+            <div class="current-over-items">
+                <ng-container *ngFor="let over of CurrentOverRuns; let i = index">
+                  <div class="over"><strong>{{ over.overId }}</strong></div>
+                  <div class="over-balls">
+                    <ng-container *ngFor="let ball of over.overBalls; let j = index">
+                      <div class="item"
+                           [ngClass]="{'four': ball.four, 'six': ball.six, 'wicket': ball.wicket}">
+                        <span>{{ ball.run }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+          </div>
+
+          <hr style="margin: 20px 0 0 0;" class="line-color" />
+          <div class="current-striker-bowler">
+            <div class="batting-wrap">
+              <div class="header">
+                BATTING
+              </div>
+              <div class="items-wrap">
+                  @if(strikerData[0]){
+                      <div class="item-container">
+                          <div class="player-shilloutte">
+                            <img src="../../../../images/player-shilloutte-sm.png" alt="">
+                          </div>
+                          <div class="player-name">
+                            <div class="first">
+                              {{strikerData[0].FirstName}} <img src="../../../../images/cricket-bat-icon.png" alt="" *ngIf="strikerData[0].isStriker">
+                            </div>
+                            <div class="last">
+                              {{strikerData[0].LastName}}
+                            </div>
+                          </div>
+                          <div class="score">
+                            {{strikerData[0].Runs}} <em>({{strikerData[0].Balls}})</em>
+                          </div>
+                        </div>
+                  }
+                  @if(nonStrikerData[0]){
+                      <div class="item-container">
+                          <div class="player-shilloutte">
+                            <img src="../../../../images/player-shilloutte-sm.png" alt="">
+                          </div>
+                          <div class="player-name">
+                            <div class="first">
+                              {{nonStrikerData[0].FirstName}} <img src="../../../../images/cricket-bat-icon.png" alt="" *ngIf="nonStrikerData[0].isStriker">
+                            </div>
+                            <div class="last">
+                              {{nonStrikerData[0].LastName}}
+                            </div>
+                          </div>
+                          <div class="score">
+                            {{nonStrikerData[0].Runs}} <em>({{nonStrikerData[0].Balls}})</em>
+                          </div>
+                        </div>
+                  }
+              </div>
+
+            </div>
+            @if(bowlerData[0]){
+              <div class="vertical-line"></div>
+              <div class="bowling-wrap">
+                <div class="header">
+                  BOWLING
+                </div>
+                <div class="items-wrap">
+                  <div class="item-container">
+                    <div class="player-shilloutte">
+                      <img src="../../../../images/player-shilloutte-sm.png" alt="">
+                    </div>
+                    <div class="player-name">
+                      <div class="first">
+                        {{bowlerData[0].FirstName}}
+                      </div>
+                      <div class="last">
+                          {{bowlerData[0].LastName}}
+                      </div>
+                    </div>
+                    <div class="score">
+                      {{bowlerData[0].Wickets}} / {{bowlerData[0].Runs}} <em>({{bowlerData[0].Overs}})</em>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            }
+          </div>
+    }
+  </div>
+</section>
+}
+@else if(matchDetails()){
+    <section id="summary-header">
+        <div class="wrap">
+          <div class="match-details">
+            <div class="match-date">
+              {{MatchDateFormatted}}
+            </div>
+            <div class="match-name">
+              {{matchDetails().CompFullName}}
+            </div>
+            <hr />
+            <div class="match-venue">
+              {{matchDetails().StadiumName}}, {{matchDetails().City}}
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="team-score flex-fill">
+                <div class="batting-team">
+                  <p class="name">
+                    {{isMobile()?matchDetails().ClubAPrefix:matchDetails().ClubAFull}}
+                  </p>
+                </div>
+                <hr style="margin: 0;" class="line-color" />
+                <div class="bowling-team">
+                  <p class="name">
+                    {{isMobile()?matchDetails().ClubBPrefix:matchDetails().ClubBFull}}
+                  </p>
+
+                </div>
+              </div>
+              <div class="match-not-started-msg">
+                <h3 style="color: #fff;font-size: 25px;font-weight: 600;margin-left: 10px;">{{MatchStartMsg}}</h3>
+              </div>
+          </div>
+
+          <div class="team-status">
+            {{description}}
+          </div>
+        </div>
+      </section>
 }

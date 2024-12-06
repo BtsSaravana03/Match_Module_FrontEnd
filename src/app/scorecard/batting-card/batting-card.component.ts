@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, input, OnInit } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { checkSR } from '../../scripts/generic';
 import { getDismissalString } from '../../scripts/cricket_gen';
@@ -7,7 +7,6 @@ import { BattingCard, BattingCardSummary } from './batting-card.interface';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { VideoService } from '../../components/video/video.service';
 import { CommonModule } from '@angular/common';
-import { fromEvent, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-batting-card',
@@ -22,11 +21,11 @@ export class BattingCardComponent{
   selctedInnings = input.required<number>();
   ballArray = input.required<BallData[]>();
   summary = input.required<BattingCardSummary[]>();
-  battingCard:BattingCard[]|[] = [];
+  battingCard:BattingCard[] = [];
   nonStrikerDismissal:any = {};
   isMobile = input.required<boolean>();
-  
-  
+
+
   constructor(){
     effect(()=>{
       if(this.ballArray() && this.selctedInnings()){
@@ -34,7 +33,7 @@ export class BattingCardComponent{
       }
     })
   }
-  
+
   generateBattingCard(){
     this.nonStrikerDismissal = [];
     this.battingCard = Enumerable.from(this.ballArray())
@@ -57,7 +56,8 @@ export class BattingCardComponent{
             dotPer: checkSR((g.count(i => i.Batruns === 0) / g.count(i => i.Batballs===1)) * 100),
             bdryPer: checkSR(((g.sum(i => (i.isFour === 1 ? 4 : 0)) + (g.sum(i => (i.isSix === 1 ? 6 : 0)))) / g.count(i => i.Batballs===1)) * 100),
             wkt: g.count(i => i.Dismissal === 1),
-            dismissalSts: g.count(i => i.Dismissal === 1)===0?'Not Out': this.setDismissal(g.first(i => i.Dismissal === 1))
+            dismissalSts: g.count(i => i.Dismissal === 1)===0?'Not Out': this.setDismissal(g.where(i => i.Dismissal === 1).toArray()),
+            isLastRow: false
         };
     }).toArray();
     ///For Non-Striker Dismissals
@@ -67,28 +67,39 @@ export class BattingCardComponent{
         element.dismissalSts = getDismissalString(this.nonStrikerDismissal[element.strikerID]);
       }
     }
-  }
-  setDismissal(ball:any){
-    if(ball.DismissedBatter !== ball.StrikerID){
-      this.nonStrikerDismissal[ball.StrikerID] = ball;
-      return null
+    if(this.battingCard.length > 0){
+        this.battingCard[this.battingCard.length - 1].isLastRow = true;
     }
-    return getDismissalString(ball);
+
+  }
+  setDismissal(balls:any){
+    let value = 'Not Out';
+    balls.forEach((ball:BallData) => {
+        if(ball.DismissedBatter !== ball.StrikerID){
+            this.nonStrikerDismissal[ball.NonStrikerID] = ball;
+          }
+          else{
+            value = getDismissalString(ball);
+          }
+    });
+    return value
   }
   onCellClick(event:any,clickedColumn:string){
-    //const clickedColumn = event.column.dataField;
     const clickedRowData:BattingCard = event.data;
     const innings = this.selctedInnings();
     switch (clickedColumn) {
       case 'dismissalSts':
         this.videoService.LibraryBallVideo(clickedRowData.strikerID,'BatsmanWickets',innings);
         break;
+
       case 'runs':
         this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Runs',innings);
         break;
+
       case 'balls':
         this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Ball',innings);
         break;
+
       case 'dot':
         this.videoService.LibraryBallVideo(clickedRowData.strikerID,'Dots',innings);
         break;
@@ -121,36 +132,4 @@ export class BattingCardComponent{
         return `Extras: ${this.summary()[0]?.ExtrasBreakup || ''}`;
     };
   }
-
-  addCustomRows() {
-    // setTimeout(() => {
-    //   const gridElement = document.querySelector('.custom-data-grid .dx-datagrid-rowsview .dx-datagrid-table tbody');
-    //   if (gridElement) {
-    //     // Create custom row 1
-    //     const customRow1 = document.createElement('tr');
-    //     customRow1.classList.add('custom-footer-row');
-    //     customRow1.innerHTML = `
-    //       <td class="gridcell">Extras</td>
-    //       <td class="gridcell"></td>
-    //       <td class="gridcell" colspan='12'></td>
-    //     `;
-  
-    //     // Create custom row 2
-    //     const customRow2 = document.createElement('tr');
-    //     customRow2.classList.add('custom-footer-row');
-    //     customRow2.innerHTML = `
-    //        <td class="gridcell">Extras</td>
-    //       <td class="gridcell"></td>
-    //       <td class="gridcell" colspan='12'></td>
-    //     `;
-  
-    //     gridElement.appendChild(customRow1);
-    //     gridElement.appendChild(customRow2);
-    //   }
-    // }, 100);
-  }  
-  isLastRow(data: any): boolean {
-    return this.battingCard[this.battingCard.length - 1] === data;
-  }
 }
-

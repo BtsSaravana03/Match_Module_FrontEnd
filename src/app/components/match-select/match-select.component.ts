@@ -5,11 +5,12 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 import { HttpServices } from '../../services/http.service';
 import { BallByBallService } from '../../services/ball-by-ball.service';
 import { AppService } from '../../services/app.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-match-select',
   standalone: true,
-  imports: [DxPopupModule,DxSelectBoxModule],
+  imports: [DxPopupModule,DxSelectBoxModule,CommonModule],
   templateUrl: './match-select.component.html',
   styleUrl: './match-select.component.scss'
 })
@@ -34,7 +35,7 @@ export class MatchSelectComponent implements OnInit {
     stylingMode: 'contained',
     onClick: async () => {
       if(this.selectedComp && this.selectedMatch){
-        await this.ballService.generate_ballbyball(this.selectedComp,this.selectedMatch);
+        this.ballService.generate_ballbyball(this.selectedComp,this.selectedMatch);
         await this.ballService.getCurrentMatchDetails(this.selectedMatch);
       }
       this.appService.toggleMatchSelection(false);
