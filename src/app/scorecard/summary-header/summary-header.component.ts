@@ -1,4 +1,4 @@
-import { Component, effect, input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild, viewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild, viewChild } from '@angular/core';
 import { BattingCardSummary, MatchData } from '../batting-card/batting-card.interface';
 import { CommonModule } from '@angular/common';
 import Enumerable from 'linq';
@@ -23,6 +23,7 @@ interface TeamSummary{
   styleUrl: './summary-header.component.scss'
 })
 export class SummaryHeaderComponent implements OnChanges{
+  overContainerDiv = viewChild<ElementRef>('overContainer')
   ballArray = input.required<BallData[]>();
   summary = input.required<BattingCardSummary[]>();
   matchDetails = input.required<MatchData>();
@@ -39,11 +40,17 @@ export class SummaryHeaderComponent implements OnChanges{
   bowlerData:any[] = [];
   description:string = '';
   MatchStartMsg:string = 'Yet to start';
+  first:boolean = true;
 
   constructor(){
     effect(()=>{
       if(this.summary() && this.matchDetails()){
         this.updateSummary();
+        setTimeout(() => {
+            if(this.overContainerDiv()){
+                this.overContainerDiv()!.nativeElement.scrollLeft = this.overContainerDiv()!.nativeElement.scrollWidth;
+            }
+        }, 0);
       }
     })
   }
@@ -52,6 +59,9 @@ export class SummaryHeaderComponent implements OnChanges{
       if(changes['ballArray']){
         this.updateIndividualScores();
         this.generateEquation();
+        if(this.overContainerDiv()){
+            this.overContainerDiv()!.nativeElement.scrollLeft = this.overContainerDiv()!.nativeElement.scrollWidth;
+        }
       }
   }
   updateSummary(){
@@ -92,7 +102,7 @@ export class SummaryHeaderComponent implements OnChanges{
         this.CurrentOver = lastBall.Overs;
         this.CurrentOverRuns = Enumerable.from(balls)
         .where(i => i.InningsId === lastBall.InningsId)
-        .takeFromLast(24) // Take the last 30 balls
+        .takeFromLast(50)
         .groupBy(i => `${i.OverId}`)
         .select((g)=>{
             return {
@@ -105,7 +115,6 @@ export class SummaryHeaderComponent implements OnChanges{
                 })).toArray()
             };
         }).toArray();
-        console.log(this.CurrentOverRuns);
         let [striker,nonStriker] = lastBall.Partnerid.split('-');
         this.strikerData = Enumerable.from(balls).where(i => i.StrikerID === parseInt(striker))
         .groupBy(i => `${i.Partnerid}-${i.StrikerID}-${i.NonStrikerID}`)

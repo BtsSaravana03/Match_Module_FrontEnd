@@ -1,29 +1,30 @@
+@import '../../../styles/variable';
 .dismissal-row{
-    border-bottom: 1px solid #e5e8f0;
+    border-bottom: 1px solid $table-border-color;
 }
 .gridcell{
     &.text-right{
         text-align: right;
     }
-   
+
 }
 .main-row td{
-    border: 1px solid #e5e8f0;
+    border: 1px solid $table-border-color;
     @media screen and (max-width:567px) {
         border: unset;
     }
 }
 .dismissal-row{
     @media screen and (max-width:567px) {
-        border-bottom: 1px solid #e5e8f0;
+        border-bottom: 1px solid $table-border-color;
     }
 }
 .custom-footer-row{
     td{
-        border: 1px solid #e5e8f0;
+        border: 1px solid $table-border-color;
     }
     &.total-row{
-        background-color: rgb(233, 233, 233);
+        background-color: $table-summary-background;
     }
-    
+
 }

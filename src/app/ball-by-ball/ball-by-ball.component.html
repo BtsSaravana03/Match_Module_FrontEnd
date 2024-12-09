@@ -3,7 +3,7 @@
   <dx-data-grid [dataSource]="ballArrayFiltered()" keyExpr="AutoId" [showColumnLines]="true"
     [sorting]="{mode:'multiple'}" [showRowLines]="true" [showBorders]="true"
     [elementAttr]="{ class: 'custom-data-grid' }" [allowColumnReordering]="true" [allowColumnResizing]="true"
-    [columnAutoWidth]="true">
+     [columnAutoWidth]="true">
     <!-- <dxo-column-fixing [enabled]="true"></dxo-column-fixing> -->
     <dxo-toolbar>
       <dxi-item location="before">
@@ -20,29 +20,68 @@
     </dxo-toolbar>
     <dxo-header-filter [visible]="true"></dxo-header-filter>
     <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
-    <dxi-column dataField="InningsId" caption="Inn" alignment="left"></dxi-column>
-    <dxi-column dataField="StrikerName" caption="Batsman Name" alignment="left"></dxi-column>
+    <!-- <dxi-column dataField="InningsId" caption="Inn" alignment="left"></dxi-column> -->
+    <dxi-column dataField="StrikerName" caption="Batsman" alignment="left"></dxi-column>
     <dxi-column dataField="StrokeName" caption="Stroke" alignment="left"></dxi-column>
-    <dxi-column dataField="Overs" caption="Overs" alignment="left"></dxi-column>
-    <dxi-column dataField="BowlerName" caption="Bowler Name" alignment="left"></dxi-column>
-    <dxi-column dataField="DeliveryStyleName" caption="Delivery Style" alignment="left"></dxi-column>
-    <dxi-column dataField="Runs" caption="Runs" alignment="left"></dxi-column>
-    <dxi-column dataField="Dismissal" caption="Wkt" alignment="left" cellTemplate="dismissalTemplate"></dxi-column>
+    <dxi-column cellTemplate="BatTypeTemplate" caption="Type" alignment="left"></dxi-column>
+    <dxi-column dataField="Overs" caption="O" alignment="left"></dxi-column>
+    <dxi-column dataField="BowlerName" caption="Bowler" alignment="left"></dxi-column>
+    <dxi-column dataField="DeliveryStyleName" caption="Delivery" alignment="left"></dxi-column>
+    <dxi-column dataField="Runs" caption="R" alignment="left"></dxi-column>
+    <dxi-column dataField="Dismissal" caption="W" alignment="left" cellTemplate="dismissalTemplate"></dxi-column>
     <dxi-column dataField="isFour" caption="IsFour" alignment="left"></dxi-column>
     <dxi-column dataField="isSix" caption="IsSix" alignment="left"></dxi-column>
-    <dxi-column caption="TeamScore" alignment="left" cellTemplate="TeamScoreTemplate"></dxi-column>
-    <dxi-column dataField="DismissalTypeDesc" caption="DismissalType" alignment="left"></dxi-column>
+    <dxi-column caption="Score" alignment="left" cellTemplate="TeamScoreTemplate"></dxi-column>
+    <dxi-column caption="Crease" alignment="left" dataField="CreaseMovementName"></dxi-column>
+    <dxi-column caption="Fielder" alignment="left" dataField="DismissalFielder1Name"></dxi-column>
+    <dxi-column caption="From" alignment="left" cellTemplate="OverAroundTemplate"></dxi-column>
+    <!-- <dxi-column dataField="DismissalTypeDesc" caption="DismissalType" alignment="left"></dxi-column> -->
+    <dxi-column caption="Dismissal" alignment="left" cellTemplate="DismissalTypeTemplate"></dxi-column>
+    <dxi-column caption="Miss/Save" alignment="left" cellTemplate="MissSaveRunsTemplate" ></dxi-column>
+    <dxi-column caption="Appeal" alignment="left" cellTemplate="AppealTemplate"></dxi-column>
+    <dxi-column caption="WTO" alignment="left" cellTemplate="WTOTemplate"></dxi-column>
+    <dxi-column caption="End" alignment="left" dataField="BowlingEnd"></dxi-column>
     <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
     <dxo-export [enabled]="true" [allowExportSelectedData]="false" [formats]="['xlsx', 'pdf']"></dxo-export>
     <div *dxTemplate="let data of 'cellTemplate'">
       <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick(data.rowIndex)"></i>
     </div>
     <div *dxTemplate="let d of 'dismissalTemplate'">
-      @if(d.data.Dismissal===1){W}@else {-}
+      @if(d.data.Dismissal===1){W}@else {}
     </div>
     <div *dxTemplate="let d of 'TeamScoreTemplate'">
       {{d.data.TeamRuns}}/{{d.data.TeamWickets}}
     </div>
+    <div *dxTemplate="let d of 'MissSaveRunsTemplate'">
+        @if(d.data.MissRun > 0){
+            -{{d.data.MissRun}}
+        }@else if(d.data.SaveRun > 0){
+            {{d.data.SaveRun}}
+        }@else {
+
+        }
+      </div>
+      <div *dxTemplate="let d of 'AppealTemplate'">
+        @if(d.data.Appeal === 1){
+            Appeal
+        }@else {
+
+        }
+      </div>
+      <div *dxTemplate="let d of 'WTOTemplate'">
+        @if(d.data.FieldType===1 || d.data.FieldType===2 || d.data.FieldType===5){Yes}@else {No}
+      </div>
+      <div *dxTemplate="let d of 'OverAroundTemplate'">
+        @if(d.data.OverAround===1){Over the Wicket}@else {Around the Wicket}
+      </div>
+      <div *dxTemplate="let d of 'DismissalTypeTemplate'">
+        @if(d.data.DismissalTypeDesc=== 'None'){}@else {
+            {{d.data.DismissalTypeDesc}}
+        }
+      </div>
+      <div *dxTemplate="let d of 'BatTypeTemplate'">
+        @if(d.data.BatTypeID===1){RHB}@else {LHB}
+      </div>
     <dxo-scrolling mode="infinite"></dxo-scrolling>
   </dx-data-grid>
 </div>

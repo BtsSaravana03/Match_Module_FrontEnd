@@ -3,10 +3,10 @@ import { GraphicsService } from '../graphics.service';
 import { VideoService } from '../../components/video/video.service';
 import { BallByBallService } from '../../services/ball-by-ball.service';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
-import Enumerable from 'linq';
 import { CommonModule } from '@angular/common';
 import { DxChartModule } from 'devextreme-angular';
 import { InningsService } from '../../components/innings-tab/innings.service';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-manhatten',
@@ -50,29 +50,37 @@ export class ManhattenComponent {
       matchSubscription.unsubscribe();
       InnSub.unsubscribe();
     })
-    
+
   }
   customizeLabelText(pointInfo: any): string {
-    return `${pointInfo.value}`; 
+    return `${pointInfo.value}`;
   }
   setManhatten(){
     if(this.matchDetails().inningsData && this.matchDetails().inningsData.length>0){
       let club = this.matchDetails().inningsData[this.selctedInnings - 1].BattingClubID;
       this.clubName = this.matchDetails().inningsData[this.selctedInnings - 1].BattingClubPrefix;
       let filteredBalls = this.graphicServices.applyFilter(this.ballArray());
-      
-      this.manhatten = Enumerable.from(filteredBalls)
-        .where(i => i.BattingClubID===club)
-        .groupBy(i => `${i.OverId}`)
-        .select((g, i) => {
+      let totalOvers = this.matchDetails().MatchOvers;
+      if(totalOvers === 0 && this.ballArray().length>0){
+        totalOvers = _.last(this.ballArray())?.OverId ?? 0;
+      }
+      this.manhatten = Array.from({ length: totalOvers }, (_, index) => {
+      const overId = index + 1;
+      const overData = filteredBalls.filter(i => i.BattingClubID === club && i.OverId === overId);
+      const runs = overData.reduce((sum, i) => sum + (i.Runs || 0), 0);
+      const wickets = overData.filter(i => i.Dismissal === 1).length;
           return {
-            Over: g.first().OverId,
-            Runs: g.lastOrDefault()?.TeamRuns || 0,
-            Wickets: g.count(i => i.Dismissal === 1),
+              Over: overId,
+              Runs: runs,
+              Wickets: wickets,
           };
-        })
-        .toArray();
+      });
+      this.manhatten.push({
+        Over:0,
+        Runs: 0,
+        Wickets:0
+    })
     }
-    
+
   }
 }

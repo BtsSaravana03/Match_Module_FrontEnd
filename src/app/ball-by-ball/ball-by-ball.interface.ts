@@ -41,7 +41,7 @@ export interface BallData {
     OverBallNo: number;
     DeliveryStyle: number;
     StrokeType: number;
-    OverAround: string | null;
+    OverAround: number | null;
     BowlingEnd: string | null;
     StrikerName: string;
     NonStrikerName: string;
@@ -75,4 +75,7 @@ export interface BallData {
     SpinOrPace:number;
     MissRun:number;
     SaveRun:number;
+    CreaseMovementName:string;
+    Appeal:number;
+    BatTypeID:number;
 }

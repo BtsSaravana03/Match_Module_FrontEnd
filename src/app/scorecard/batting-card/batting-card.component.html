@@ -20,7 +20,7 @@
       <tr class="main-row" role="row">
         <td class="gridcell" [ngClass]="{'not-out-class':m.data.dismissalSts === 'Not Out' }">{{ m.data.strikerName }}</td>
         <td class="gridcell" *ngIf="!isMobile()" [ngClass]="{'video-class': m.data.dismissalSts !== 'Not Out'}" (click)="onCellClick(m,'dismissalSts')">{{ m.data.dismissalSts }}</td>
-        <td class="gridcell video-class text-right" (click)="onCellClick(m,'runs')">{{ m.data.runs }}</td>
+        <td class="gridcell video-class text-right text-bold" (click)="onCellClick(m,'runs')">{{ m.data.runs }}</td>
         <td class="gridcell video-class text-right" (click)="onCellClick(m,'balls')">{{ m.data.balls }}</td>
         <td class="gridcell text-right" >{{ m.data.strikeRate }}</td>
         <td class="gridcell video-class text-right" (click)="onCellClick(m,'dot')">{{ m.data.dot }}</td>
@@ -47,15 +47,27 @@
           </td>
         </tr>
         <tr class="custom-footer-row total-row" role="row">
-          <td class="gridcell"><strong>Total</strong></td>
-          <td class="gridcell">
-                <strong *ngIf="summary()[selctedInnings()-1]">{{summary()[selctedInnings()-1].Overs}} Ov (RR: {{summary()[selctedInnings()-1].RunRate}})</strong>
-          </td>
-          <td class="gridcell text-right">
-            <strong *ngIf="summary()[selctedInnings()-1]">{{summary()[selctedInnings()-1].TeamTotal}}/{{summary()[selctedInnings()-1].Dismissals}}</strong>
-          </td>
-          <td class="gridcell" [attr.colspan]="!isMobile() ? 10 : 9">
-          </td>
+            @if(isMobile()){
+                <td class="gridcell"><strong>Total</strong></td>
+                <td class="gridcell text-right">
+                  <strong *ngIf="summary()[selctedInnings()-1]">{{summary()[selctedInnings()-1].TeamTotal}}/{{summary()[selctedInnings()-1].Dismissals}}</strong>
+                </td>
+                <td class="gridcell" [attr.colspan]="!isMobile() ? 11 : 10">
+                    <strong *ngIf="summary()[selctedInnings()-1]">{{summary()[selctedInnings()-1].Overs}} Ov (RR: {{summary()[selctedInnings()-1].RunRate}})</strong>
+                </td>
+            }
+            @else {
+                <td class="gridcell"><strong>Total</strong></td>
+                <td class="gridcell">
+                      <strong *ngIf="summary()[selctedInnings()-1]">{{summary()[selctedInnings()-1].Overs}} Ov (RR: {{summary()[selctedInnings()-1].RunRate}})</strong>
+                </td>
+                <td class="gridcell text-right">
+                  <strong *ngIf="summary()[selctedInnings()-1]">{{summary()[selctedInnings()-1].TeamTotal}}/{{summary()[selctedInnings()-1].Dismissals}}</strong>
+                </td>
+                <td class="gridcell" [attr.colspan]="!isMobile() ? 10 : 9">
+                </td>
+            }
+
         </tr>
       </ng-container>
     </ng-container>

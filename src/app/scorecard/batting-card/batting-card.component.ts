@@ -1,6 +1,6 @@
 import { Component, effect, inject, input } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
-import { checkSR } from '../../scripts/generic';
+import { checkSR, checkSRNoDecimal } from '../../scripts/generic';
 import { getDismissalString } from '../../scripts/cricket_gen';
 import Enumerable from 'linq';
 import { BattingCard, BattingCardSummary } from './batting-card.interface';
@@ -46,7 +46,7 @@ export class BattingCardComponent{
             strikerName: striker_name,
             runs: g.sum(i => i.Batruns),
             balls: g.count(i => i.Batballs===1),
-            strikeRate: checkSR((g.sum(i => i.Batruns) / g.count(i => i.Batballs===1)) * 100),
+            strikeRate: checkSRNoDecimal((g.sum(i => i.Batruns) / g.count(i => i.Batballs===1)) * 100),
             dot: g.count(i => i.Batruns === 0),
             _1s: g.sum(i => (i.Batruns === 1 && i.ExtraTypeId === 0) ? 1 : 0),
             _2s: g.sum(i => (i.Batruns === 2 && i.ExtraTypeId === 0) ? 1 : 0),

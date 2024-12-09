@@ -6,6 +6,7 @@ import { HttpServices } from '../../services/http.service';
 import { BallByBallService } from '../../services/ball-by-ball.service';
 import { AppService } from '../../services/app.service';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-match-select',
@@ -42,6 +43,25 @@ export class MatchSelectComponent implements OnInit {
 
     },
   };
+  constructor(private route:ActivatedRoute){
+    if(sessionStorage.getItem('currentMatchId')){
+        let matchid = parseInt(sessionStorage.getItem('currentMatchId')!);
+        sessionStorage.removeItem('currentMatchId');
+        this.setSessionMatch(matchid);
+    }
+    this.route.queryParamMap.subscribe(params => {
+        let matchid = params.get('matchid');
+        if(matchid){
+            let matchid = parseInt(sessionStorage.getItem('currentMatchId')!);
+            this.setSessionMatch(matchid);
+        }
+      });
+  }
+  setSessionMatch(id:number){
+    this.ballService.generate_ballbyball(null,id);
+    this.ballService.getCurrentMatchDetails(id);
+    this.appService.toggleMatchSelection(false);
+  }
   async ngOnInit (){
     this.resizeObservable$ = fromEvent(window,'resize');
     this.resizeSubscription$ = this.resizeObservable$.subscribe(e => {
@@ -51,8 +71,11 @@ export class MatchSelectComponent implements OnInit {
     this.destroyRef.onDestroy(()=>{
       this.resizeSubscription$.unsubscribe();
     })
-    this.getCompetitions();
-    const res = await this.ballService.getDismissalTypes();
+
+        this.getCompetitions();
+
+
+    //const res = await this.ballService.getDismissalTypes();
   }
   onResize(){
     if(window.innerWidth < 750){

@@ -33,19 +33,19 @@ export const routes: Routes = [
         },
         {
           path: 'wagonwheel',
-          component: WagonWheelComponent, 
+          component: WagonWheelComponent,
         },
         {
             path: 'beehive',
-            component: BeehiveComponent, 
+            component: BeehiveComponent,
         },
         {
             path: 'manhatten',
-            component: ManhattenComponent, 
+            component: ManhattenComponent,
         },
         {
             path: 'worm',
-            component: WormComponent, 
+            component: WormComponent,
         }
       ],
     },

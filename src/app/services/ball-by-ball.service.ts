@@ -18,7 +18,7 @@ export class BallByBallService implements OnDestroy {
   matchObservable$ = this.matchDetails$.asObservable();
   matchDetails:MatchData|{} ={};
   dismissalTypes: any[] = [];
-  competitionID!: number;
+  competitionID!: number|null;
   matchID!: number;
   private destroy$ = new Subject <void>();
 
@@ -51,7 +51,7 @@ export class BallByBallService implements OnDestroy {
 //       error: (err) => console.error('Polling subscription error:', err)
 //     });
 //   }
-    generate_ballbyball(compid: number, matchid: number) {
+    generate_ballbyball(compid: number|null, matchid: number) {
         this.competitionID = compid;
         this.matchID = matchid;
         this.destroy$.next();

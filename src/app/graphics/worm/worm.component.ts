@@ -7,6 +7,7 @@ import { GraphicsService } from '../graphics.service';
 import { DxChartModule } from 'devextreme-angular';
 import { CommonModule } from '@angular/common';
 import { InningsService } from '../../components/innings-tab/innings.service';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-worm',
@@ -49,27 +50,43 @@ export class WormComponent {
       matchSubscription.unsubscribe();
       InnSub.unsubscribe();
     })
-    
+
   }
-  customizeLabelText(pointInfo: any): string {
-    return `${pointInfo.value}`; 
-  }
+  customizeLabelText = (pointInfo: any) => {
+    return pointInfo.value !== 0 ? pointInfo.value.toString() : '';
+};
   setManhatten() {
-    let club = this.matchDetails().inningsData[this.selctedInnings - 1].BattingClubID;
-    this.clubName = this.matchDetails().inningsData[this.selctedInnings - 1].BattingClubPrefix;
-    let filteredBalls = this.graphicServices.applyFilter(this.ballArray());
-    
-    this.worm = Enumerable.from(filteredBalls)
-      .where(i => i.BattingClubID===club)
-      .groupBy(i => `${i.OverId}`)
-      .select((g, i) => {
-        return {
-          Over: g.first().OverId,
-          Runs: g.lastOrDefault()?.TeamRuns || 0,
-          Wickets: g.count(i => i.Dismissal === 1),
-        };
-      })
-      .toArray();
+    if (this.matchDetails().inningsData && this.matchDetails().inningsData.length > 0) {
+        let club = this.matchDetails().inningsData[this.selctedInnings - 1].BattingClubID;
+        this.clubName = this.matchDetails().inningsData[this.selctedInnings - 1].BattingClubPrefix;
+        let filteredBalls = this.graphicServices.applyFilter(this.ballArray());
+        let totalOvers = this.matchDetails().MatchOvers;
+        if (totalOvers === 0 && this.ballArray().length > 0) {
+            totalOvers = _.last(this.ballArray())?.OverId ?? 0;
+        }
+        this.worm = Array.from({ length: totalOvers }, (_, index) => {
+            const overId = index + 1;
+            const overData = filteredBalls.filter(i => i.BattingClubID === club && i.OverId === overId && i.InningsId===this.selctedInnings);
+            // const runs = overData.length > 0
+            //     ? overData.reduce((sum, i) => sum + (i.TeamRuns || 0), 0)
+            //     : null; // Set runs to null if no data for this over
+            const runs = overData.length > 0?overData[overData.length-1].TeamRuns: null
+            const wickets = overData.filter(i => i.Dismissal === 1).length;
+            return {
+                Over: overId,
+                Runs: runs,
+                Wickets: wickets,
+            };
+        });
+        if (this.worm.length > 0) {
+            this.worm.push({
+                Over:0,
+                Runs: 0,
+                Wickets:0
+            })
+        }
+
+    }
   }
-  
+
 }

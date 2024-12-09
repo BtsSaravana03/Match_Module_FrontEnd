@@ -1,4 +1,4 @@
-<dx-popup [width]="width" [height]="height" [hideOnOutsideClick]="false" [showCloseButton]="false"
+<dx-popup [width]="width" [height]="'auto'" [hideOnOutsideClick]="false" [showCloseButton]="false"
   shadingColor="rgba(255, 255, 255, 1)" [(visible)]="showPopup" [showTitle]="false" [dragEnabled]="false"
   [attr.class]="'match-selection'">
   <div *dxTemplate="let data of 'content'">
@@ -24,7 +24,31 @@
         </dx-select-box>
       </div>
     </div>
+    <!-- <div class="match-selection-wrap">
+        <div class="match-item">
+            <div class="date">
+                Mon 9 Dec
+                <br />
+                19:00
+            </div>
+            <div class="match">
+                <div class="teams">
+                    <div class="teama">
+                     Bangladesh-Woman v  Scotland-Woman
+                    </div>
 
+                 </div>
+                 <div class="venue">
+                    Rajiv Gandhi International Stadium, Delhi
+                </div>
+
+
+            </div>
+            <div class="status">
+                Match Complete
+            </div>
+        </div>
+    </div> -->
   </div>
   <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="center" [options]="generateButton"
     [disabled]="selectedMatch === undefined">

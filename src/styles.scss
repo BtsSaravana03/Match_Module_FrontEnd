@@ -1,3 +1,4 @@
+@import './styles/variable';
 @font-face {
     font-family: 'Helvetica';
     font-style: normal;
@@ -8,18 +9,23 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: $theme-color #ffffff;
+    @media screen and (max-width:567px) {
+        scrollbar-width: none;
+    }
     body{
-        font-family: "Poppins", sans-serif;
+        font-family: $font-primary;
         h1,h2,h3,h4,h5,h6{
-            font-family: "Poppins", sans-serif;
+            font-family: $header-font;
             font-weight: 700;
             margin-bottom: 0;
         }
     }
 }
-.custom-cell-style{
-    padding: 5px 15px;
-}
+// .custom-cell-style{
+//     padding: 5px 15px;
+// }
 .dx-overlay-wrapper{
-    font-family: "Poppins", sans-serif;
+    font-family: $font-primary;
 }

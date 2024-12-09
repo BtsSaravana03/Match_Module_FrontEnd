@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AppService } from '../services/app.service';
 import { LoginServices } from './login.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   private appService = inject(AppService);
   private loginServices = inject(LoginServices);
   private fb = inject(FormBuilder);
-  private router = inject(Router);
+  private router = inject(ActivatedRoute);
 
   LoginForm!: FormGroup;
   errorMessage:string|null = null;
@@ -34,8 +34,7 @@ export class LoginComponent implements OnInit {
       const { username, password } = this.LoginForm.value;
       const res = await this.loginServices.login(username, password);
       if (res) {
-        window.location.href = '/scorecard';
-        
+            window.location.href = '/scorecard';
       } else {
         this.errorMessage = 'Username or Password is Incorrect';
       }

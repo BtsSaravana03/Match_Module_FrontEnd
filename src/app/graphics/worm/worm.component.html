@@ -1,37 +1,49 @@
 <div class="container mt-3">
-    <dx-chart id="worm" [dataSource]="worm" *ngIf="worm.length > 0">
-      <!-- Line Chart for Team A -->
-      <dxi-series 
-        [valueField]="'Runs'" 
-        [argumentField]="'Over'" 
-        [name]="clubName" 
-        type="line" 
-        [label]="{ visible: true, position: 'outside', customizeText: customizeLabelText }">
+    <dx-chart id="worm" [dataSource]="worm" *ngIf="worm.length > 0" >
+      <dxi-series
+        [valueField]="'Runs'"
+        [argumentField]="'Over'"
+        [name]="clubName"
+        type="spline"
+        color="#1d575d"
+
+        [label]="{
+            visible: true,
+            position: 'outside',
+            customizeText: customizeLabelText,
+            font: {
+                family: 'Poppins, sans-serif',
+                size: 14,
+                color: '#1d575d'
+            },
+            backgroundColor: '#fff',
+            border: {
+                visible: true,
+                width: 1,
+                color: '#1d575d',
+                cornerRadius: 10
+            }
+        }">
       </dxi-series>
-      
-      <!-- Line Chart for Team B -->
-      <!-- <dxi-series 
-        [valueField]="'RunsTeamB'" 
-        [argumentField]="'Over'" 
-        [name]="matchDetails().ClubBPrefix" 
-        type="line" 
-        [label]="{ visible: true, position: 'outside', customizeText: customizeLabelText }">
-      </dxi-series> -->
-      
-      <!-- Argument Axis -->
+
       <dxo-argument-axis
         [tickInterval]="1"
         [valueMarginsEnabled]="false"
         [grid]="{ visible: false }"
-        [label]="{ format: { type: 'decimal' } }"
+        [label]="{ format: { type: 'decimal' }, font: {
+            family: 'Poppins, sans-serif',
+            size: 14,
+            color: '#333333'
+        }}"
         [title]="{ text: 'Overs' }">
       </dxo-argument-axis>
-  
-      <!-- Value Axis -->
-      <dxi-value-axis [grid]="{ visible: false }" [title]="{ text: 'Runs' }"></dxi-value-axis>
-  
-      <!-- Legend -->
+
+      <dxi-value-axis [grid]="{ visible: false }" [title]="{ text: 'Runs' }" [label]="{font: {
+        family: 'Poppins, sans-serif',
+        size: 14,
+        color: '#333333'
+    }}"></dxi-value-axis>
+
       <dxo-legend [visible]="true" horizontalAlignment="center"></dxo-legend>
     </dx-chart>
   </div>
-  
