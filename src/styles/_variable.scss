@@ -1,10 +1,16 @@
-$font-primary:"Poppins", sans-serif;
-$header-font: "Poppins", sans-serif;
-$font-secondary: 'Helvetica';
-$theme-color:#1D575D;
+/* OVERALL */
+
+$font-primary:"Readex Pro", sans-serif;
+$header-font: "Readex Pro", sans-serif;
+$font-secondary: "Readex Pro", sans-serif;
+$theme-color:#184bd3;
+$invert-typography-color:#fff;
 $text-color: #081728;
-$background-color: #CBE6FF;
+$background-color: #F7F8FB;
 $secondary-color: $text-color;
+
+/* TABLE SETTINGS */
+
 $table-header-background:#F6F7F8;
 $table-header-text-color:#979899;
 $table-header-font-size:13px;
@@ -12,3 +18,8 @@ $table-header-font-weight:400;
 $table-summary-background:#F6F7F8;
 $table-summary-text-color:#48494A;
 $table-border-color:#e5e8f0;
+
+/* TAB SETTINGS */
+$tab-border-radius:50px;
+
+/* CARD SETTINGS */

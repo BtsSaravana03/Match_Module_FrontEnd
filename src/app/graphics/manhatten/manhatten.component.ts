@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal, ViewEncapsulation } from '@angular/core';
+import { Component, DestroyRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
 import { GraphicsService } from '../graphics.service';
 import { VideoService } from '../../components/video/video.service';
 import { BallByBallService } from '../../services/ball-by-ball.service';
@@ -19,14 +19,14 @@ import _ from 'lodash';
 export class ManhattenComponent {
   private ballbyballService = inject(BallByBallService);
   private destroyRef = inject(DestroyRef);
-  private videoService = inject(VideoService);
+  //private videoService = inject(VideoService);
   private graphicServices = inject(GraphicsService);
-  private InningService = inject(InningsService);
+  //private InningService = inject(InningsService);
 
   ballArray = signal<BallData[]>([]);
   matchDetails = signal<any>({});
   manhatten:any[] = [];
-  selctedInnings:number = 1;
+  selctedInnings = input.required<number>()
   clubName:string = '';
 
   ngOnInit(): void {
@@ -41,14 +41,14 @@ export class ManhattenComponent {
       this.matchDetails.set(updated);
       this.setManhatten();
     })
-    const InnSub = this.InningService.InningsObserver$.subscribe(updated =>{
-      this.selctedInnings = updated;
-    })
+    // const InnSub = this.InningService.InningsObserver$.subscribe(updated =>{
+    //   this.selctedInnings = updated;
+    // })
     this.destroyRef.onDestroy(()=>{
       subscription.unsubscribe();
       filter.unsubscribe();
       matchSubscription.unsubscribe();
-      InnSub.unsubscribe();
+      //InnSub.unsubscribe();
     })
 
   }
@@ -57,8 +57,8 @@ export class ManhattenComponent {
   }
   setManhatten(){
     if(this.matchDetails().inningsData && this.matchDetails().inningsData.length>0){
-      let club = this.matchDetails().inningsData[this.selctedInnings - 1].BattingClubID;
-      this.clubName = this.matchDetails().inningsData[this.selctedInnings - 1].BattingClubPrefix;
+      let club = this.matchDetails().inningsData[this.selctedInnings() - 1].BattingClubID;
+      this.clubName = this.matchDetails().inningsData[this.selctedInnings() - 1].BattingClubPrefix;
       let filteredBalls = this.graphicServices.applyFilter(this.ballArray());
       let totalOvers = this.matchDetails().MatchOvers;
       if(totalOvers === 0 && this.ballArray().length>0){

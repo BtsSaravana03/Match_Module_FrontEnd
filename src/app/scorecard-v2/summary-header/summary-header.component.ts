@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, effect, ElementRef, input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild, viewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, inject, input, OnChanges, OnInit, signal, SimpleChanges, TemplateRef, ViewChild, viewChild } from '@angular/core';
 import { BattingCardSummary, MatchData } from '../batting-card/batting-card.interface';
 import { CommonModule } from '@angular/common';
 import Enumerable from 'linq';
@@ -7,6 +7,7 @@ import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import _, { isNative, last } from 'lodash';
 import { calculateOvers, getCurrentBallDescription, oversToBalls } from '../../scripts/cricket_gen';
 import { splitName } from '../../scripts/generic';
+import { AppService } from '../../services/app.service';
 
 interface TeamSummary{
   TeamID:number,
@@ -23,13 +24,14 @@ interface TeamSummary{
   styleUrl: './summary-header.component.scss'
 })
 export class SummaryHeaderComponent implements OnChanges{
+  private appServices = inject(AppService);
   overContainerDiv = viewChild<ElementRef>('overContainer')
   ballArray = input.required<BallData[]>();
   summary = input.required<BattingCardSummary[]>();
   matchDetails = input.required<MatchData>();
   selctedInnings = input.required<number>();
   currentInnings = input.required<number|undefined>();
-  isMobile = input.required<boolean>();
+  isMobile = signal<boolean>(false);
   MatchDateFormatted:string = '-';
   TeamASummary:TeamSummary[]|[]= [];
   TeamBSummary:TeamSummary[]|[]= [];
@@ -40,7 +42,7 @@ export class SummaryHeaderComponent implements OnChanges{
   bowlerData:any[] = [];
   description:string = '';
   MatchStartMsg:string = 'Yet to start';
-  first:boolean = true;
+  expand:boolean = true;
 
   constructor(){
     effect(()=>{
@@ -52,7 +54,8 @@ export class SummaryHeaderComponent implements OnChanges{
             }
         }, 0);
       }
-    })
+    });
+    this.isMobile.set(this.appServices.isMobile());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -185,7 +188,7 @@ export class SummaryHeaderComponent implements OnChanges{
             if (matchDetails.isLimitedOvers === 1) {
                  if (inningsData.length > 0 && this.currentInnings() === 2) {
                     // Second Innings Description for Limited overs
-                    const inning2data = this.summary()[1] ?? {};
+                    const inning2data = this.summary()[1] ?? null;
                     if (inning2data) {
                         const TeamName = matchDetails.inningsData[1].BattingClubName;
                         const inning1data = this.summary()[0];

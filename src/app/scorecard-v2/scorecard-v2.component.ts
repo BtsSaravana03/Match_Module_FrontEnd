@@ -18,14 +18,14 @@ import { InningsService } from '../components/innings-tab/innings.service';
 import { checkInf, checkSR } from '../scripts/generic';
 
 @Component({
-  selector: 'app-scorecard',
+  selector: 'app-scorecard-v2',
   standalone: true,
-  imports: [BattingCardComponent, DxTabsModule, BowlingCardComponent, FallOfWicketsComponent, SummaryHeaderComponent, VideoComponent, CommonModule, InningsTabComponent],
-  templateUrl: './scorecard.component.html',
-  styleUrl: './scorecard.component.scss',
+  imports: [BattingCardComponent, DxTabsModule, BowlingCardComponent, FallOfWicketsComponent, VideoComponent, CommonModule],
+  templateUrl: './scorecard-v2.component.html',
+  styleUrl: './scorecard-v2.component.scss',
   encapsulation:ViewEncapsulation.None
 })
-export class ScorecardComponent implements OnInit {
+export class ScorecardV2Component implements OnInit {
   private ballbyballService = inject(BallByBallService);
   private destroyRef = inject(DestroyRef);
   private appService = inject(AppService);

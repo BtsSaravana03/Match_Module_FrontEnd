@@ -1,0 +1,7 @@
+<div id="Tabs" [ngClass]="{'d-none': !visibility()}">
+    @for (m of dataSource(); track $index) {
+        <div class="tab" (click)="onTabChange(m[keyExpression()],dataSource(),keyExpression())" [ngClass]="{'active': selectedItem===m}">
+            {{m[displayExpression()]}}
+        </div>
+    }
+</div>

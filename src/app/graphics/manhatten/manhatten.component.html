@@ -1,6 +1,5 @@
-<div class="container mt-3">
-    <dx-chart id="manhatten" [dataSource]="manhatten" *ngIf="manhatten.length > 0"
-        >
+<div>
+    <dx-chart id="manhatten" [dataSource]="manhatten" *ngIf="manhatten.length > 0">
       <dxi-series [valueField]="'Runs'" [argumentField]="'Over'" [name]="clubName" type="bar"
       color="#1d575d"
       [label]="{

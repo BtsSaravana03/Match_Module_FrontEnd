@@ -58,8 +58,7 @@ export class BattingStatsComponent {
     .where(i => i.InningsId === this.selctedInnings)
     .groupBy(i => i.InningsId)
     .select(g => {
-      const maiden = g.groupBy(i => i.OverId && i.ExtraTypeId===0)
-            .count(over => over.sum(ball => ball.Bowlruns) === 0 && over.count() === 6);
+        const maiden = g.where(i => i.Maiden===1).sum(i => i.EndOver)
       return {
         Innings:g.first().InningsId,
         BowlingType:null,
@@ -85,8 +84,7 @@ export class BattingStatsComponent {
     .where(i => i.InningsId === this.selctedInnings)
     .groupBy(i => i.Day)
     .select(g => {
-      const maiden = g.groupBy(i => i.OverId && i.ExtraTypeId===0)
-            .count(over => over.sum(ball => ball.Bowlruns) === 0 && over.count() === 6);
+        const maiden = g.where(i => i.Maiden===1).sum(i => i.EndOver)
       return {
         Innings:g.first().InningsId,
         Runs: g.sum(i => i.Batruns),
@@ -108,13 +106,12 @@ export class BattingStatsComponent {
         bdryPer: checkSR(((g.sum(i => (i.isFour === 1 ? 4 : 0)) + (g.sum(i => (i.isSix === 1 ? 6 : 0)))) / g.count(i => i.Batballs===1)) * 100),
       }
     }).toArray();
-    
+
     this.Table_Session = Enumerable.from(this.ballArray())
     .where(i => i.InningsId === this.selctedInnings)
     .groupBy(i => i.Session)
     .select(g => {
-      const maiden = g.groupBy(i => i.OverId && i.ExtraTypeId===0)
-            .count(over => over.sum(ball => ball.Bowlruns) === 0 && over.count() === 6);
+        const maiden = g.where(i => i.Maiden===1).sum(i => i.EndOver);
       return {
         Innings:g.first().InningsId,
         Runs: g.sum(i => i.Batruns),
@@ -163,7 +160,7 @@ export class BattingStatsComponent {
         bdryPer: checkSR(((g.sum(i => (i.isFour === 1 ? 4 : 0)) + (g.sum(i => (i.isSix === 1 ? 6 : 0)))) / g.count(i => i.Batballs===1)) * 100),
       }
     }).toArray();
-  } 
+  }
   onCellClick(type:string,data:any){
     this.videoService.statsVideos(type,this.selctedInnings,data);
   }

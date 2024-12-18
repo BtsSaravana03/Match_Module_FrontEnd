@@ -3,7 +3,7 @@ import {HttpServices} from './http.service';
 import {BehaviorSubject,catchError,from,interval,retry,startWith,Subject,switchMap,takeUntil,throwError} from 'rxjs';
 import {BallData} from '../ball-by-ball/ball-by-ball.interface';
 import { FilterService } from '../components/filter/filter.service';
-import { MatchData } from '../scorecard/batting-card/batting-card.interface';
+import { MatchData } from '../scorecard-v2/batting-card/batting-card.interface';
 
 @Injectable({
   providedIn: 'root'

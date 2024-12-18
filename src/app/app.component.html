@@ -2,9 +2,19 @@
 <div class="content-area" [style.margin-left]="navbarVisible?'65px':'5px'">
 </div> -->
 <app-navbar [visibility]="navbarVisible" />
-<div>
-  <router-outlet></router-outlet>
-</div>
+<!-- <div>
+    <router-outlet></router-outlet>
+</div> -->
+<div id="root" class="container">
+    <div class="my-4">
+        <app-tabs [dataSource]="Tabs" displayExpression="name" keyExpression="value" (onTabSelectionChange)="onTabChange($event)" [visibility]="navbarVisible"></app-tabs>
+    </div>
 
-<app-match-select [(showPopup)]="generateMatches" />
-<div class="custom-overlay"></div>
+    <app-card>
+        <router-outlet></router-outlet>
+    </app-card>
+</div>
+@if(generateMatches){
+    <app-match-select [(showPopup)]="generateMatches" />
+    <div class="custom-overlay"></div>
+}

@@ -34,7 +34,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
   private cdr = inject(ChangeDetectorRef);
-  
+
   ballArray = signal<BallData[]>([]);
   rangeDefault:Range = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0}
   range2M:Range = this.rangeDefault;
@@ -58,7 +58,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
       let scale = this.graphicServices.getScaling(this.pm_width + this.text_Container,this.pm_height,window.innerWidth,window.innerHeight);
       const container = this.el.nativeElement.querySelector('#pitchmap-container');
       container.style.transform = `scale(${scale})`;
-      container.style.transformOrigin = "top center"; 
+      container.style.transformOrigin = "top center";
   }
 
   ngOnInit(): void {
@@ -78,7 +78,9 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     this.onResize();
   }
   setPitchmap(){
-    let filtered_balls = this.graphicServices.applyFilter(this.ballArray());
+   let filtered_balls = this.graphicServices.applyFilter(this.ballArray());
+
+
     this.range2M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range4M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range6M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
@@ -90,7 +92,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     const width = this.pm_width;
     const height = this.pm_height;
     //Cricket Pitch Dimensions(in cm)
-    const pitchWidth = 264; 
+    const pitchWidth = 264;
     const pitchLength = 1500;
     // PX/CM Ratio
     const scaling_x = parseFloat((width / pitchWidth).toFixed(4));
@@ -110,7 +112,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     const svgElement = this.el.nativeElement.querySelector('#pitchmapSVG');
     //Clearing previous balls
     svgElement.innerHTML = '';
-    //const t0 = performance.now();
+    const t0 = performance.now();
     filtered_balls.forEach(i => {
       if(i.PM_X !== null && i.PM_Y !== null){
         const pitchReg_x = i.PM_X_CM * scaling_x;
@@ -186,11 +188,11 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
         }
       }
     })
-    // const t1 = performance.now();
-    // console.log(`Call to doSomething took ${(t1 - t0)/1000} seconds.`);
+     const t1 = performance.now();
+     console.log(`Pitchmap Plotting took ${(t1 - t0)/1000} seconds. for ${filtered_balls.length} balls`);
   }
   onBallClick(i:BallData){
     this.videoService.PlayGraphicsVideos(i.BallId,i.InningsId);
   }
- 
+
 }

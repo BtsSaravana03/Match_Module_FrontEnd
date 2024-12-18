@@ -1,0 +1,26 @@
+@import '../../../../styles/variable';
+#Tabs{
+    width: fit-content;
+    display: flex;
+    border: 2px solid $theme-color;
+    border-radius: $tab-border-radius;
+    color: $theme-color;
+    .tab{
+        padding: 10px;
+        border-radius: 50px;
+        margin: 2px;
+        cursor: pointer;
+        :first-child{
+            padding-left: 15px;
+        }
+        :last-child{
+            padding-right: 15px;
+        }
+        &.active{
+            background-color: $theme-color;
+            color: $invert-typography-color;
+            transition: background-color 1000ms linear;
+            padding: 10px 15px;
+        }
+    }
+}

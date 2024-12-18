@@ -1,7 +1,7 @@
 import { BallData } from "../ball-by-ball/ball-by-ball.interface";
 
-export function getDismissalString(_a:any): string {
-    const {DismissalTypeID,DismissalFielder1Name,BowlerName,DismissalFielderID1,BowlerID} = _a;
+export function getDismissalString(_a:BallData): string {
+    const {DismissalTypeID,DismissalFielder1Name,DismissalFielder2Name,BowlerName,DismissalFielderID1,BowlerID} = _a;
     switch (DismissalTypeID) {
         case 1: // Bowled
             return `b ${BowlerName}`;
@@ -13,7 +13,7 @@ export function getDismissalString(_a:any): string {
         case 3: // LBW
             return `lbw b ${BowlerName}`;
         case 4: // Run Out
-            return `run out ${DismissalFielder1Name??''}`;
+            return `run out ${DismissalFielder2Name?DismissalFielder1Name+' / '+DismissalFielder2Name:DismissalFielder1Name??''}`;
         case 5: // Stump
             return `st ${DismissalFielder1Name} b ${BowlerName}`;
         case 6: // Hit Wicket

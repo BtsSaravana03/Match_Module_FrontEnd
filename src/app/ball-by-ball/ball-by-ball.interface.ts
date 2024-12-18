@@ -49,6 +49,7 @@ export interface BallData {
     BattingClubID: number;
     BowlingClubID: number;
     DismissalFielder1Name: string | null;
+    DismissalFielder2Name: string | null;
     TeamRuns: number;
     Bowlruns: number;
     Bowlballs: number;

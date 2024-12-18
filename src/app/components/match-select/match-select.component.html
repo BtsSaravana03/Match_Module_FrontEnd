@@ -1,6 +1,6 @@
 <dx-popup [width]="width" [height]="'auto'" [hideOnOutsideClick]="false" [showCloseButton]="false"
   shadingColor="rgba(255, 255, 255, 1)" [(visible)]="showPopup" [showTitle]="false" [dragEnabled]="false"
-  [attr.class]="'match-selection'">
+  [attr.class]="'match-selection'" (onHiding)="showPopup.set(false)">
   <div *dxTemplate="let data of 'content'">
     <div class="field-wrap">
       <div class="field-container">

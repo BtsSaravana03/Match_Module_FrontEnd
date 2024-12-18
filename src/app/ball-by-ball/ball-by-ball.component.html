@@ -33,7 +33,7 @@
     <dxi-column dataField="isSix" caption="IsSix" alignment="left"></dxi-column>
     <dxi-column caption="Score" alignment="left" cellTemplate="TeamScoreTemplate"></dxi-column>
     <dxi-column caption="Crease" alignment="left" dataField="CreaseMovementName"></dxi-column>
-    <dxi-column caption="Fielder" alignment="left" dataField="DismissalFielder1Name"></dxi-column>
+    <dxi-column caption="Fielder" alignment="left" cellTemplate="DismissalFielderTemplate"></dxi-column>
     <dxi-column caption="From" alignment="left" cellTemplate="OverAroundTemplate"></dxi-column>
     <!-- <dxi-column dataField="DismissalTypeDesc" caption="DismissalType" alignment="left"></dxi-column> -->
     <dxi-column caption="Dismissal" alignment="left" cellTemplate="DismissalTypeTemplate"></dxi-column>
@@ -81,6 +81,17 @@
       </div>
       <div *dxTemplate="let d of 'BatTypeTemplate'">
         @if(d.data.BatTypeID===1){RHB}@else {LHB}
+      </div>
+      <div *dxTemplate="let d of 'DismissalFielderTemplate'">
+        @if(d.data.DismissalFielder2Name && d.data.DismissalTypeID === 4){
+            {{d.data.DismissalFielder1Name}} / {{d.data.DismissalFielder2Name}}
+        }
+        @else if(d.data.FieldType===1 || d.data.FieldType===2 || d.data.FieldType===5){
+            {{d.data.FielderName}}
+        }
+        @else {
+            {{d.data.DismissalFielder1Name}}
+        }
       </div>
     <dxo-scrolling mode="infinite"></dxo-scrolling>
   </dx-data-grid>

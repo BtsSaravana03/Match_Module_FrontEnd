@@ -32,8 +32,7 @@ export class BowlingCardComponent {
       .groupBy(i => `${i.BowlerID}##${i.BowlerName}`)
       .select(g => {
         const [bowler_id, bowler_name] = g.key().split('##');
-        const maiden = g.groupBy(i => i.OverId && i.ExtraTypeId===0)
-            .count(over => over.sum(ball => ball.Bowlruns) === 0 && over.count() === 6);
+        const maiden = g.where(i => i.Maiden===1).sum(i => i.EndOver)
         return {
             bowlerId: parseInt(bowler_id),
             bowlerName: bowler_name,

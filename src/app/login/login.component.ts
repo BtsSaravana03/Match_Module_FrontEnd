@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   private appService = inject(AppService);
   private loginServices = inject(LoginServices);
   private fb = inject(FormBuilder);
-  private router = inject(ActivatedRoute);
+  private route = inject(Router);
 
   LoginForm!: FormGroup;
   errorMessage:string|null = null;
@@ -34,7 +34,10 @@ export class LoginComponent implements OnInit {
       const { username, password } = this.LoginForm.value;
       const res = await this.loginServices.login(username, password);
       if (res) {
-            window.location.href = '/scorecard';
+            // window.location.href = '/scorecard';
+            this.appService.toggleNavbar(true);
+            this.appService.toggleMatchSelection(true);
+            this.route.navigate(['v2','overview']);
       } else {
         this.errorMessage = 'Username or Password is Incorrect';
       }

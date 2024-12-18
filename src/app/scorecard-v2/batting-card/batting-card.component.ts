@@ -1,4 +1,4 @@
-import { Component, effect, inject, input } from '@angular/core';
+import { Component, effect, inject, input, signal } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { checkSR, checkSRNoDecimal } from '../../scripts/generic';
 import { getDismissalString } from '../../scripts/cricket_gen';
@@ -7,6 +7,7 @@ import { BattingCard, BattingCardSummary } from './batting-card.interface';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { VideoService } from '../../components/video/video.service';
 import { CommonModule } from '@angular/common';
+import { AppService } from '../../services/app.service';
 
 @Component({
   selector: 'app-batting-card',
@@ -18,12 +19,13 @@ import { CommonModule } from '@angular/common';
 
 export class BattingCardComponent{
   private videoService = inject(VideoService);
+  private appServices = inject(AppService);
   selctedInnings = input.required<number>();
   ballArray = input.required<BallData[]>();
   summary = input.required<BattingCardSummary[]>();
   battingCard:BattingCard[] = [];
   nonStrikerDismissal:any = {};
-  isMobile = input.required<boolean>();
+  isMobile = signal(false);
 
 
   constructor(){
@@ -32,6 +34,7 @@ export class BattingCardComponent{
         this.generateBattingCard();
       }
     })
+    this.isMobile.set(this.appServices.isMobile());
   }
 
   generateBattingCard(){

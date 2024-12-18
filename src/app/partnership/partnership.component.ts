@@ -15,7 +15,7 @@ import { InningsService } from '../components/innings-tab/innings.service';
 @Component({
   selector: 'app-partnership',
   standalone: true,
-  imports: [DxDataGridModule, DxTabsModule, CommonModule, VideoComponent, InningsTabComponent],
+  imports: [DxDataGridModule, DxTabsModule, CommonModule],
   templateUrl: './partnership.component.html',
   styleUrl: './partnership.component.scss',
   encapsulation:ViewEncapsulation.None
@@ -23,34 +23,32 @@ import { InningsService } from '../components/innings-tab/innings.service';
 export class PartnershipComponent implements OnInit {
   private ballbyballService = inject(BallByBallService);
   private destroyRef = inject(DestroyRef);
-  private appService = inject(AppService);
   private videoService = inject(VideoService);
-  private InningService = inject(InningsService);
+  //private InningService = inject(InningsService);
 
   ballArray = signal<BallData[]>([]);
   Partnership = signal<Partnership[]>([]);
   totalInnings = signal<any[]>([]);
   matchDetails = signal<any>({});
-  selctedInnings:number = 1;
+  selctedInnings = input.required<number>()
 
   ngOnInit(): void {
-    this.appService.updateNavHeader('Partnership');
     const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
       this.ballArray.set(updated);
       this.generatePartnership();
     })
-    const InnSub = this.InningService.InningsObserver$.subscribe(updated=>{
-      this.selctedInnings = updated;
-    })
+    // const InnSub = this.InningService.InningsObserver$.subscribe(updated=>{
+    //   this.selctedInnings = updated;
+    // })
     this.destroyRef.onDestroy(()=>{
       subscription.unsubscribe();
-      InnSub.unsubscribe();
+      //InnSub.unsubscribe();
     })
   }
   generatePartnership(){
     let Partnership = 0;
     const data:Partnership[] = Enumerable.from(this.ballArray())
-    .where(i => i.InningsId === this.selctedInnings)
+    .where(i => i.InningsId === this.selctedInnings())
     .groupBy(i=> i.Partnerid)
     .select(g =>{
       const Striker = g.first().StrikerID;
@@ -73,7 +71,7 @@ export class PartnershipComponent implements OnInit {
         Player_1_6s:g.sum(i=>i.isSix === 1 && i.StrikerID===Striker?1:0),
         Player_2_6s:g.sum(i=>i.isSix === 1 && i.StrikerID===NonStriker?1:0),
         Wicket: Partnership,
-        Runs:g.sum(i=> i.Batruns) + ` (${g.sum(i => i.Batballs)})`
+        Runs:g.sum(i=> i.Runs + i.Extras + i.Penalty + i.BLExtras) + ` (${g.sum(i => i.Batballs)})`
       }
     }).toArray();
     this.Partnership.set(data);
@@ -83,6 +81,6 @@ export class PartnershipComponent implements OnInit {
     this.generatePartnership();
   }
   onCellClick(data:Partnership){
-    this.videoService.PlayPartnershipVideos(data.PartnershipID,this.selctedInnings);
+    this.videoService.PlayPartnershipVideos(data.PartnershipID,this.selctedInnings());
   }
 }

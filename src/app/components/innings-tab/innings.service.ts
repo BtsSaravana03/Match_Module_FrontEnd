@@ -8,6 +8,7 @@ export class InningsService {
   innings = signal<number>(1);
   private Innings$ = new BehaviorSubject(1);
   InningsObserver$ = this.Innings$.asObservable();
+  CurrentInnings = signal(1);
 
   ChangeInnings(ID:number){
     this.Innings$.next(ID);

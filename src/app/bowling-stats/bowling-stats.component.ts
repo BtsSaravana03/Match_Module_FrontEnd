@@ -57,8 +57,7 @@ export class BowlingStatsComponent {
     .where(i => i.InningsId === this.selctedInnings)
     .groupBy(i => i.InningsId)
     .select(g => {
-      const maiden = g.groupBy(i => i.OverId && i.ExtraTypeId===0)
-            .count(over => over.sum(ball => ball.Bowlruns) === 0 && over.count() === 6);
+      const maiden = g.groupBy(i => i.OverId && i.EndOver===1 && i.Maiden===1).count();
       return {
         Innings:g.first().InningsId,
         BowlingType:null,
@@ -85,8 +84,7 @@ export class BowlingStatsComponent {
     .where(i => i.InningsId === this.selctedInnings)
     .groupBy(i => i.Day)
     .select(g => {
-      const maiden = g.groupBy(i => i.OverId && i.ExtraTypeId===0)
-            .count(over => over.sum(ball => ball.Bowlruns) === 0 && over.count() === 6);
+        const maiden = g.where(i => i.Maiden===1).sum(i => i.EndOver)
       return {
         Innings:g.first().InningsId,
         Runs: g.sum(i => i.Bowlruns),
@@ -109,13 +107,12 @@ export class BowlingStatsComponent {
         bdryPer: checkSR(((g.sum(i => (i.isFour === 1 ? 4 : 0)) + (g.sum(i => (i.isSix === 1 ? 6 : 0)))) / g.count(i => i.Bowlballs===1)) * 100),
       }
     }).toArray();
-    
+
     this.Table_Session = Enumerable.from(this.ballArray())
     .where(i => i.InningsId === this.selctedInnings)
     .groupBy(i => i.Session)
     .select(g => {
-      const maiden = g.groupBy(i => i.OverId && i.ExtraTypeId===0)
-            .count(over => over.sum(ball => ball.Bowlruns) === 0 && over.count() === 6);
+        const maiden = g.where(i => i.Maiden===1).sum(i => i.EndOver)
       return {
         Innings:g.first().InningsId,
         Runs: g.sum(i => i.Bowlruns),
@@ -143,8 +140,7 @@ export class BowlingStatsComponent {
     .where(i => i.InningsId === this.selctedInnings && (i.SpinOrPace !== null && i.SpinOrPace !== 0))
     .groupBy(i => i.SpinOrPace)
     .select(g => {
-      const maiden = g.groupBy(i => i.OverId && i.ExtraTypeId===0)
-            .count(over => over.sum(ball => ball.Bowlruns) === 0 && over.count() === 6);
+        const maiden = g.where(i => i.Maiden===1).sum(i => i.EndOver)
       return {
         BowlingType: g.first().SpinOrPace===1?'Pace':'Spin',
         Innings:g.first().InningsId,

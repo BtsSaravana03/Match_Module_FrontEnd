@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -11,6 +11,7 @@ export class AppService {
   nav_observable$ = this.navbar$.asObservable();
   matchSelection_observable$ = this.matchSelection$.asObservable();
   navbarHeader_observable$ = this.navHeaderText$.asObservable();
+  isMobile = signal<boolean>(false);
 
   toggleNavbar(b:boolean){
     this.navbar$.next(b);

@@ -1,86 +1,112 @@
 @import './variable';
-.custom-data-grid{
-    .dx-datagrid-headers
-    {
-         border-radius: 5px 5px 0 0;
-        .dx-header-row td{
-            background-color: $table-header-background;
-            border: none;
-            padding: 8px 15px;
-            font-family: $font-secondary;
-            .dx-datagrid-text-content{
-                color: $table-header-text-color;
-                font-weight: $table-header-font-weight;
-                font-size: $table-header-font-size;
-            }
-            &:hover{
-                background-color: $table-header-background!important;
-                .dx-datagrid-text-content{
-                    color: $table-header-text-color;
-                }
-            }
-        }
-    }
-    .dx-datagrid-table .dx-row td,.dx-datagrid-table .dx-footer-row td{
-        padding: 6px 15px;
-        font-family: $font-secondary;
-        &.partnership-highlight{
-            background-color: $theme-color;
-            color: #fff;
-        }
-        &.video-class{
-            text-decoration: underline;
-            &:hover{
-                background-color: $theme-color;
-                color: #fff;
-                cursor: pointer;
-            }
-        }
-        &.not-out-class{
-            border-left: 2px solid $theme-color!important;
-        }
-        &.text-bold{
-            font-weight: 600;
-        }
-    }
 
-    .dx-bordered-bottom-view{
-        border-radius: 0 0 5px 5px;
-        .dx-datagrid-content{
-            table td{
-                padding: 6px 15px;
-                font-family: $font-secondary;
+.custom-data-grid {
+  .dx-datagrid-headers {
+    border-radius: 5px 5px 0 0;
+
+    .dx-header-row td {
+      background-color: $table-header-background;
+      border: none;
+      padding: 8px 15px;
+      font-family: $font-secondary;
+
+      &.partnership-highlight {
+        background-color: $theme-color;
+
+        .dx-datagrid-text-content {
+          color: $invert-typography-color;
+        }
+        &:hover{
+            background-color: $theme-color!important;
+            .dx-datagrid-text-content {
+              color: $invert-typography-color!important;
             }
         }
-    }
-}
-.dx-widget {
-    font-family: $font-primary;
-}
-.innings-tab-wrapper{
-    display: flex;
-    justify-content: end;
-    flex-grow: 1;
-    width: 100%;
-    min-width: 200px;
-    overflow: clip;
-    margin-bottom: 10px;
-    // .innings-template .dx-tabs-wrapper .dx-item .dx-tab-content{
-    //     &::after{
-    //         background-color: $theme-color;
-    //     }
-    // }
-    .dx-tabs-styling-mode-secondary.dx-tab-indicator-position-bottom .dx-tab.dx-tab-selected .dx-tab-content::after{
-        background-color: $theme-color;
-    }
-}
-.tab-content {
-    div{
-        font-size: 0.9rem;
-    }
-    .tab-team-text{
-        font-weight: 600;
-        font-family: $font-secondary;
-        padding-bottom: 4px;
+      }
+
+      .dx-datagrid-text-content {
+        color: $table-header-text-color;
+        font-weight: $table-header-font-weight;
+        font-size: $table-header-font-size;
+      }
+
+      &:hover {
+        background-color: $table-header-background !important;
+
+        .dx-datagrid-text-content {
+          color: $table-header-text-color;
+        }
+      }
     }
   }
+
+  .dx-datagrid-table .dx-row td,
+  .dx-datagrid-table .dx-footer-row td {
+    padding: 6px 15px;
+    font-family: $font-secondary;
+
+    &.partnership-highlight {
+      background-color: $theme-color;
+      color: $invert-typography-color;
+    }
+
+    &.video-class {
+      text-decoration: underline;
+
+      &:hover {
+        background-color: $theme-color;
+        color: $invert-typography-color;
+        cursor: pointer;
+      }
+    }
+
+    &.not-out-class {
+      border-left: 2px solid $theme-color !important;
+    }
+
+    &.text-bold {
+      font-weight: 600;
+    }
+  }
+
+  .dx-bordered-bottom-view {
+    border-radius: 0 0 5px 5px;
+
+    .dx-datagrid-content {
+      table td {
+        padding: 6px 15px;
+        font-family: $font-secondary;
+      }
+    }
+  }
+}
+
+.dx-widget {
+  font-family: $font-primary;
+}
+
+.innings-tab-wrapper {
+  display: flex;
+  justify-content: end;
+  flex-grow: 1;
+  width: 100%;
+  min-width: 200px;
+  overflow: clip;
+  margin-bottom: 10px;
+
+  .dx-tabs-styling-mode-secondary.dx-tab-indicator-position-bottom .dx-tab.dx-tab-selected .dx-tab-content::after {
+    background-color: $theme-color;
+  }
+}
+
+.tab-content {
+  div {
+    font-size: 0.9rem;
+  }
+
+  .tab-team-text {
+    font-weight: 600;
+    font-family: $font-secondary;
+    padding-bottom: 4px;
+  }
+}

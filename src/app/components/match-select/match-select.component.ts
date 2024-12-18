@@ -24,7 +24,7 @@ export class MatchSelectComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   width:string = '700px';
   height:string = '200px';
-  showPopup = model(true);
+  showPopup = model(false);
   selectedComp!:number;
   CompDataSource:any[] = [];
   selectedMatch!:number;
@@ -40,7 +40,6 @@ export class MatchSelectComponent implements OnInit {
         await this.ballService.getCurrentMatchDetails(this.selectedMatch);
       }
       this.appService.toggleMatchSelection(false);
-
     },
   };
   constructor(private route:ActivatedRoute){
