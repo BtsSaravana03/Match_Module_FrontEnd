@@ -1,33 +1,47 @@
 <div class="p-3">
-    <div class="sticky-tab">
-        <dx-tabs [width]="'fit-content'" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''"
-        [focusStateEnabled]="false" [className]="'innings-template'" [showNavButtons]="true" [selectedItem]="TabSelected"
-        [dataSource]="['Scorecard','Partnership','Worm','Manhattan','Match info']" [orientation]="'horizontal'"
-        (onSelectionChanged)="onTabChange($event)" [stylingMode]="'secondary'">
-      </dx-tabs>
-    </div>
-  <app-card>
-    <div id="Scorecard" class="mt-3">
-      <app-batting-card [ballArray]="ballArray()" [selctedInnings]="selctedInnings" [summary]="summary" />
-      <br />
-      <app-fall-of-wickets [ballArray]="ballArray()" [selctedInnings]="selctedInnings" />
-      <br />
-      <app-bowling-card [ballArray]="ballArray()" [selctedInnings]="selctedInnings" />
-    </div>
-  </app-card>
-  <app-card>
-    <div id="Partnership" class="mt-3">
-      <app-partnership [selctedInnings]="selctedInnings"></app-partnership>
-    </div>
-  </app-card>
-  <app-card>
-    <div id="Worm" class="mt-3">
-      <app-worm [selctedInnings]="selctedInnings"></app-worm>
+  <div class="sticky-tab">
+    <dx-tabs [width]="this.isMobile()?'auto':'fit-content'" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''"
+      [focusStateEnabled]="false" [className]="'innings-template'" [showNavButtons]="true" [selectedItem]="TabSelected"
+      [dataSource]="Tabs" [orientation]="'horizontal'"
+      (onSelectionChanged)="onTabChange($event)" [stylingMode]="'secondary'">
+    </dx-tabs>
+  </div>
+  <div class="mt-2" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
+    <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix" keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true" (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
+  </div>
+  <app-card [ApplyDefaultStyle]="true">
+    <div id="Scorecard" #Scorecard>
+      <ng-container>
+        <app-batting-card [ballArray]="ballArray()" [selctedInnings]="selctedInnings" [summary]="summary" />
+        <br />
+        <app-fall-of-wickets [ballArray]="ballArray()" [selctedInnings]="selctedInnings" />
+        <br />
+        <app-bowling-card [ballArray]="ballArray()" [selctedInnings]="selctedInnings" />
+      </ng-container>
     </div>
   </app-card>
-  <app-card>
-    <div id="Manhattan" class="mt-3">
-      <app-manhatten [selctedInnings]="selctedInnings"></app-manhatten>
+  <br />
+  <app-card [ApplyDefaultStyle]="true">
+    <div id="Partnership" #Partnership>
+      <ng-container>
+        <app-partnership [matchDetails]="this.matchDetails()"></app-partnership>
+      </ng-container>
+    </div>
+  </app-card>
+  <br />
+  <app-card [ApplyDefaultStyle]="true">
+    <div id="Worm" #Worm>
+      <ng-container>
+        <app-worm [selctedInnings]="selctedInnings"></app-worm>
+      </ng-container>
+    </div>
+  </app-card>
+  <br />
+  <app-card [ApplyDefaultStyle]="true">
+    <div id="Manhattan" #Manhattan>
+      <ng-container>
+        <app-manhatten [selctedInnings]="selctedInnings"></app-manhatten>
+      </ng-container>
     </div>
   </app-card>
 </div>

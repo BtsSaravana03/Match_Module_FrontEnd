@@ -1,1 +1,8 @@
-<p>ballbyball works!</p>
+<div class="p-3">
+    <div class="mt-2" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
+        <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix" keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true" (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
+      </div>
+    <app-card>
+        <app-ball-by-ball [selctedInnings]="selctedInnings" [ballArray]="ballArray()" [matchDetails]="matchDetails()"/>
+    </app-card>
+</div>

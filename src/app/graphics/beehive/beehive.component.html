@@ -1,4 +1,4 @@
-<div id="beehive-container">
+<div id="beehive-container" [ngStyle]="{'height.px': bh_Height*scale}">
   <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="'0 0 ' + (bh_Width + 25) + ' ' + bh_Height"
     [attr.width]="bh_Width + 25" [attr.height]="bh_Height" id="svg_Wrap">
     <g transform="translate(0, 0)">
@@ -9,7 +9,6 @@
             .bh-cls-1 {
               fill: #58595b;
             }
-
             .bh-cls-2,
             .bh-cls-3 {
               fill: none;
@@ -49,9 +48,9 @@
       <svg xmlns="http://www.w3.org/2000/svg" [attr.width]="25" [attr.height]="bh_Height"
           [attr.viewBox]="'0 0 ' + 25 + ' ' + bh_Height">
           <defs>
-            <style> 
+            <style>
               .cls-1,.cls-3,.cls-4,.cls-5{stroke:#fff;stroke-miterlimit:10;stroke-width:0.5px;}
-              .cls-2{font-size:10px;fill:#231f20;font-family: Poppins, Arial;}
+              .cls-2{font-size:10px;fill:#231f20;font-family: 'Readex Pro', Arial;}
             </style>
           </defs>>
           <g id="Legends" data-name="Legends" [attr.transform]="'translate(0 ,'+ (bh_Height - 105)+')'">

@@ -5,6 +5,21 @@
     border: 2px solid $theme-color;
     border-radius: $tab-border-radius;
     color: $theme-color;
+    text-wrap-mode: nowrap;
+    @media screen and (max-width:430px) {
+        width: 100%;
+        overflow: auto;
+        scrollbar-width: none;
+    }
+    &.small{
+        .tab{
+            padding: 5px;
+            &.active{
+                padding: 5px 10px;
+            }
+        }
+
+    }
     .tab{
         padding: 10px;
         border-radius: 50px;
@@ -19,7 +34,7 @@
         &.active{
             background-color: $theme-color;
             color: $invert-typography-color;
-            transition: background-color 1000ms linear;
+            transition: background-color 300ms ease-in-out;
             padding: 10px 15px;
         }
     }

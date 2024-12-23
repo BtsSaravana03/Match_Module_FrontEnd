@@ -7,14 +7,13 @@ import { MatchSelectComponent } from './components/match-select/match-select.com
 import { AppService } from './services/app.service';
 import { TabsComponent } from "./layout/sharedComponents/tabs/tabs.component";
 import { CardComponent } from "./layout/sharedComponents/card/card.component";
-import { VideoComponent } from "./components/video/video.component";
 import { fromEvent, Observable, Subscription } from 'rxjs';
-import { ViewportScroller } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 config({licenseKey})
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, MatchSelectComponent, TabsComponent, CardComponent],
+  imports: [RouterOutlet, NavbarComponent, MatchSelectComponent, TabsComponent, CardComponent,CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   encapsulation:ViewEncapsulation.None

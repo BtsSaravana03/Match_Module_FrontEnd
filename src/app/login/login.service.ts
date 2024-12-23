@@ -14,9 +14,9 @@ export class LoginServices{
    async login(username: string, password: string): Promise<boolean> {
         try {
             const res = await this.httpService.postData(`login/validate/${username}/${password}`);
-            
-            if (res.status === 200) {
-                this.userInfo = res.data;
+
+            if (res.status === 200 && res.data.length>0) {
+                this.userInfo = res.data[0];
                 sessionStorage.setItem('session_mm',res.session)
                 return true;
             } else {

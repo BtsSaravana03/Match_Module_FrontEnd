@@ -1,7 +1,7 @@
 h6{
-    font-weight: 500;
+    font-weight: 600;
     font-size: 16px;
-    color: #625c5cab
+    color: #625c5cab;
 }
 .line-color {
     border: 1px solid #00000044;
@@ -12,6 +12,7 @@ h6{
     flex-wrap: wrap;
     text-wrap: nowrap;
     margin-top: 10px;
+    align-items: baseline;
     .wicket-item{
         cursor: pointer;
         display: flex;
@@ -27,6 +28,12 @@ h6{
             margin: 0px;
             font-size: 0.9rem;
             color: #464545;
+            &.dim-text{
+                color: #585858;
+            }
         }
+    }
+    .font-weight-600{
+        font-weight: 600;
     }
   }

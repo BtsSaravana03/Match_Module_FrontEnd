@@ -41,7 +41,18 @@ export function calculateOvers(totalBalls:number) {
     const remainingBalls = totalBalls % 6;
     return `${fullOvers}.${remainingBalls}`;
 }
-
+export function calculateOversPrecise(Balls:BallData[]) {
+    let overs = 0;
+    let balls = 0;
+    for(let i = 0;i <Balls.length;i++){
+        balls++;
+        if(Balls[i].EndOver === 1){
+            overs++;
+            balls = 0;
+        }
+    }
+   return parseFloat(`${overs}.${balls}`);
+}
 export function getCurrentBallDescription(ball: BallData): string {
     let description = "";
     // Handle extras

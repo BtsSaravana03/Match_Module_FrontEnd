@@ -1,6 +1,4 @@
-<!-- <app-summary-header [summary]="summary" [matchDetails]="matchDetails()" [selctedInnings]="selctedInnings" [isMobile]="isMobile" [currentInnings]="currentInnings" [ballArray]="ballArray()"/> -->
 <div class="container mt-3">
-  <!-- <app-innings-tab (inningsChange)="onInningsChange($event)"/> -->
   @if(ballArray().length>0){
     <app-batting-card [ballArray]="ballArray()" [selctedInnings]="selctedInnings" [summary]="summary"/>
     <br />

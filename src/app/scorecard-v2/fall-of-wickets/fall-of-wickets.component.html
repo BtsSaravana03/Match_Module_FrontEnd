@@ -24,14 +24,20 @@
     </div>
 
 } -->
+    <div class="px-2">
+
+
 @if(wicketsCard.length>0){
-<h6>Fall of wickets</h6>
-<hr style="margin: 0;" class="line-color" />
+<!-- <h6>Fall of wickets</h6> -->
+<!-- <hr style="margin: 0;" class="line-color" /> -->
 <div class="fow-wrap">
 @for (m of wicketsCard; track $index) {
+    @if($index===0){
+        <span class="font-weight-600">Fall of wickets: </span>
+    }
     <div class="wicket-item" (click)="onClick(m)">
         <div>
-            <p>{{m.order}}-{{m.teamRuns}}</p>
+            <p class="font-weight-600">{{m.order}}-{{m.teamRuns}}</p>
         </div>
         <div>
             <p class="dim-text">({{m.strikerName}}, {{m.over}} ov)
@@ -45,3 +51,4 @@
 }
 </div>
 }
+</div>

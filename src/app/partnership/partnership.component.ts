@@ -1,16 +1,12 @@
-import { Component, DestroyRef, inject, input, OnInit, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, effect, inject, input, OnInit, signal, ViewEncapsulation } from '@angular/core';
 import { DxDataGridModule, DxTabsModule } from 'devextreme-angular';
 import { BallData } from '../ball-by-ball/ball-by-ball.interface';
 import { Partnership } from './partnership.interface';
 import { BallByBallService } from '../services/ball-by-ball.service';
-import { AppService } from '../services/app.service';
 import Enumerable from 'linq';
-import { fromEvent, Observable, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { VideoService } from '../components/video/video.service';
-import { VideoComponent } from "../components/video/video.component";
-import { InningsTabComponent } from "../components/innings-tab/innings-tab.component";
-import { InningsService } from '../components/innings-tab/innings.service';
+import { InningServiceService } from '../services/inning-service.service';
 
 @Component({
   selector: 'app-partnership',
@@ -24,25 +20,26 @@ export class PartnershipComponent implements OnInit {
   private ballbyballService = inject(BallByBallService);
   private destroyRef = inject(DestroyRef);
   private videoService = inject(VideoService);
-  //private InningService = inject(InningsService);
+  private cdr = inject(ChangeDetectorRef);
+  private InningService = inject(InningServiceService);
 
   ballArray = signal<BallData[]>([]);
   Partnership = signal<Partnership[]>([]);
-  totalInnings = signal<any[]>([]);
-  matchDetails = signal<any>({});
-  selctedInnings = input.required<number>()
-
+  //totalInnings = input.required<any[]>();
+  matchDetails = input.required<any>();
+  selctedInnings = signal<number>(1);
   ngOnInit(): void {
     const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
       this.ballArray.set(updated);
       this.generatePartnership();
     })
-    // const InnSub = this.InningService.InningsObserver$.subscribe(updated=>{
-    //   this.selctedInnings = updated;
-    // })
+    const InnSub = this.InningService.InningsObserver$.subscribe(updated=>{
+        this.selctedInnings.set(this.InningService.selectedInnings());
+        this.generatePartnership();
+    })
     this.destroyRef.onDestroy(()=>{
       subscription.unsubscribe();
-      //InnSub.unsubscribe();
+      InnSub.unsubscribe();
     })
   }
   generatePartnership(){
@@ -76,10 +73,10 @@ export class PartnershipComponent implements OnInit {
     }).toArray();
     this.Partnership.set(data);
   }
-  onInningsChange(e:any){
-    this.selctedInnings = e;
-    this.generatePartnership();
-  }
+//   onInningsChange(e:any){
+//     this.selctedInnings = e;
+//     this.generatePartnership();
+//   }
   onCellClick(data:Partnership){
     this.videoService.PlayPartnershipVideos(data.PartnershipID,this.selctedInnings());
   }

@@ -20,16 +20,16 @@ export class GraphicsService {
   };
   private triggerFilter$ = new Subject <void>();
   filterObservable = this.triggerFilter$.asObservable();
-  navbarHeight = 130;
-  
-  
+  navbarHeight = 305;
+
+
   triggerFilter(){
     this.triggerFilter$.next();
   }
   applyFilter(balls:BallData[]):BallData[]{
     let filtered = balls;
     filtered = balls.filter(i => {
-      if(i.InningsId !== this.filter.Innings) return false;
+    //   if(i.InningsId !== this.filter.Innings) return false;
       if(this.filter.BattingType.length> 0){
         if(i.StBattingTypeID === null || !this.filter.BattingType.includes(i.StBattingTypeID)) return false
       }
@@ -46,7 +46,7 @@ export class GraphicsService {
         });
         if (!isBowlingTypeMatch) return false;
       }
-  
+
       if(this.filter.Batsman.length >0){
         if(!this.filter.Batsman.includes(i.StrikerID)) return false;
       }

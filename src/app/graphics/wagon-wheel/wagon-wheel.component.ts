@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, DestroyRef, ElementRef, HostListener, inject, Renderer2, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, effect, ElementRef, HostListener, inject, input, Renderer2, signal, ViewEncapsulation } from '@angular/core';
 import { BallByBallService } from '../../services/ball-by-ball.service';
 import { AppService } from '../../services/app.service';
 import { VideoService } from '../../components/video/video.service';
@@ -7,11 +7,12 @@ import { GraphicsService } from '../graphics.service';
 import { VideoComponent } from "../../components/video/video.component";
 import { BallDetailsPopoverComponent } from "../ball-details-popover/ball-details-popover.component";
 import { saveSvgAsPng } from 'save-svg-as-png';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-wagon-wheel',
   standalone: true,
-  imports: [VideoComponent, BallDetailsPopoverComponent],
+  imports: [VideoComponent, BallDetailsPopoverComponent,CommonModule],
   templateUrl: './wagon-wheel.component.html',
   styleUrl: './wagon-wheel.component.scss',
   encapsulation:ViewEncapsulation.None
@@ -25,18 +26,23 @@ export class WagonWheelComponent {
   private renderer = inject(Renderer2);
   private cdr = inject(ChangeDetectorRef);
 
-  ballArray = signal<BallData[]>([]);
+  ballArray = input.required<BallData[]>();
   ww_Width = 602;
   ww_Height = 650;
   tooltipTarget:string|undefined;
   targetBall:BallData|undefined;
+  scale = 1;
 
   @HostListener('window:resize')
   onResize() {
       let scale = this.graphicServices.getScaling(this.ww_Width,this.ww_Height,window.innerWidth,window.innerHeight);
       const container = this.el.nativeElement.querySelector('#WW_Wrap');
       container.style.transform = `scale(${scale})`;
-      container.style.transformOrigin = "top center"; 
+      container.style.transformOrigin = "top center";
+      setTimeout(() => {
+        this.scale = scale;
+        this.cdr.detectChanges();
+      }, 0);
   }
   ngAfterViewInit(): void {
     this.onResize();
@@ -44,16 +50,23 @@ export class WagonWheelComponent {
 
 
   ngOnInit(): void {
-    const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
-      this.ballArray.set(updated);
-      this.setWagonwheel();
-    })
+    // const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
+    //   this.ballArray.set(updated);
+    //   this.setWagonwheel();
+    // })
     const filter = this.graphicServices.filterObservable.subscribe(updated => {
       this.setWagonwheel();
     })
     this.destroyRef.onDestroy(()=>{
-      subscription.unsubscribe();
+      //subscription.unsubscribe();
       filter.unsubscribe();
+    })
+  }
+  constructor(){
+    effect(()=>{
+      if(this.ballArray()){
+        this.setWagonwheel();
+      }
     })
   }
 

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, ElementRef, HostListener, inject, OnInit, Renderer2, signal, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, effect, ElementRef, HostListener, inject, input, OnInit, Renderer2, signal, ViewEncapsulation } from '@angular/core';
 import { BallByBallService } from '../../services/ball-by-ball.service';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { check, checkInf } from '../../scripts/generic';
@@ -8,6 +8,7 @@ import { DxPopoverModule } from 'devextreme-angular';
 import { GraphicsService } from '../graphics.service';
 import { BallDetailsPopoverComponent } from "../ball-details-popover/ball-details-popover.component";
 import {saveSvgAsPng} from "save-svg-as-png";
+import { CommonModule } from '@angular/common';
 
 interface Range {
   Balls:number;
@@ -21,7 +22,7 @@ interface Range {
 @Component({
   selector: 'app-pitch-map',
   standalone: true,
-  imports: [VideoComponent, DxPopoverModule, BallDetailsPopoverComponent],
+  imports: [VideoComponent, DxPopoverModule, BallDetailsPopoverComponent,CommonModule],
   templateUrl: './pitch-map.component.html',
   styleUrl: './pitch-map.component.scss',
   encapsulation:ViewEncapsulation.None
@@ -35,7 +36,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   private renderer = inject(Renderer2);
   private cdr = inject(ChangeDetectorRef);
 
-  ballArray = signal<BallData[]>([]);
+  ballArray = input.required<BallData[]>();
   rangeDefault:Range = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0}
   range2M:Range = this.rangeDefault;
   range4M:Range = this.rangeDefault;
@@ -52,6 +53,16 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   _10mLine_y = 0;
   tooltipTarget:string|undefined;
   targetBall:BallData|undefined;
+  scale = 1;
+  greeceLine = '87.55';
+
+  constructor(){
+      effect(()=>{
+        if(this.ballArray()){
+          this.setPitchmap();
+        }
+      })
+    }
 
   @HostListener('window:resize')
   onResize() {
@@ -59,18 +70,22 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
       const container = this.el.nativeElement.querySelector('#pitchmap-container');
       container.style.transform = `scale(${scale})`;
       container.style.transformOrigin = "top center";
+      setTimeout(() => {
+        this.scale = scale;
+        this.cdr.detectChanges();
+      }, 0);
   }
 
   ngOnInit(): void {
-    const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
-      this.ballArray.set(updated);
-      this.setPitchmap();
-    })
+    // const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
+    //   this.ballArray.set(updated);
+    //   this.setPitchmap();
+    // })
     const filter = this.graphicServices.filterObservable.subscribe(updated => {
       this.setPitchmap();
     })
     this.destroyRef.onDestroy(()=>{
-      subscription.unsubscribe();
+      //subscription.unsubscribe();
       filter.unsubscribe();
     })
   }
@@ -78,9 +93,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     this.onResize();
   }
   setPitchmap(){
-   let filtered_balls = this.graphicServices.applyFilter(this.ballArray());
-
-
+    let filtered_balls = this.graphicServices.applyFilter(this.ballArray());
     this.range2M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range4M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
     this.range6M = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0};
@@ -97,6 +110,8 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     // PX/CM Ratio
     const scaling_x = parseFloat((width / pitchWidth).toFixed(4));
     const scaling_y = parseFloat((height / pitchLength).toFixed(4));
+    //Greece Line
+    this.greeceLine = String((scaling_y * 122) + _beforeGreece);
     //Meter Lines
     this._2mLine_y = (scaling_y * 200) + _beforeGreece;
     this._4mLine_y = (scaling_y * 400) + _beforeGreece;

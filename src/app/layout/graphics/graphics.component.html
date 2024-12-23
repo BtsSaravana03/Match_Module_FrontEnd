@@ -1,1 +1,27 @@
-<p>graphics works!</p>
+<div class="p-3">
+  <div class="sticky-tab">
+    <dx-tabs [width]="'fit-content'" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''"
+      [focusStateEnabled]="false" [className]="'innings-template'" [showNavButtons]="true" [selectedItem]="TabSelected"
+      [dataSource]="Tabs" [orientation]="'horizontal'" (onSelectionChanged)="onTabChange($event)"
+      [stylingMode]="'secondary'">
+    </dx-tabs>
+  </div>
+  <div class="mt-2" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
+    <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix" keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true" (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
+  </div>
+  <div id="Pitchmap" #Pitchmap *ngIf="TabSelected==='Pitchmap'">
+    <ng-container>
+        <app-pitch-map [ballArray]="ballArrayFiltered()"></app-pitch-map>
+    </ng-container>
+  </div>
+  <div id="Wagonwheel" #Wagonwheel *ngIf="TabSelected==='Wagonwheel'">
+    <ng-container>
+        <app-wagon-wheel [ballArray]="ballArrayFiltered()"></app-wagon-wheel>
+    </ng-container>
+  </div>
+  <div id="Beehive" #Beehive *ngIf="TabSelected==='Beehive'">
+    <ng-container>
+        <app-beehive [ballArray]="ballArrayFiltered()"></app-beehive>
+    </ng-container>
+  </div>
+</div>

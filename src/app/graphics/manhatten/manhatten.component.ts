@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
+import { Component, DestroyRef, effect, inject, input, signal, ViewEncapsulation } from '@angular/core';
 import { GraphicsService } from '../graphics.service';
 import { VideoService } from '../../components/video/video.service';
 import { BallByBallService } from '../../services/ball-by-ball.service';
@@ -19,9 +19,7 @@ import _ from 'lodash';
 export class ManhattenComponent {
   private ballbyballService = inject(BallByBallService);
   private destroyRef = inject(DestroyRef);
-  //private videoService = inject(VideoService);
   private graphicServices = inject(GraphicsService);
-  //private InningService = inject(InningsService);
 
   ballArray = signal<BallData[]>([]);
   matchDetails = signal<any>({});
@@ -29,6 +27,13 @@ export class ManhattenComponent {
   selctedInnings = input.required<number>()
   clubName:string = '';
 
+  constructor(){
+    effect(()=>{
+      if(this.ballArray() && this.selctedInnings()){
+        this.setManhatten();
+      }
+    })
+  }
   ngOnInit(): void {
     const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
       this.ballArray.set(updated);
@@ -41,14 +46,10 @@ export class ManhattenComponent {
       this.matchDetails.set(updated);
       this.setManhatten();
     })
-    // const InnSub = this.InningService.InningsObserver$.subscribe(updated =>{
-    //   this.selctedInnings = updated;
-    // })
     this.destroyRef.onDestroy(()=>{
       subscription.unsubscribe();
       filter.unsubscribe();
       matchSubscription.unsubscribe();
-      //InnSub.unsubscribe();
     })
 
   }

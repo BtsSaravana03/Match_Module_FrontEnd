@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, ElementRef, HostListener, inject, OnInit, Renderer2, signal, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, effect, ElementRef, HostListener, inject, input, OnInit, Renderer2, signal, ViewEncapsulation } from '@angular/core';
 import { BallByBallService } from '../../services/ball-by-ball.service';
 import { AppService } from '../../services/app.service';
 import { VideoService } from '../../components/video/video.service';
@@ -6,17 +6,18 @@ import { GraphicsService } from '../graphics.service';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { VideoComponent } from "../../components/video/video.component";
 import { BallDetailsPopoverComponent } from "../ball-details-popover/ball-details-popover.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-beehive',
   standalone: true,
-  imports: [VideoComponent, BallDetailsPopoverComponent],
+  imports: [VideoComponent, BallDetailsPopoverComponent,CommonModule],
   templateUrl: './beehive.component.html',
   styleUrl: './beehive.component.scss',
   encapsulation:ViewEncapsulation.None
 })
 export class BeehiveComponent implements OnInit,AfterViewInit {
-  private ballbyballService = inject(BallByBallService);
+  //private ballbyballService = inject(BallByBallService);
   private destroyRef = inject(DestroyRef);
   private videoService = inject(VideoService);
   private graphicServices = inject(GraphicsService);
@@ -24,22 +25,29 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
   private renderer = inject(Renderer2);
   private cdr = inject(ChangeDetectorRef);
 
-  ballArray = signal<BallData[]>([]);
+  ballArray = input.required<BallData[]>();
   bh_Width = 493;
   bh_Height = 355;
   tooltipTarget:string|undefined;
   targetBall:BallData|undefined;
-
-  ngOnInit(): void {
-    const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
-      this.ballArray.set(updated);
-      this.setBeehive();
+  scale = 1;
+  constructor(){
+    effect(()=>{
+      if(this.ballArray()){
+        this.setBeehive();
+      }
     })
+  }
+  ngOnInit(): void {
+    // const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
+    //   this.ballArray.set(updated);
+    //   this.setBeehive();
+    // })
     const filter = this.graphicServices.filterObservable.subscribe(updated => {
       this.setBeehive();
     })
     this.destroyRef.onDestroy(()=>{
-      subscription.unsubscribe();
+      //subscription.unsubscribe();
       filter.unsubscribe();
     })
   }
@@ -49,6 +57,10 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
       const container = this.el.nativeElement.querySelector('#beehive-container');
       container.style.transform = `scale(${scale})`;
       container.style.transformOrigin = "top center";
+      setTimeout(() => {
+        this.scale = scale;
+        this.cdr.detectChanges();
+      }, 0);
   }
   ngAfterViewInit(): void {
     this.onResize();

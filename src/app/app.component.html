@@ -6,7 +6,7 @@
     <router-outlet></router-outlet>
 </div> -->
 <div id="root" class="container">
-    <div class="my-4">
+    <div class="my-4" [ngClass]="{'my-4': navbarVisible}">
         <app-tabs [dataSource]="Tabs" displayExpression="name" keyExpression="value" (onTabSelectionChange)="onTabChange($event)" [visibility]="navbarVisible"></app-tabs>
     </div>
 

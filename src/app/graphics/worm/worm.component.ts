@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, input, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, input, signal } from '@angular/core';
 import Enumerable from 'linq';
 import { BallByBallService } from '../../services/ball-by-ball.service';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
@@ -29,17 +29,25 @@ export class WormComponent {
   selctedInnings = input.required<number>()
   clubName:string = '';
 
+  constructor(){
+      effect(()=>{
+        if(this.ballArray() && this.selctedInnings()){
+          this.setWorm();
+        }
+      })
+    }
+
   ngOnInit(): void {
     const subscription = this.ballbyballService.ballObservable$.subscribe(updated =>{
       this.ballArray.set(updated);
-      this.setManhatten();
+      this.setWorm();
     })
     const filter = this.graphicServices.filterObservable.subscribe(updated => {
-      this.setManhatten();
+      this.setWorm();
     });
     const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated=>{
       this.matchDetails.set(updated);
-      this.setManhatten();
+      this.setWorm();
     });
     // const InnSub = this.InningService.InningsObserver$.subscribe(updated =>{
     //   this.selctedInnings = updated;
@@ -55,7 +63,7 @@ export class WormComponent {
   customizeLabelText = (pointInfo: any) => {
     return pointInfo.value !== 0 ? pointInfo.value.toString() : '';
 };
-  setManhatten() {
+  setWorm() {
     if (this.matchDetails().inningsData && this.matchDetails().inningsData.length > 0) {
         let club = this.matchDetails().inningsData[this.selctedInnings() -1].BattingClubID;
         this.clubName = this.matchDetails().inningsData[this.selctedInnings() -1].BattingClubPrefix;

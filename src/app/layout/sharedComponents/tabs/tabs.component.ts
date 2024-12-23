@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, Component, effect, input, OnChanges, output, SimpleChanges } from '@angular/core';
+import { AfterContentInit, Component, effect, inject, input, OnChanges, OnInit, output, SimpleChanges } from '@angular/core';
+import { BallByBallService } from '../../../services/ball-by-ball.service';
 
 @Component({
   selector: 'app-tabs',
@@ -15,8 +16,9 @@ export class TabsComponent implements AfterContentInit,OnChanges {
     keyExpression = input.required<string>();
     selectedItem:any = undefined;
     onTabSelectionChange = output<any[]>();
-    setTabValue:any = undefined;
+    setTabValue = input<undefined|number>();
     visibility =input.required<boolean>();
+    TinyTabSize = input<boolean>(false);
 
     ngAfterContentInit(): void {
         this.selectedItem = this.dataSource()[0]??undefined;
@@ -32,10 +34,16 @@ export class TabsComponent implements AfterContentInit,OnChanges {
                 this.changeTab(currentValue);
             }
         }
+        if(changes['dataSource']){
+            this.selectedItem = this.dataSource()[0]??undefined;
+            if(this.selectedItem){
+                this.onTabSelectionChange.emit(this.selectedItem);
+            }
+        }
     }
 
     onTabChange<T>(key:string,dataSource: T[],keyExpression: keyof T){
-        const selectedItem = dataSource.find((item: T) => String(item[keyExpression]) === key);
+        const selectedItem = dataSource.find((item: T) => item[keyExpression] === key);
         if(this.selectedItem !== selectedItem){
             this.selectedItem = selectedItem;
             this.onTabSelectionChange.emit(this.selectedItem);

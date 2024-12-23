@@ -7,6 +7,7 @@ import { BallByBallService } from '../../services/ball-by-ball.service';
 import { AppService } from '../../services/app.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { InningServiceService } from '../../services/inning-service.service';
 
 @Component({
   selector: 'app-match-select',
@@ -19,6 +20,7 @@ export class MatchSelectComponent implements OnInit {
   private ballService = inject(BallByBallService);
   private httpService = inject(HttpServices);
   private appService = inject(AppService);
+  private inningsService = inject(InningServiceService);
   resizeObservable$!:Observable<Event>;
   resizeSubscription$!: Subscription;
   destroyRef = inject(DestroyRef);
@@ -102,6 +104,8 @@ export class MatchSelectComponent implements OnInit {
   onMatchSelected(e:any){
     if(e.selectedItem){
       this.selectedMatch = e.selectedItem.ID;
+      this.inningsService.ChangeInnings(1);
+
     }
   }
 }

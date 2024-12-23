@@ -4,10 +4,11 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { AppService } from '../services/app.service';
 
 @Injectable()
 export class SessionInterceptor implements HttpInterceptor {
-  constructor(private router: Router,private location: Location) {
+  constructor(private router: Router,private location: Location,private appServices: AppService) {
   }
   intercept(
     request: HttpRequest<any>,
@@ -24,12 +25,16 @@ export class SessionInterceptor implements HttpInterceptor {
     }
     else{
         if (!this.checkSession()) {
-            this.router.navigate(['/login']);
+            setTimeout(() => this.router.navigate(['/login']), 0);
             return throwError(() => new Error('Session expired'));
           }
     }
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+            // Handle 401 Unauthorized error
+            setTimeout(() => this.router.navigate(['/login']), 0);
+          }
         return throwError(() => error);
       })
     );

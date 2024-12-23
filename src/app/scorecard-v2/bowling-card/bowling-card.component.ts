@@ -1,7 +1,7 @@
 import { Component, effect, inject, input } from '@angular/core';
 import Enumerable from 'linq';
 import { checkSR } from '../../scripts/generic';
-import { calculateOvers } from '../../scripts/cricket_gen';
+import { calculateOvers, calculateOversPrecise } from '../../scripts/cricket_gen';
 import { DxDataGridModule } from 'devextreme-angular';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { BowlingCard } from './bowling-card.interface';
@@ -38,7 +38,7 @@ export class BowlingCardComponent {
             bowlerName: bowler_name,
             balls: g.count(i=> i.Bowlballs===1),
             runs: g.sum(i=> i.Bowlruns),
-            overs: parseFloat(calculateOvers(g.sum(i=> i.Bowlballs===1?1:0))),
+            overs: (calculateOversPrecise(g.toArray())),
             maiden: maiden,
             wkt: g.count(i=>i.Bowlwkts===1),
             economy: checkSR((g.sum(i => i.Bowlballs)/g.sum(i=>i.Bowlballs))*6),

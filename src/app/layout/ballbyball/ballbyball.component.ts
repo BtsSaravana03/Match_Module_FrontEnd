@@ -1,12 +1,55 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { CardComponent } from '../sharedComponents/card/card.component';
+import { BallByBallComponent } from "../../ball-by-ball/ball-by-ball.component";
+import { CommonModule } from '@angular/common';
+import { TabsComponent } from '../sharedComponents/tabs/tabs.component';
+import { BallByBallService } from '../../services/ball-by-ball.service';
+import { InningServiceService } from '../../services/inning-service.service';
+import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
+import { BattingCardSummary } from '../../scorecard-v2/batting-card/batting-card.interface';
 
 @Component({
   selector: 'app-ballbyball',
   standalone: true,
-  imports: [],
+  imports: [CardComponent, BallByBallComponent,CommonModule,TabsComponent],
   templateUrl: './ballbyball.component.html',
   styleUrl: './ballbyball.component.scss'
 })
 export class BallbyballComponent {
-
+    private ballbyballService = inject(BallByBallService);
+    private inningService = inject(InningServiceService);
+    private destroyRef = inject(DestroyRef);
+    isMobile = signal(false);
+    ballArray = signal<BallData[]>([]);
+    summary:[]|BattingCardSummary[] = [];
+    matchDetails = signal<any>({});
+    totalInnings = signal<any[]>([]);
+    selctedInnings:number = 1;
+    currentInnings:number|undefined;
+    setInningValue:number|undefined;
+    ngOnInit(): void {
+        const subscription = this.ballbyballService.ballObservable$.subscribe(updated => {
+            this.ballArray.set(updated);
+            this.currentInnings = this.ballArray()[this.ballArray().length - 1]?.InningsId || undefined;
+        })
+        const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated => {
+            this.matchDetails.set(updated);
+            this.totalInnings.set(this.matchDetails()?.inningsData || []);
+            if(this.totalInnings().length > 0){
+                this.setInningValue = 1;
+            }
+        })
+        const InnSub = this.inningService.InningsObserver$.subscribe(updated =>{
+            this.selctedInnings = updated;
+        })
+        this.destroyRef.onDestroy(() => {
+            subscription.unsubscribe();
+            matchSubscription.unsubscribe();
+        })
+    }
+    onInningsChange(e:any){
+        this.selctedInnings = e.InningsID;
+        this.inningService.selectedInnings.set(e.InningsID);
+        this.inningService.currentInningData = e;
+      }
 }
