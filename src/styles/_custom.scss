@@ -68,7 +68,9 @@
       font-weight: 600;
     }
   }
-
+  .dx-datagrid-table .dx-row.no-boundary-row{
+    background-color: rgba(119, 136, 153, 0.582);
+  }
   .dx-bordered-bottom-view {
     border-radius: 0 0 5px 5px;
 

@@ -1,8 +1,25 @@
 <div class="p-3">
-    <div class="mt-2" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
-        <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix" keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true" (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
-      </div>
-    <app-card>
-        <app-ball-by-ball [selctedInnings]="selctedInnings" [ballArray]="ballArray()" [matchDetails]="matchDetails()"/>
-    </app-card>
+  <div class="sticky-tab">
+    <dx-tabs [width]="'fit-content'" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''"
+      [focusStateEnabled]="false" [className]="'innings-template'" [showNavButtons]="true" [selectedItem]="TabSelected"
+      [dataSource]="Tabs" [orientation]="'horizontal'" (onSelectionChanged)="onTabChange($event)"
+      [stylingMode]="'secondary'">
+    </dx-tabs>
+  </div>
+  <div class="mt-2" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
+    <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix"
+      keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true"
+      (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
+  </div>
+  @if(TabSelected === 'Adv BallByBall'){
+  <app-card>
+    <app-ball-by-ball [selctedInnings]="selctedInnings" [ballArray]="ballArray()" [matchDetails]="matchDetails()" />
+  </app-card>
+  }
+  @else if(TabSelected === 'BallByBall'){
+  <app-card>
+    <app-basic-ball-by-ball [selctedInnings]="selctedInnings" [ballArray]="ballArray()" [matchDetails]="matchDetails()">
+    </app-basic-ball-by-ball>
+  </app-card>
+  }
 </div>

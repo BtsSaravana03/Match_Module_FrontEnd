@@ -14,10 +14,10 @@
       </div>
     </div>
     <div class="status-wrap">
-        <div class="status" *ngIf="!matchDetails().MatchComplete">
-            Live
-          </div>
-          <!-- <div class="summary-collapse" (click)="expand = !expand">
+      <div class="status" *ngIf="!matchDetails().MatchComplete">
+        Live
+      </div>
+      <!-- <div class="summary-collapse" (click)="expand = !expand">
             <i class=" fa-solid  fa-lg" style="color: #fff;" [ngClass]="{ 'fa-compress': expand, 'fa-expand':!expand}"></i>
           </div> -->
     </div>
@@ -59,143 +59,227 @@
       {{description}}
     </div>
     @if(ballArray().length>0){
-        <div class="other-details" [ngClass]="{'hide': !expand}">
-            <div class="over-container" #overContainer>
-                <!-- <div class="current-over">
+    <div class="other-details" [ngClass]="{'hide': !expand}">
+      <div class="over-container" #overContainer>
+        <!-- <div class="current-over">
                   OVERS {{CurrentOver}}
                 </div> -->
-                <div class="current-over-items">
-                    <ng-container *ngFor="let over of CurrentOverRuns; let i = index">
-                      <div class="over"><strong>{{ over.overId }}</strong></div>
-                      <div class="over-balls">
-                        <ng-container *ngFor="let ball of over.overBalls; let j = index">
-                          <div class="item"
-                               [ngClass]="{'four': ball.four, 'six': ball.six, 'wicket': ball.wicket}">
-                            <span>{{ ball.run }}</span>
-                          </div>
-                        </ng-container>
-                      </div>
-                    </ng-container>
-                  </div>
-              </div>
-
-              <hr style="margin: 20px 0 0 0;" class="line-color" />
-              <div class="current-striker-bowler">
-                <div class="batting-wrap">
-                  <div class="header">
-                    BATTING
-                  </div>
-                  <div class="items-wrap">
-                      @if(strikerData[0]){
-                          <div class="item-container">
-                              <div class="player-shilloutte">
-                                <img src="../../../../images/player-shilloutte-sm.png" alt="">
-                              </div>
-                              <div class="player-name">
-                                <div class="first">
-                                  {{strikerData[0].FirstName}} <img src="../../../../images/cricket-bat-icon.png" alt="" *ngIf="strikerData[0].isStriker">
-                                </div>
-                                <div class="last">
-                                  {{strikerData[0].LastName}}
-                                </div>
-                              </div>
-                              <div class="score">
-                                {{strikerData[0].Runs}} <em>({{strikerData[0].Balls}})</em>
-                              </div>
-                            </div>
-                      }
-                      @if(nonStrikerData[0]){
-                          <div class="item-container">
-                              <div class="player-shilloutte">
-                                <img src="../../../../images/player-shilloutte-sm.png" alt="">
-                              </div>
-                              <div class="player-name">
-                                <div class="first">
-                                  {{nonStrikerData[0].FirstName}} <img src="../../../../images/cricket-bat-icon.png" alt="" *ngIf="nonStrikerData[0].isStriker">
-                                </div>
-                                <div class="last">
-                                  {{nonStrikerData[0].LastName}}
-                                </div>
-                              </div>
-                              <div class="score">
-                                {{nonStrikerData[0].Runs}} <em>({{nonStrikerData[0].Balls}})</em>
-                              </div>
-                            </div>
-                      }
-                  </div>
-
+        <div class="current-over-items">
+          <ng-container *ngFor="let over of CurrentOverRuns; let i = index">
+            <div class="over"><strong>{{ over.overId }}</strong></div>
+            <div class="over-balls">
+              <ng-container *ngFor="let ball of over.overBalls; let j = index">
+                <div class="item" [ngClass]="{'four': ball.four, 'six': ball.six, 'wicket': ball.wicket}">
+                  <span>{{ ball.run }}</span>
                 </div>
-                @if(bowlerData[0]){
-                  <div class="vertical-line"></div>
-                  <div class="bowling-wrap">
-                    <div class="header">
-                      BOWLING
-                    </div>
-                    <div class="items-wrap">
-                      <div class="item-container">
-                        <div class="player-shilloutte">
-                          <img src="../../../../images/player-shilloutte-sm.png" alt="">
-                        </div>
-                        <div class="player-name">
-                          <div class="first">
-                            {{bowlerData[0].FirstName}}
-                          </div>
-                          <div class="last">
-                              {{bowlerData[0].LastName}}
-                          </div>
-                        </div>
-                        <div class="score">
-                          {{bowlerData[0].Wickets}} / {{bowlerData[0].Runs}} <em>({{bowlerData[0].Overs}})</em>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                }
-              </div>
+              </ng-container>
+            </div>
+          </ng-container>
         </div>
+      </div>
+
+      <hr style="margin: 20px 0 0 0;" class="line-color" />
+      <div class="current-striker-bowler">
+        <div class="batting-wrap">
+          <div class="header">
+            BATTING
+          </div>
+          <div class="items-wrap">
+            @if(strikerData[0]){
+            <div class="item-container">
+              <div class="player-shilloutte">
+                <img src="../../../../images/player-shilloutte-sm.png" alt="">
+              </div>
+              <div class="player-name">
+                <div class="first">
+                  {{strikerData[0].FirstName}} <img src="../../../../images/cricket-bat-icon.png" alt=""
+                    *ngIf="strikerData[0].isStriker">
+                </div>
+                <div class="last">
+                  {{strikerData[0].LastName}}
+                </div>
+              </div>
+              <div class="score">
+                {{strikerData[0].Runs}} <em>({{strikerData[0].Balls}})</em>
+              </div>
+            </div>
+            }
+            @if(nonStrikerData[0]){
+            <div class="item-container">
+              <div class="player-shilloutte">
+                <img src="../../../../images/player-shilloutte-sm.png" alt="">
+              </div>
+              <div class="player-name">
+                <div class="first">
+                  {{nonStrikerData[0].FirstName}} <img src="../../../../images/cricket-bat-icon.png" alt=""
+                    *ngIf="nonStrikerData[0].isStriker">
+                </div>
+                <div class="last">
+                  {{nonStrikerData[0].LastName}}
+                </div>
+              </div>
+              <div class="score">
+                {{nonStrikerData[0].Runs}} <em>({{nonStrikerData[0].Balls}})</em>
+              </div>
+            </div>
+            }
+          </div>
+
+        </div>
+        @if(bowlerData[0]){
+        <div class="vertical-line"></div>
+        <div class="bowling-wrap">
+          <div class="header">
+            BOWLING
+          </div>
+          <div class="items-wrap">
+            <div class="item-container">
+              <div class="player-shilloutte">
+                <img src="../../../../images/player-shilloutte-sm.png" alt="">
+              </div>
+              <div class="player-name">
+                <div class="first">
+                  {{bowlerData[0].FirstName}}
+                </div>
+                <div class="last">
+                  {{bowlerData[0].LastName}}
+                </div>
+              </div>
+              <div class="score">
+                {{bowlerData[0].Wickets}} / {{bowlerData[0].Runs}} <em>({{bowlerData[0].Overs}})</em>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        }
+      </div>
+      <hr style="margin: 20px 0 0 0;" class="line-color" />
+      <div class="chunk-wrap">
+        @if(dataChunks.currentRunRate !== 0){
+            <div class="item-container">
+                <div class="item">
+                    Current RR
+                </div>
+                <div class="value">
+                    {{dataChunks.currentRunRate.toFixed(1)}}
+                </div>
+              </div>
+        }
+        @if(lastBall?.InningsId === 1){
+            <div class="item-container">
+                <div class="item">
+                    Projected RR (8 RPO)
+                </div>
+                <div class="value">
+                    {{dataChunks.projections.at8RPO}}
+                </div>
+              </div>
+              <div class="item-container">
+                <div class="item">
+                    Projected RR (10 RPO)
+                </div>
+                <div class="value">
+                    {{dataChunks.projections.at10RPO}}
+                </div>
+              </div>
+        }
+        @if(lastBall?.InningsId === 2){
+            <div class="item-container">
+                <div class="item">
+                    Required RR
+                </div>
+                <div class="value">
+                    {{dataChunks.requiredRunRate.toFixed(1)}}
+                </div>
+              </div>
+        }
+        <div class="item-container">
+            <div class="item">
+                Last Boundary
+            </div>
+            <div class="value">
+                {{dataChunks.lastEvents.boundary?dataChunks.lastEvents.boundary.Overs:'-'}}
+            </div>
+          </div>
+          <div class="item-container">
+            <div class="item">
+                Last Six
+            </div>
+            <div class="value">
+                {{dataChunks.lastEvents.six?dataChunks.lastEvents.six.Overs:'-'}}
+            </div>
+          </div>
+          <div class="item-container">
+            <div class="item">
+                Last DotBall
+            </div>
+            <div class="value">
+                {{dataChunks.lastEvents.dotBall?dataChunks.lastEvents.dotBall.Overs:'-'}}
+            </div>
+          </div>
+          <div class="item-container">
+            <div class="item">
+                Last 5 Overs
+            </div>
+            <div class="value">
+              {{dataChunks.lastFiveOvers.Runs}} / {{dataChunks.lastFiveOvers.Wickets}}
+            </div>
+          </div>
+          @if(lastBall?.InningsId === 2){
+            <div class="item-container">
+                <div class="item">
+                    At this Stage
+                </div>
+                <div class="value">
+                    {{dataChunks.secondInningsStage.runs}} / {{dataChunks.secondInningsStage.wickets}}
+                </div>
+              </div>
+        }
+      </div>
+    </div>
     }
   </div>
 </section>
 }
 @else if(matchDetails()){
-    <section id="summary-header">
-        <div class="wrap">
-          <div class="match-details">
-            <div class="match-date">
-              {{MatchDateFormatted}}
-            </div>
-            <div class="match-name">
-              {{matchDetails().CompFullName}}
-            </div>
-            <hr />
-            <div class="match-venue">
-              {{matchDetails().StadiumName}}, {{matchDetails().City}}
-            </div>
-          </div>
-          <div class="d-flex align-items-center">
-            <div class="team-score flex-fill">
-                <div class="batting-team">
-                  <p class="name">
-                    {{isMobile()?matchDetails().ClubAPrefix:matchDetails().ClubAFull}}
-                  </p>
-                </div>
-                <hr style="margin: 0;" class="line-color" />
-                <div class="bowling-team">
-                  <p class="name">
-                    {{isMobile()?matchDetails().ClubBPrefix:matchDetails().ClubBFull}}
-                  </p>
-
-                </div>
-              </div>
-              <div class="match-not-started-msg">
-                <h3 style="color: #fff;font-size: 25px;font-weight: 600;margin-left: 10px;">{{MatchStartMsg}}</h3>
-              </div>
-          </div>
-
-          <div class="team-status">
-            {{description}}
-          </div>
+<section id="summary-header">
+  <div class="wrap">
+    <div class="match-details">
+      <div class="match-date">
+        {{MatchDateFormatted}}
+      </div>
+      <div class="match-name">
+        {{matchDetails().CompFullName}}
+      </div>
+      <hr />
+      <div class="match-venue">
+        {{matchDetails().StadiumName}}, {{matchDetails().City}}
+      </div>
+    </div>
+    <div class="d-flex align-items-center">
+      <div class="team-score flex-fill">
+        <div class="batting-team">
+          <p class="name">
+            {{isMobile()?matchDetails().ClubAPrefix:matchDetails().ClubAFull}}
+          </p>
         </div>
-      </section>
+        <hr style="margin: 0;" class="line-color" />
+        <div class="bowling-team">
+          <p class="name">
+            {{isMobile()?matchDetails().ClubBPrefix:matchDetails().ClubBFull}}
+          </p>
+
+        </div>
+      </div>
+      <div class="match-not-started-msg">
+        <h3 style="color: #fff;font-size: 25px;font-weight: 600;margin-left: 10px;">{{MatchStartMsg}}</h3>
+      </div>
+    </div>
+
+    <div class="team-status">
+      {{description}}
+    </div>
+  </div>
+</section>
 }

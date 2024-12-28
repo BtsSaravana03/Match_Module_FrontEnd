@@ -23,6 +23,7 @@
   <br />
   <app-card [ApplyDefaultStyle]="true">
     <div id="Partnership" #Partnership>
+        <h4 class="card-header-custom">Partnership</h4>
       <ng-container>
         <app-partnership [matchDetails]="this.matchDetails()"></app-partnership>
       </ng-container>
@@ -31,6 +32,7 @@
   <br />
   <app-card [ApplyDefaultStyle]="true">
     <div id="Worm" #Worm>
+        <h4 class="card-header-custom">Worm</h4>
       <ng-container>
         <app-worm [selctedInnings]="selctedInnings"></app-worm>
       </ng-container>
@@ -39,8 +41,17 @@
   <br />
   <app-card [ApplyDefaultStyle]="true">
     <div id="Manhattan" #Manhattan>
+        <h4 class="card-header-custom">Manhattan</h4>
       <ng-container>
         <app-manhatten [selctedInnings]="selctedInnings"></app-manhatten>
+      </ng-container>
+    </div>
+  </app-card>
+  <app-card [ApplyDefaultStyle]="true">
+    <div id="MatchInfo" #MatchInfo>
+        <h4 class="card-header-custom">Match Info</h4>
+      <ng-container>
+        <app-match-info-v2 [matchInfo]="this.matchDetails()"></app-match-info-v2>
       </ng-container>
     </div>
   </app-card>

@@ -1,5 +1,4 @@
 import { DestroyRef, inject, Injectable, OnInit, signal } from '@angular/core';
-import { HttpServices } from '../../services/http.service';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import Enumerable from 'linq';
 import { BallByBallService } from '../../services/ball-by-ball.service';
@@ -55,7 +54,7 @@ export class VideoService {
           Runs: group.first().Runs,
           competitionid: group.first().BowlingClubID,
           InningsID: group.first().InningsId,
-          VideoPath: group.first().hlsPath,
+          VideoPath: group.first().InVideoPath,
           BallID: group.first().BallId,
           Overs: group.first().Overs,
           StartTimeTrim: group.first().deviceTime_Start,
@@ -71,6 +70,10 @@ export class VideoService {
           Ballspeed: maxByField('Penalty'),
           VideoNA: group.first().isNoBall,
           VideoMode: group.first().VideoMode,
+          hlsPath: group.first().hlsPath,
+          InVideoMode:group.first().InVideoMode,
+          StartFrame:group.first().StartFrame,
+          EndFrame:group.first().EndFrame,
         };
       })
       .toArray();
@@ -99,7 +102,7 @@ export class VideoService {
           Runs: group.first().Runs,
           competitionid: group.first().BowlingClubID,
           InningsID: group.first().InningsId,
-          VideoPath: group.first().hlsPath,
+          VideoPath: group.first().InVideoPath,
           BallID: group.first().BallId,
           Overs: group.first().Overs,
           StartTimeTrim: group.first().deviceTime_Start,
@@ -114,7 +117,11 @@ export class VideoService {
           ReplayVideo: maxByField('hlsPath'),
           Ballspeed: maxByField('Penalty'),
           VideoNA: group.first().isNoBall,
-          VideoMode: group.first().VideoMode,
+          VideoMode: group.first().InVideoMode,
+          hlsPath: group.first().hlsPath,
+          InVideoMode:group.first().InVideoMode,
+          StartFrame:group.first().StartFrame,
+          EndFrame:group.first().EndFrame,
         };
       })
       .toArray();
@@ -141,7 +148,7 @@ export class VideoService {
           Runs: group.first().Runs,
           competitionid: group.first().BowlingClubID,
           InningsID: group.first().InningsId,
-          VideoPath: group.first().hlsPath,
+          VideoPath: group.first().InVideoPath,
           BallID: group.first().BallId,
           Overs: group.first().Overs,
           StartTimeTrim: group.first().deviceTime_Start,
@@ -156,7 +163,11 @@ export class VideoService {
           ReplayVideo: maxByField('hlsPath'),
           Ballspeed: maxByField('Penalty'),
           VideoNA: group.first().isNoBall,
-          VideoMode: group.first().VideoMode,
+          VideoMode: group.first().InVideoMode,
+          hlsPath: group.first().hlsPath,
+          InVideoMode:group.first().InVideoMode,
+          StartFrame:group.first().StartFrame,
+          EndFrame:group.first().EndFrame,
         };
       })
       .toArray();
@@ -184,7 +195,7 @@ export class VideoService {
           Runs: group.first().Runs,
           competitionid: group.first().BowlingClubID,
           InningsID: group.first().InningsId,
-          VideoPath: group.first().hlsPath,
+          VideoPath: group.first().InVideoPath,
           BallID: group.first().BallId,
           Overs: group.first().Overs,
           StartTimeTrim: group.first().deviceTime_Start,
@@ -199,7 +210,11 @@ export class VideoService {
           ReplayVideo: maxByField('hlsPath'),
           Ballspeed: maxByField('Penalty'),
           VideoNA: group.first().isNoBall,
-          VideoMode: group.first().VideoMode,
+          VideoMode: group.first().InVideoMode,
+          hlsPath: group.first().hlsPath,
+          InVideoMode:group.first().InVideoMode,
+          StartFrame:group.first().StartFrame,
+          EndFrame:group.first().EndFrame,
         };
       })
       .toArray();
@@ -213,18 +228,18 @@ export class VideoService {
   }
   checkBallVideoFilter(ball:BallData, PlayerID:number, type:string) {
     if (type == 'Ball') {
-     
+
       if (ball.StrikerID == PlayerID) {
         this.setTab('Bat');
         return true;
       }
     } else if (type == 'Dots') {
-      
+
       if (ball.StrikerID === PlayerID && ball.Runs === 0 && ball.Batballs === 1) {
         this.setTab('Bat');
         return true;
       }
-    } 
+    }
     else if (type == 'Fours') {
       if (ball.StrikerID == PlayerID && ball.isFour == 1) {
         this.setTab('Bat');
@@ -358,7 +373,7 @@ export class VideoService {
         Runs: group.first().Runs,
         competitionid: group.first().BowlingClubID,
         InningsID: group.first().InningsId,
-        VideoPath: group.first().hlsPath,
+        VideoPath: group.first().InVideoPath,
         BallID: group.first().BallId,
         Overs: group.first().Overs,
         StartTimeTrim: group.first().deviceTime_Start,
@@ -373,7 +388,11 @@ export class VideoService {
         ReplayVideo: maxByField('hlsPath'),
         Ballspeed: maxByField('Penalty'),
         VideoNA: group.first().isNoBall,
-        VideoMode: group.first().VideoMode,
+        VideoMode: group.first().InVideoMode,
+        hlsPath: group.first().hlsPath,
+        InVideoMode:group.first().InVideoMode,
+        StartFrame:group.first().StartFrame,
+        EndFrame:group.first().EndFrame,
       };
     })
     .toArray();

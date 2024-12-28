@@ -1,0 +1,37 @@
+<dx-data-grid [dataSource]="overByOverData" [allowColumnReordering]="true" keyExpr="Over" [showColumnLines]="true"
+  [sorting]="{mode:'none'}" [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
+  [allowColumnResizing]="true" [columnAutoWidth]="true" (onRowPrepared)="onRowPrepared($event)">
+
+  <!-- Define Columns -->
+  <dxi-column dataField="Over" caption="Over"></dxi-column>
+  <dxi-column dataField="Bowler(Over#)" caption="Bowler(Over#)"></dxi-column>
+  <dxi-column dataField="Runs" caption="Runs"></dxi-column>
+  <dxi-column dataField="Wkts" caption="Wickets"></dxi-column>
+  <dxi-column dataField="Dots" caption="Dots"></dxi-column>
+  <dxi-column dataField="4s" caption="4s"></dxi-column>
+  <dxi-column dataField="6s" caption="6s"></dxi-column>
+  <dxi-column dataField="Bs" caption="Boundaries"></dxi-column>
+  <dxi-column dataField="Extras" caption="Extras"></dxi-column>
+  <dxo-scrolling mode="infinite"></dxo-scrolling>
+  <!-- Summary Row -->
+  <dxo-summary>
+    <!-- Add "Overall" to the Over column -->
+    <dxi-total-item column="Over" summaryType="custom" displayFormat="Overall" showInColumn="Over">
+    </dxi-total-item>
+
+    <dxi-total-item column="Runs" summaryType="sum" displayFormat="{0}">
+    </dxi-total-item>
+    <dxi-total-item column="Wkts" summaryType="sum" displayFormat="{0}">
+    </dxi-total-item>
+    <dxi-total-item column="Dots" summaryType="sum" displayFormat="{0}">
+    </dxi-total-item>
+    <dxi-total-item column="4s" summaryType="sum" displayFormat="{0}">
+    </dxi-total-item>
+    <dxi-total-item column="6s" summaryType="sum" displayFormat="{0}">
+    </dxi-total-item>
+    <dxi-total-item column="Bs" summaryType="sum" displayFormat="{0}">
+    </dxi-total-item>
+    <dxi-total-item column="Extras" summaryType="sum" displayFormat="{0}">
+    </dxi-total-item>
+  </dxo-summary>
+</dx-data-grid>

@@ -1,29 +1,33 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { SummaryHeaderComponent } from "../../scorecard-v2/summary-header/summary-header.component";
 import { BallByBallService } from '../../services/ball-by-ball.service';
-import { InningsService } from '../../components/innings-tab/innings.service';
 import { Router } from '@angular/router';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { BattingCardSummary } from '../../scorecard-v2/batting-card/batting-card.interface';
 import { calculateOvers } from '../../scripts/cricket_gen';
 import { checkInf } from '../../scripts/generic';
 import Enumerable from 'linq';
+import { CardComponent } from "../sharedComponents/card/card.component";
+import { CommonModule } from '@angular/common';
+import { TabsComponent } from '../sharedComponents/tabs/tabs.component';
+import { InningServiceService } from '../../services/inning-service.service';
+import { OverByOverComponent } from "./over-by-over/over-by-over.component";
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [SummaryHeaderComponent],
+  imports: [SummaryHeaderComponent, CardComponent, CommonModule, TabsComponent, OverByOverComponent],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
 export class OverviewComponent {
     private ballbyballService = inject(BallByBallService);
-    private inningService = inject(InningsService);
+    private inningService = inject(InningServiceService);
     private destroyRef = inject(DestroyRef);
     private router = inject(Router);
     ballArray = signal<BallData[]>([]);
     summary:[]|BattingCardSummary[] = [];
-    matchDetails = signal<any>({});
+    matchDetails = signal<any>(undefined);
     totalInnings = signal<any[]>([]);
     selctedInnings:number = 1;
     currentInnings:number|undefined;
@@ -75,5 +79,11 @@ export class OverviewComponent {
               RunRate:checkInf(TeamTotal / overs)
             }
           }).orderBy(i=> i.Innings).toArray();
+      }
+      onInningsChange(e:any){
+        this.selctedInnings = e.InningsID;
+        this.inningService.selectedInnings.set(e.InningsID);
+        this.inningService.currentInningData = e;
+        this.inningService.ChangeInnings(e.InningsID)
       }
 }

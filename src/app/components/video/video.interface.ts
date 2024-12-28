@@ -25,5 +25,9 @@ export interface VideoBalls {
     ReplayVideo: string;
     Ballspeed: number;
     VideoNA: boolean;
-    VideoMode:number
+    VideoMode:number;
+    hlsPath:string|null;
+    InVideoMode:number;
+    StartFrame:number;
+    EndFrame:number;
 }

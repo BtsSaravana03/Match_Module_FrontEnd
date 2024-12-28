@@ -7,11 +7,13 @@ import { BallByBallService } from '../../services/ball-by-ball.service';
 import { InningServiceService } from '../../services/inning-service.service';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { BattingCardSummary } from '../../scorecard-v2/batting-card/batting-card.interface';
+import { DxTabsModule } from 'devextreme-angular';
+import { BasicBallByBallComponent } from "./basic-ball-by-ball/basic-ball-by-ball.component";
 
 @Component({
   selector: 'app-ballbyball',
   standalone: true,
-  imports: [CardComponent, BallByBallComponent,CommonModule,TabsComponent],
+  imports: [CardComponent, BallByBallComponent, CommonModule, TabsComponent, DxTabsModule, BasicBallByBallComponent],
   templateUrl: './ballbyball.component.html',
   styleUrl: './ballbyball.component.scss'
 })
@@ -19,6 +21,9 @@ export class BallbyballComponent {
     private ballbyballService = inject(BallByBallService);
     private inningService = inject(InningServiceService);
     private destroyRef = inject(DestroyRef);
+    setInningValue:number|undefined;
+    Tabs = ['BallByBall','Adv BallByBall'];
+    TabSelected = 'BallByBall';
     isMobile = signal(false);
     ballArray = signal<BallData[]>([]);
     summary:[]|BattingCardSummary[] = [];
@@ -26,7 +31,6 @@ export class BallbyballComponent {
     totalInnings = signal<any[]>([]);
     selctedInnings:number = 1;
     currentInnings:number|undefined;
-    setInningValue:number|undefined;
     ngOnInit(): void {
         const subscription = this.ballbyballService.ballObservable$.subscribe(updated => {
             this.ballArray.set(updated);
@@ -52,4 +56,7 @@ export class BallbyballComponent {
         this.inningService.selectedInnings.set(e.InningsID);
         this.inningService.currentInningData = e;
       }
+      onTabChange(e:any){
+        this.TabSelected = e.addedItems[0];
+    }
 }

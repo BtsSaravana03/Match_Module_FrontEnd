@@ -16,6 +16,29 @@ interface TeamSummary{
   isCurrentInn:boolean,
   Overs:number
 };
+interface DataChunks {
+    projections: {
+        at8RPO: number;
+        at10RPO: number;
+    };
+    currentRunRate: number;
+    requiredRunRate: number;
+    lastEvents: {
+        boundary: BallData | null|undefined;
+        six: BallData | null|undefined;
+        dotBall: BallData | null |undefined;
+    };
+    lastFiveOvers: {
+        Runs:number;
+        Wickets:number
+    };
+    secondInningsStage: {
+        runs: number;
+        wickets: number;
+        overs: number;
+    };
+}
+
 @Component({
   selector: 'app-summary-header',
   standalone: true,
@@ -43,7 +66,29 @@ export class SummaryHeaderComponent implements OnChanges{
   description:string = '';
   MatchStartMsg:string = 'Yet to start';
   expand:boolean = true;
-
+  lastBall:BallData|undefined;
+  dataChunks:DataChunks = {
+    projections: {
+        at8RPO: 0,
+        at10RPO: 0
+    },
+    currentRunRate: 0,
+    requiredRunRate: 0,
+    lastEvents: {
+        boundary: null,
+        six: null,
+        dotBall: null
+    },
+    lastFiveOvers: {
+        Runs: 0,
+        Wickets:0
+    },
+    secondInningsStage: {
+        runs: 0,
+        wickets: 0,
+        overs: 0
+    }
+};
   constructor(){
     effect(()=>{
       if(this.summary() && this.matchDetails()){
@@ -51,6 +96,9 @@ export class SummaryHeaderComponent implements OnChanges{
         setTimeout(() => {
             if(this.overContainerDiv()){
                 this.overContainerDiv()!.nativeElement.scrollLeft = this.overContainerDiv()!.nativeElement.scrollWidth;
+            }
+            if(this.lastBall){
+                this.dataChunks = this.calculateStats(this.ballArray(),this.lastBall,this.matchDetails().MatchOvers)
             }
         }, 0);
       }
@@ -64,6 +112,9 @@ export class SummaryHeaderComponent implements OnChanges{
         this.generateEquation();
         if(this.overContainerDiv()){
             this.overContainerDiv()!.nativeElement.scrollLeft = this.overContainerDiv()!.nativeElement.scrollWidth;
+        }
+        if(this.lastBall){
+            this.dataChunks = this.calculateStats(this.ballArray(),this.lastBall,this.matchDetails().MatchOvers)
         }
       }
   }
@@ -98,9 +149,11 @@ export class SummaryHeaderComponent implements OnChanges{
     //This is for venue and other details
     this.MatchDateFormatted = this.matchDetails().Date?moment(this.matchDetails().Date).format('dddd Do MMMM YYYY, HH:mm'):'-';
   }
+
   updateIndividualScores(){
     let balls = this.ballArray();
     let lastBall = _.last(balls);
+    this.lastBall = lastBall;
     if(lastBall){
         this.CurrentOver = lastBall.Overs;
         this.CurrentOverRuns = Enumerable.from(balls)
@@ -290,4 +343,81 @@ export class SummaryHeaderComponent implements OnChanges{
         }
     }
   }
+  calculateStats(balls: BallData[],lastBall: BallData,totalOvers: number):DataChunks {
+    const totalScore = lastBall.TeamRuns;
+    const oversBowled = lastBall.Overs;
+    const oversRemaining = totalOvers - oversBowled;
+    const targetRuns = this.TeamASummary[0].Total ?? 0;
+    // Projected Scores
+    const projectedAt8RPO = totalScore + (oversRemaining * 8);
+    const projectedAt10RPO = totalScore + (oversRemaining * 10);
+    const currentRunRate = oversBowled > 0 ? totalScore / oversBowled : 0;
+    // Required Run Rate
+    const runsScored = Enumerable.from(balls)
+        .where(i => i.InningsId === 2)
+        .sum(i => i.Runs);
+    const requiredRunRate = (targetRuns - runsScored) / oversRemaining;
+
+    // Last Events
+    const lastBoundary = Enumerable.from(balls)
+        .where(i => i.isFour === 1)
+        .orderByDescending(i => i.AutoId)
+        .firstOrDefault();
+
+    const lastSix = Enumerable.from(balls)
+        .where(i => i.isSix === 1)
+        .orderByDescending(i => i.AutoId)
+        .firstOrDefault();
+
+    const lastDotBall = Enumerable.from(balls)
+        .where(i => i.Runs === 0 && i.isWide === 0 && i.isNoBall === 0)
+        .orderByDescending(i => i.AutoId)
+        .firstOrDefault();
+
+    const ballsPerOver = 6;
+    const lastFiveOvers = Enumerable.from(balls)
+    .where(i => i.InningsId === lastBall.InningsId)
+    .groupBy(i => `${i.OverId}`)
+    .takeFromLast(5)
+    .select(g => {
+        return {
+            Runs: g.sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras),
+            Wickets: g.count(i => i.Dismissal === 1)
+         };
+    })
+    .toArray();
+    let totalRunsInLastFiveOvers = 0;
+    let totalWicketsInLastFiveOvers = 0;
+
+    lastFiveOvers.forEach(ball => {
+        totalRunsInLastFiveOvers += ball.Runs;
+        totalWicketsInLastFiveOvers += ball.Wickets;
+    });
+
+    const secondInningsStage = {
+        runs: runsScored,
+        wickets: lastBall.TeamWickets,
+        overs: oversBowled
+    };
+
+    // Organizing into dataChunks
+    return {
+        projections: {
+            at8RPO: projectedAt8RPO,
+            at10RPO: projectedAt10RPO
+        },
+        currentRunRate,
+        requiredRunRate,
+        lastEvents: {
+            boundary: lastBoundary,
+            six: lastSix,
+            dotBall: lastDotBall
+        },
+        lastFiveOvers:{
+            Runs: totalRunsInLastFiveOvers,
+            Wickets: totalWicketsInLastFiveOvers,
+        },
+        secondInningsStage
+    };
+}
 }

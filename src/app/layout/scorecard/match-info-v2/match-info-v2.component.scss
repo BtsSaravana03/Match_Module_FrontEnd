@@ -1,0 +1,16 @@
+@import '../../../../styles/variable';
+
+table#matchInfo{
+    border: 1px solid $table-border-color;
+    border-radius: 5px;
+    width: 100%;
+    tr{
+
+            border-bottom: 1px solid $table-border-color;
+        td{
+            padding: 5px 20px;
+            border-right: 1px solid $table-border-color;
+
+        }
+    }
+}

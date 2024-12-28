@@ -1,0 +1,60 @@
+<table id="matchInfo">
+    <tbody>
+        <tr>
+            <td><strong>Location</strong></td>
+            <td>{{matchInfo().info?.Venue}}, {{matchInfo().info?.City}}</td>
+        </tr>
+        <tr>
+            <td><strong>Toss</strong></td>
+            <td>{{matchInfo().info?.Toss}}</td>
+        </tr>
+        <tr>
+            <td><strong>Series</strong></td>
+            <td>{{matchInfo().info?.Series}}</td>
+        </tr>
+        <tr>
+            <td><strong>Season</strong></td>
+            <td>{{matchInfo().info?.Season}}</td>
+        </tr>
+        <!-- <tr>
+            <td><strong>Player Of The Match</strong></td>
+            <td>KKR, Mitchell Starc</td>
+        </tr>
+        <tr>
+            <td><strong>Player Of The Series</strong></td>
+            <td>KKR, Sunil Narine</td>
+        </tr>
+        <tr>
+            <td><strong>Series Result</strong></td>
+            <td>Kolkata Knight Riders won the 2024 Indian Premier League</td>
+        </tr> -->
+        <tr>
+            <td><strong>Hours of play (local time)</strong></td>
+            <td>{{matchInfo().info?.Time}}</td>
+        </tr>
+        <tr>
+            <td><strong>Match Days</strong></td>
+            <td>{{getFormattedDate}} - {{dayOrNight}} ({{matchInfo().info?.MatchOvers}}-over match)</td>
+        </tr>
+        <!-- <tr>
+            <td><strong>SRH Player Replacement</strong></td>
+            <td>Impact Player: Abdul Samad in, Travis Head out (1st innings 11.5 ov)</td>
+        </tr> -->
+        <tr>
+            <td><strong>Umpires</strong></td>
+            <td>{{matchInfo().info?.Umpires}}</td>
+        </tr>
+        <tr>
+            <td><strong>TV Umpire</strong></td>
+            <td>{{matchInfo().info?.TVUmpire}}</td>
+        </tr>
+        <!-- <tr>
+            <td><strong>Reserve Umpire</strong></td>
+            <td>Virendar Sharma</td>
+        </tr> -->
+        <tr>
+            <td><strong>Match Referee</strong></td>
+            <td>{{matchInfo().info?.MatchReferee}}</td>
+        </tr>
+    </tbody>
+</table>

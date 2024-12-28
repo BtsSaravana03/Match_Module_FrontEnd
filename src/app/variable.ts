@@ -1,1 +1,2 @@
-export const api_url = 'http://localhost:3000/';
+export const ip = 'localhost';
+export const api_url = 'http://'+ip+':3000/';

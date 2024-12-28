@@ -1,0 +1,34 @@
+<div>
+    <dx-data-grid [dataSource]="ballArrayFiltered" keyExpr="AutoId" [showColumnLines]="true"
+      [sorting]="{mode:'multiple'}" [showRowLines]="true" [showBorders]="true"
+      [elementAttr]="{ class: 'custom-data-grid' }" [allowColumnReordering]="true" [allowColumnResizing]="true"
+       [columnAutoWidth]="true">
+      <dxo-toolbar>
+        <dxi-item location="before">
+          <div *dxTemplate class="InningsBtn">
+            <button class="btn btn-light btn-sm" (click)="onCellClick(0)" title="Play all"><i
+                class="fa-solid fa-circle-play" style="color: #74C0FC;"></i>
+              {{selctedInnings()}}<sup>{{getInningPre()}}</sup> Innings</button>
+          </div>
+        </dxi-item>
+        <dxi-item location="after" name="searchPanel">
+        </dxi-item>
+        <dxi-item location="after" name="exportButton">
+        </dxi-item>
+      </dxo-toolbar>
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
+      <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+      <dxi-column dataField="StrikerName" caption="Batsman" alignment="left"></dxi-column>
+      <dxi-column dataField="Overs" caption="O" alignment="left"></dxi-column>
+      <dxi-column dataField="BowlerName" caption="Bowler" alignment="left"></dxi-column>
+      <dxi-column dataField="DeliveryStyleName" caption="Delivery" alignment="left"></dxi-column>
+      <dxi-column dataField="Runs" caption="R" alignment="left"></dxi-column>
+      <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
+      <div *dxTemplate="let data of 'cellTemplate'">
+        <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick(data.rowIndex)"></i>
+      </div>
+      <dxo-export [enabled]="true" [allowExportSelectedData]="false" [formats]="['xlsx', 'pdf']"></dxo-export>
+      <dxo-scrolling mode="infinite"></dxo-scrolling>
+    </dx-data-grid>
+  </div>
+  <app-video [selctedInnings]="this.selctedInnings()" [matchInfo]="matchDetails()" />

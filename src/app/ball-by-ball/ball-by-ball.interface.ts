@@ -79,4 +79,6 @@ export interface BallData {
     CreaseMovementName:string;
     Appeal:number;
     BatTypeID:number;
+    InVideoPath:string;
+    InVideoMode:number;
 }

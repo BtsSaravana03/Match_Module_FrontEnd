@@ -22,6 +22,7 @@
     "devextreme-angular": "24.1.6",
     "exceljs": "^4.4.0",
     "file-saver-es": "^2.0.5",
+    "hls.js": "^1.5.18",
     "jspdf": "^2.5.2",
     "linq": "^4.0.3",
     "lodash": "^4.17.21",

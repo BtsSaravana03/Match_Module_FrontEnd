@@ -56,6 +56,7 @@ export interface MatchData {
     isLimitedOvers:number;
     inningsData: InningsData[];
     result:MatchResult[];
+    info:MatchInfo | null;
 }
 
 interface InningsData {
@@ -94,3 +95,18 @@ export interface MatchResult {
     ClubName:string;
     ClubPrefix:string;
   }
+  interface MatchInfo {
+    Series: string;
+    Season: string;
+    MatchName: string;
+    Venue: string;
+    City: string;
+    Time: string;
+    Date: string;
+    MatchOvers: number;
+    Format: string;
+    Toss: string;
+    Umpires: string | null;        // Could be null if no umpires are specified
+    TVUmpire: string | null;       // Could be null if no TV umpire is specified
+    MatchReferee: string | null;   // Could be null if no referee is specified
+}

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { DxTabsModule } from 'devextreme-angular';
 import { BallByBallService } from '../../services/ball-by-ball.service';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
@@ -20,13 +20,13 @@ import { CommonModule } from '@angular/common';
 import { AppService } from '../../services/app.service';
 import { TabsComponent } from "../sharedComponents/tabs/tabs.component";
 import { InningServiceService } from '../../services/inning-service.service';
-import { TabService } from '../sharedComponents/tabs/tab.service';
+import { MatchInfoV2Component } from "./match-info-v2/match-info-v2.component";
 
 
 @Component({
   selector: 'app-scorecard',
   standalone: true,
-  imports: [DxTabsModule, BattingCardComponent, FallOfWicketsComponent, BowlingCardComponent, PartnershipComponent, WormComponent, ManhattenComponent, CardComponent, VideoComponent, CommonModule, TabsComponent],
+  imports: [DxTabsModule, BattingCardComponent, FallOfWicketsComponent, BowlingCardComponent, PartnershipComponent, WormComponent, ManhattenComponent, CardComponent, VideoComponent, CommonModule, TabsComponent, MatchInfoV2Component],
   templateUrl: './scorecard.component.html',
   styleUrl: './scorecard.component.scss'
 })
@@ -44,15 +44,8 @@ export class ScorecardComponent implements OnInit{
     selctedInnings:number = 1;
     currentInnings:number|undefined;
     resizeObservable$!:Observable<Event>;
-    Tabs = ['Scorecard','Partnership','Worm','Manhattan'];
+    Tabs = ['Scorecard','Partnership','Worm','Manhattan','MatchInfo'];
     TabSelected:string = 'Scorecard';
-    // Scorecard = viewChild<ElementRef>('Scorecard');
-    // Partnership = viewChild<ElementRef>('Partnership');
-    // Worm = viewChild<ElementRef>('Worm');
-    // Manhattan = viewChild<ElementRef>('Manhattan');
-    // MatchInfo = viewChild<ElementRef>('MatchInfo');
-    // observer!: IntersectionObserver;
-    //setInningValue:number|undefined;
 
     ngOnInit(): void {
       this.router.navigate(['/v2/scorecard'],{fragment: this.TabSelected})
@@ -64,13 +57,7 @@ export class ScorecardComponent implements OnInit{
       const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated => {
         this.matchDetails.set(updated);
         this.totalInnings.set(this.matchDetails()?.inningsData || []);
-        // if(this.totalInnings().length > 0){
-        //     this.setInningValue = 1;
-        // }
       })
-    //   const InnSub = this.inningService.InningsObserver$.subscribe(updated =>{
-    //     this.selctedInnings = updated;
-    //    })
       this.resizeObservable$ = fromEvent(window, 'resize');
       const resizeSubscription: Subscription = this.resizeObservable$.subscribe(() => {})
       this.destroyRef.onDestroy(() => {
@@ -116,38 +103,6 @@ export class ScorecardComponent implements OnInit{
             }
           }).orderBy(i=> i.Innings).toArray();
       }
-    //   observeElements() {
-    //     const threshold = 0.1;
-    //     this.observer = new IntersectionObserver(
-    //     (entries) => {
-    //         entries.forEach((entry) => {
-    //         if (entry.isIntersecting) {
-    //             console.log(`${entry.target.id} is in view!`);
-    //             this.observer.disconnect();
-    //         }
-    //         });
-    //     },
-    //     { threshold }
-    //     );
-    //     const elementMap: Record<string, ElementRef | undefined> = {
-    //         Scorecard: this.Scorecard(),
-    //         Partnership: this.Partnership(),
-    //         Worm: this.Worm(),
-    //         Manhattan: this.Manhattan(),
-    //       };
-
-    //       this.Tabs.forEach((tab) => {
-    //         const elementRef = elementMap[tab]?.nativeElement;
-    //         if (elementRef) {
-    //           this.observer.observe(elementRef);
-    //         }
-    //       });
-    // }
-    // ngOnDestroy(): void {
-    //     if (this.observer) {
-    //       this.observer.disconnect();
-    //     }
-    //   }
       onInningsChange(e:any){
         this.selctedInnings = e.InningsID;
         this.inningService.selectedInnings.set(e.InningsID);

@@ -1,3 +1,16 @@
 <div>
     <app-summary-header [ballArray]="ballArray()" [currentInnings]="currentInnings" [selctedInnings]="selctedInnings" [summary]="summary" [matchDetails]="matchDetails()"/>
 </div>
+<div class="p-4">
+    @if(matchDetails().inningsData){
+        <div class="my-2" *ngIf="this.matchDetails().inningsData.length>0">
+            <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix" keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true" (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
+          </div>
+        <app-card>
+            @if(ballArray().length >0){
+                <app-over-by-over [ballArray]="ballArray()" [selctedInnings]="selctedInnings"></app-over-by-over>
+            }
+        </app-card>
+    }
+
+</div>
