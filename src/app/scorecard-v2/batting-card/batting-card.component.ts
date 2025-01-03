@@ -60,9 +60,10 @@ export class BattingCardComponent{
             bdryPer: checkSR(((g.sum(i => (i.isFour === 1 ? 4 : 0)) + (g.sum(i => (i.isSix === 1 ? 6 : 0)))) / g.count(i => i.Batballs===1)) * 100),
             wkt: g.count(i => i.Dismissal === 1),
             dismissalSts: g.count(i => i.Dismissal === 1)===0?'Not Out': this.setDismissal(g.where(i => i.Dismissal === 1).toArray()),
-            isLastRow: false
+            isLastRow: false,
+            BatOrder: g.first().BatOrder
         };
-    }).toArray();
+    }).orderBy(i => i.BatOrder).toArray();
     ///For Non-Striker Dismissals
     for (let i = 0; i < this.battingCard.length; i++) {
       let element = this.battingCard[i];

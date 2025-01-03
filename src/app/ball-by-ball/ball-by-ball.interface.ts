@@ -66,6 +66,7 @@ export interface BallData {
     PM_Y:number;
     PM_X_CM:number;
     PM_Y_CM:number;
+    PhaseofPlay:string;
     WW_Angle:number;
     WW_Distance:number;
     WW_DistancePercentage:number;
@@ -81,4 +82,6 @@ export interface BallData {
     BatTypeID:number;
     InVideoPath:string;
     InVideoMode:number;
+    BatOrder:number;
+    MultipleBowlers:boolean;
 }

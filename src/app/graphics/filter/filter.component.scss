@@ -1,18 +1,30 @@
+@import '../../../styles/variable';
 #filter-wrap{
+    width: 250px;
     .check-group{
         display: grid;
         grid-template-columns: auto auto auto auto;
+        row-gap: 5px;
+        column-gap: 3px;
         @media screen and (max-width:400px) {
             grid-template-columns: auto auto auto;
         }
     }
     .check-group-player{
         display: grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: auto;
         row-gap: 5px;
         @media screen and (max-width:400px) {
             grid-template-columns: auto;
         }
     }
+    .filterbtn{
+        border: 2px solid $theme-color;
+        border-radius: 0px;
+        color: $theme-color;
+        &.selected{
+            background-color: $theme-color;
+            color: $invert-typography-color;
+        }
+    }
 }
-

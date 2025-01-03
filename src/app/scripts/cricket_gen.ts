@@ -46,7 +46,7 @@ export function calculateOversPrecise(Balls:BallData[]) {
     let balls = 0;
     for(let i = 0;i <Balls.length;i++){
         balls++;
-        if(Balls[i].EndOver === 1){
+        if(Balls[i].EndOver === 1 && !Balls[i].MultipleBowlers){
             overs++;
             balls = 0;
         }

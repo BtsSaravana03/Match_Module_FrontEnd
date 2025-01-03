@@ -1,27 +1,64 @@
-<div class="p-3">
-  <div class="sticky-tab">
-    <dx-tabs [width]="'fit-content'" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''"
-      [focusStateEnabled]="false" [className]="'innings-template'" [showNavButtons]="true" [selectedItem]="TabSelected"
-      [dataSource]="Tabs" [orientation]="'horizontal'" (onSelectionChanged)="onTabChange($event)"
-      [stylingMode]="'secondary'">
-    </dx-tabs>
-  </div>
-  <div class="mt-2" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
-    <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix" keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true" (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
-  </div>
-  <div id="Pitchmap" #Pitchmap *ngIf="TabSelected==='Pitchmap'">
-    <ng-container>
-        <app-pitch-map [ballArray]="ballArrayFiltered()"></app-pitch-map>
-    </ng-container>
-  </div>
-  <div id="Wagonwheel" #Wagonwheel *ngIf="TabSelected==='Wagonwheel'">
-    <ng-container>
-        <app-wagon-wheel [ballArray]="ballArrayFiltered()"></app-wagon-wheel>
-    </ng-container>
-  </div>
-  <div id="Beehive" #Beehive *ngIf="TabSelected==='Beehive'">
-    <ng-container>
-        <app-beehive [ballArray]="ballArrayFiltered()"></app-beehive>
-    </ng-container>
+<div class="graphic-wrap">
+  <!-- <div class="graphic-filter">
+        <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="false" [SelectedInnings]="selctedInnings()" target="#"></app-graphics-filter>
+    </div> -->
+  <div>
+    <div class="sticky-tab">
+      <dx-tabs [width]="'fit-content'" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''"
+        [focusStateEnabled]="false" [className]="'innings-template'" [showNavButtons]="true"
+        [selectedItem]="TabSelected" [dataSource]="Tabs" [orientation]="'horizontal'"
+        (onSelectionChanged)="onTabChange($event)" [stylingMode]="'secondary'">
+      </dx-tabs>
+    </div>
+    <div class="mt-2" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
+      <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix"
+        keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true"
+        (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
+    </div>
+    <div id="Pitchmap" #Pitchmap *ngIf="TabSelected==='Pitchmap'">
+      <ng-container>
+        <div class="d-flex">
+          <div class="graphic-filter">
+            <button id="pitchmap_filter_btn" class="filter-btn" *ngIf="isMobile()"><i class="fa-solid fa-filter"></i></button>
+            <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()"
+              [SelectedInnings]="selctedInnings()" target="#pitchmap_filter_btn"></app-graphics-filter>
+          </div>
+          <div class="graphics">
+            <app-pitch-map [ballArray]="ballArrayFiltered()"></app-pitch-map>
+          </div>
+
+        </div>
+
+      </ng-container>
+    </div>
+    <div id="Wagonwheel" #Wagonwheel *ngIf="TabSelected==='Wagonwheel'">
+      <ng-container>
+        <div class="d-flex">
+          <div class="graphic-filter">
+            <button id="wagonwheel_filter_btn" class="filter-btn"  *ngIf="isMobile()"><i class="fa-solid fa-filter"></i></button>
+            <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()"
+              [SelectedInnings]="selctedInnings()" target="#wagonwheel_filter_btn"></app-graphics-filter>
+          </div>
+          <div class="graphics">
+            <app-wagon-wheel [ballArray]="ballArrayFiltered()"></app-wagon-wheel>
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+    <div id="Beehive" #Beehive *ngIf="TabSelected==='Beehive'">
+      <ng-container>
+        <div class="d-flex">
+            <div class="graphic-filter">
+                <button id="beehive_filter_btn" class="filter-btn" *ngIf="isMobile()"><i class="fa-solid fa-filter"></i></button>
+                <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()" [SelectedInnings]="selctedInnings()" target="#beehive_filter_btn"></app-graphics-filter>
+            </div>
+           <div class="graphics">
+            <app-beehive [ballArray]="ballArrayFiltered()"></app-beehive>
+           </div>
+</div>
+
+      </ng-container>
+    </div>
   </div>
 </div>

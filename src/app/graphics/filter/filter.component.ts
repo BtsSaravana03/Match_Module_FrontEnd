@@ -31,15 +31,15 @@ export class FilterComponent implements OnInit,AfterViewInit {
   tabsWithIcon = [
     {
       id: 0,
-      icon: 'fa-solid fa-filter',
+      icon: 'fa-solid fa-filter fa-xs',
     },
     {
       id: 1,
-      icon: 'fa-solid fa-user',
+      icon: 'fa-solid fa-user fa-xs',
     },
     {
       id: 2,
-      icon: 'fa-sharp fa-solid fa-tennis-ball',
+      icon: 'fa-sharp fa-solid fa-tennis-ball fa-xs',
     }
   ];
   appliedFilters:GraphicsFilter = {
@@ -89,6 +89,7 @@ export class FilterComponent implements OnInit,AfterViewInit {
     } else {
       this.appliedFilters[filterName] = filterArray.filter(item => item !== id);
     }
+    this.apply();
   }
   refreshPlayers() {
     this.appliedFilters.Batsman = [];

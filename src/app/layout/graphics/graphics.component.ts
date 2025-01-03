@@ -10,19 +10,21 @@ import { InningServiceService } from '../../services/inning-service.service';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { BattingCardSummary } from '../../scorecard-v2/batting-card/batting-card.interface';
 import Enumerable from 'linq';
+import { FilterComponent } from "../../graphics/filter/filter.component";
+import { AppService } from '../../services/app.service';
 
 @Component({
   selector: 'app-graphics',
   standalone: true,
-  imports: [DxTabsModule,PitchMapComponent,WagonWheelComponent,BeehiveComponent,CommonModule,TabsComponent],
+  imports: [DxTabsModule, PitchMapComponent, WagonWheelComponent, BeehiveComponent, CommonModule, TabsComponent, FilterComponent],
   templateUrl: './graphics.component.html',
   styleUrl: './graphics.component.scss'
 })
 export class GraphicsComponent {
-     private ballbyballService = inject(BallByBallService);
+    private ballbyballService = inject(BallByBallService);
     private inningService = inject(InningServiceService);
     private destroyRef = inject(DestroyRef);
-    private cdr = inject(ChangeDetectorRef);
+    private appServices = inject(AppService);
     isMobile = signal(false);
     ballArray = signal<BallData[]>([]);
     ballArrayFiltered = signal<BallData[]>([]);
@@ -43,6 +45,8 @@ export class GraphicsComponent {
         this.TabSelected = e.addedItems[0];
     }
     ngOnInit(): void {
+        const isMobile = this.appServices.isMobile();
+        this.isMobile.set(isMobile);
         const subscription = this.ballbyballService.ballObservable$.subscribe(updated => {
             this.ballArray.set(updated);
             this.currentInnings = this.ballArray()[this.ballArray().length - 1]?.InningsId || undefined;

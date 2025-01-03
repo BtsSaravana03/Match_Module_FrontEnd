@@ -4,8 +4,7 @@ import { CommonModule } from '@angular/common';
 import { DxPopupModule } from 'devextreme-angular';
 import { VideoBalls } from './video.interface';
 import { fromEvent, Observable, Subscription } from 'rxjs';
-import { api_url, ip } from '../../variable';
-import { HttpServices } from '../../services/http.service';
+import { api_url, ip, videoFolder } from '../../variable';
 import Hls from 'hls.js';
 
 @Component({
@@ -95,13 +94,12 @@ export class VideoComponent {
         this.hlsStartFrame = ball.StartFrame;
         this.hlsEndFrame = ball.EndFrame;
         const videoElement = this.videoElement()?.nativeElement;
-        const hlsUrl = `http://${ip}/hls/`+ball.hlsPath;
+        const hlsUrl = videoFolder +ball.hlsPath;
         if (Hls.isSupported()) {
             const hls = new Hls();
             hls.loadSource(hlsUrl);
             hls.attachMedia(videoElement);
             // hls.on(Hls.Events.MANIFEST_PARSED, () => {
-
             //     videoElement.play().catch(console.error);
             // });
             videoElement.currentTime = this.hlsStartFrame;
@@ -125,12 +123,13 @@ export class VideoComponent {
         //     this.videoElement()?.nativeElement.load();
         // }
     }
-    else if(ball.InVideoMode === 1 || ball.InVideoMode === 2){
+    //else if(true){
+    else if(ball.VideoMode === 1 || ball.VideoMode === 2){
       let folder = this.matchInfo().MtcVideos+' '+this.formatDate(this.matchInfo()?.Date)+ball.InningsID;
-      let _p = rootFolder +'/' + folder +'/'+ folder+'_'+ball.BallID+'.mp4';
-      const encoded = encodeURIComponent(_p);
-      let blob = await this.convertToBlob(encoded,ball.VideoMode);
-      this.videoSrc.set(blob);
+      let _p =  videoFolder + folder +'/'+ folder+'_'+ball.BallID+'.mp4';
+      // normalize = _p.replace(/\\/g, '/');
+     // let blob = await this.convertToBlob(_p,ball.VideoMode);
+      this.videoSrc.set(_p);
     }
 
     else{
@@ -176,7 +175,8 @@ export class VideoComponent {
     // var URL = window.URL || window.webkitURL;
     // URL.createObjectURL(video);
     //return video.blob();
-    let response = await fetch(api_url+ 'video/getBlobURL/'+filePath+'/'+videotype);
+    const encoded = encodeURIComponent(filePath);
+    let response = await fetch(api_url+ 'video/getBlobURL/'+encoded);
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }

@@ -1,14 +1,27 @@
 <div>
     <app-summary-header [ballArray]="ballArray()" [currentInnings]="currentInnings" [selctedInnings]="selctedInnings" [summary]="summary" [matchDetails]="matchDetails()"/>
 </div>
-<div class="p-4">
+<div class="px-4 py-2">
+    <div class="sticky-tab">
+        <dx-tabs [width]="this.isMobile?'auto':'fit-content'" [rtlEnabled]="false" [scrollByContent]="true"
+          [noDataText]="''" [focusStateEnabled]="false" [className]="'innings-template'" [showNavButtons]="true"
+          [selectedItem]="TabSelected" [dataSource]="Tabs" [orientation]="'horizontal'"
+          (onSelectionChanged)="onTabChange($event)" [stylingMode]="'secondary'">
+        </dx-tabs>
+      </div>
     @if(matchDetails().inningsData){
-        <div class="my-2" *ngIf="this.matchDetails().inningsData.length>0">
+        <div class="mx-2 mt-3 mb-3" *ngIf="this.matchDetails().inningsData.length>0">
             <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix" keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true" (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
           </div>
         <app-card>
             @if(ballArray().length >0){
-                <app-over-by-over [ballArray]="ballArray()" [selctedInnings]="selctedInnings"></app-over-by-over>
+                @if(TabSelected === 'OverByOver'){
+                    <app-over-by-over [ballArray]="ballArray()" [selctedInnings]="selctedInnings"></app-over-by-over>
+                }
+                @else if(TabSelected === 'PhaseWise'){
+                    <app-phase-wise [selctedInnings]="selctedInnings" [ballArray]="ballArray()"></app-phase-wise>
+                }
+
             }
         </app-card>
     }

@@ -1,0 +1,8 @@
+<app-card>
+    <div class="mb-3 pt-3" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
+        <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix"
+          keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true"
+          (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
+      </div>
+    <app-fielding [selctedInnings]="selctedInnings"></app-fielding>
+</app-card>

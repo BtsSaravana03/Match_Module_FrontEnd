@@ -4,6 +4,8 @@ import { OverviewComponent } from './layout/overview/overview.component';
 import { ScorecardComponent } from './layout/scorecard/scorecard.component';
 import { GraphicsComponent } from './layout/graphics/graphics.component';
 import { BallbyballComponent } from './layout/ballbyball/ballbyball.component';
+import { FieldingViewComponent } from './layout/fielding-view/fielding-view.component';
+import { SpellWiseComponent } from './layout/spell-wise/spell-wise.component';
 
 export const routes: Routes = [
     // {path:'ballbyball',component:BallByBallComponent},
@@ -49,5 +51,7 @@ export const routes: Routes = [
     {path:'v2/scorecard',component:ScorecardComponent},
     {path:'v2/graphics',component:GraphicsComponent},
     {path:'v2/ballbyball',component:BallbyballComponent},
+    {path:'v2/fielding',component:FieldingViewComponent},
+    {path:'v2/spell',component:SpellWiseComponent},
     {path:'',redirectTo:'login',pathMatch:'full'}
 ];

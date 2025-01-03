@@ -13,7 +13,7 @@ config({licenseKey})
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, MatchSelectComponent, TabsComponent, CardComponent,CommonModule],
+  imports: [RouterOutlet, NavbarComponent, MatchSelectComponent, TabsComponent, CardComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   encapsulation:ViewEncapsulation.None
@@ -29,7 +29,9 @@ export class AppComponent implements OnInit {
     {name:'Overview',value:'overview'},
     {name:'Scorecard',value:'scorecard'},
     {name:'Ball by ball',value:'ballbyball'},
-    {name:'Graphics',value:'graphics'}
+    {name:'Graphics',value:'graphics'},
+    {name:'Spell',value:'spell'},
+    {name:'Fielding',value:'fielding'}
   ]
 
   constructor(viewport: ViewportScroller) {

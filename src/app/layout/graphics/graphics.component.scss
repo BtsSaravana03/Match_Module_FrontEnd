@@ -1,0 +1,19 @@
+@import '../../../styles/variable';
+.graphic-wrap{
+    padding: 20px;
+    .graphic-filter{
+        padding: 10px;
+        border-right: 1px solid $theme-color;
+        border-radius: 0px;
+    }
+    .graphics{
+        flex: 1;
+    }
+    .filter-btn{
+        background: #184bd3;
+    color: #fff;
+    border: none;
+    padding: 5px;
+    border-radius: 3px;
+    }
+}

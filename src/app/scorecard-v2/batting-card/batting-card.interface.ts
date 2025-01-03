@@ -25,6 +25,7 @@ export interface BattingCard {
     wkt: number;
     dismissalSts: string | null;
     isLastRow:boolean;
+    BatOrder:number;
 }
 
 export interface MatchData {

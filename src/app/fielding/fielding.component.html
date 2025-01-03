@@ -1,8 +1,7 @@
-<div class="container mt-3">
-    <app-innings-tab (inningsChange)="onInningsChange($event)"/>
-
+<div>
+    <!-- <app-innings-tab (inningsChange)="onInningsChange($event)"/> -->
     <dx-data-grid [dataSource]="FieldingStats" [allowColumnReordering]="false" keyExpr="SrNo" [showColumnLines]="true" [sorting]="{mode:'none'}"
         [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
-        [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+        [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="isMobile" [width]="'100%'">
       </dx-data-grid>
 </div>

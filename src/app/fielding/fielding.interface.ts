@@ -1,6 +1,6 @@
 export interface Fielding{
     SrNo:number;
-    PlayerName:string|null;
+    Name:string|null;
     RunsSaved:number;
     RunsMissed:number;
     NetRunsSaved:number;

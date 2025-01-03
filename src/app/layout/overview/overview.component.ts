@@ -12,11 +12,14 @@ import { CommonModule } from '@angular/common';
 import { TabsComponent } from '../sharedComponents/tabs/tabs.component';
 import { InningServiceService } from '../../services/inning-service.service';
 import { OverByOverComponent } from "./over-by-over/over-by-over.component";
+import { DxTabsModule } from 'devextreme-angular';
+import { AppService } from '../../services/app.service';
+import { PhaseWiseComponent } from "../phase-wise/phase-wise.component";
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [SummaryHeaderComponent, CardComponent, CommonModule, TabsComponent, OverByOverComponent],
+  imports: [SummaryHeaderComponent, CardComponent, CommonModule, TabsComponent, OverByOverComponent, DxTabsModule, PhaseWiseComponent],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
@@ -24,15 +27,19 @@ export class OverviewComponent {
     private ballbyballService = inject(BallByBallService);
     private inningService = inject(InningServiceService);
     private destroyRef = inject(DestroyRef);
-    private router = inject(Router);
+    private appService = inject(AppService);
     ballArray = signal<BallData[]>([]);
     summary:[]|BattingCardSummary[] = [];
     matchDetails = signal<any>(undefined);
     totalInnings = signal<any[]>([]);
     selctedInnings:number = 1;
     currentInnings:number|undefined;
+    Tabs = ['OverByOver','PhaseWise'];
+    TabSelected:string = 'OverByOver';
+    isMobile = false;
 
     ngOnInit(): void {
+        this.isMobile = this.appService.isMobile();
         const subscription = this.ballbyballService.ballObservable$.subscribe(updated => {
             this.ballArray.set(updated);
             this.currentInnings = this.ballArray()[this.ballArray().length - 1]?.InningsId || undefined;
@@ -47,6 +54,9 @@ export class OverviewComponent {
             subscription.unsubscribe();
             matchSubscription.unsubscribe();
         })
+    }
+    onTabChange(e:any){
+        this.TabSelected = e.addedItems[0];
     }
     generateSummary(){
         this.summary = Enumerable.from(this.ballArray())
