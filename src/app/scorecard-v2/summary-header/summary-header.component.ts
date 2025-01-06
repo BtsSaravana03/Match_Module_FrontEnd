@@ -5,7 +5,7 @@ import Enumerable from 'linq';
 import moment from 'moment';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import _, { isNative, last } from 'lodash';
-import { calculateOvers, getCurrentBallDescription, oversToBalls } from '../../scripts/cricket_gen';
+import { calculateOvers, getCurrentBallDescription, oversSplit, oversToBalls } from '../../scripts/cricket_gen';
 import { splitName } from '../../scripts/generic';
 import { AppService } from '../../services/app.service';
 
@@ -247,15 +247,15 @@ export class SummaryHeaderComponent implements OnChanges{
                         const inning1data = this.summary()[0];
                         let neededRuns = inning1data.TeamTotal - inning2data.TeamTotal;
                         let remainingBalls = oversToBalls(matchDetails.MatchOvers) - oversToBalls(inning2data.Overs);
-                        let revisedOvers = matchDetails.inningsData[1].RevisedOvers;
+                        let revisedBalls = matchDetails.inningsData[1].RevisedOvers;
                         let revisedTarget = matchDetails.inningsData[1].RevisedTarget;
-                        if (revisedOvers) {
-                            remainingBalls = oversToBalls(revisedOvers) - oversToBalls(inning2data.Overs);
+                        if (revisedBalls) {
+                            remainingBalls = revisedBalls - oversToBalls(inning2data.Overs);
                         }
                         if (revisedTarget) {
                             neededRuns = revisedTarget - inning2data.TeamTotal;
                         }
-                        this.description = `${TeamName} needed ${neededRuns} to win from ${remainingBalls}`;
+                        this.description = `${TeamName} needed ${neededRuns<0?0:neededRuns} to win from ${remainingBalls}`;
                     }
                 }
             } else {
@@ -347,16 +347,18 @@ export class SummaryHeaderComponent implements OnChanges{
     const totalScore = lastBall.TeamRuns;
     const oversBowled = lastBall.Overs;
     const oversRemaining = totalOvers - oversBowled;
+    let _Over = oversSplit(oversBowled);
     const targetRuns = this.TeamASummary[0].Total ?? 0;
     // Projected Scores
     const projectedAt8RPO = totalScore + (oversRemaining * 8);
     const projectedAt10RPO = totalScore + (oversRemaining * 10);
-    const currentRunRate = oversBowled > 0 ? totalScore / oversBowled : 0;
+    const currentRunRate = oversBowled > 0 ? totalScore / (_Over.over + _Over.ballFraction) : 0;
     // Required Run Rate
     const runsScored = Enumerable.from(balls)
         .where(i => i.InningsId === 2)
         .sum(i => i.Runs);
-    const requiredRunRate = (targetRuns - runsScored) / oversRemaining;
+        let _RequiredOver = oversSplit(oversRemaining);
+    const requiredRunRate = (targetRuns - runsScored) / (_RequiredOver.over + _RequiredOver.ballFraction);
 
     // Last Events
     const lastBoundary = Enumerable.from(balls)

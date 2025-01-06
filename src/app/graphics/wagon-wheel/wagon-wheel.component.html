@@ -7,6 +7,8 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 601.81 601.81" id="WagonWheel" width="600">
             <defs>
               <style>
+              .st0{fill:none;stroke:#C9C7C7;stroke-width:0.5;stroke-miterlimit:10;}
+
                 .ww-cls-1 {
                   fill: #006838;
                 }
@@ -45,6 +47,10 @@
 
               </style>
             </defs>
+            <line class="st0" x1="300" y1="1.4" x2="300" y2="601" />
+            <line class="st0" x1="0.9" y1="300.5" x2="595.7" y2="300.5" />
+            <line class="st0" x1="88.5" y1="512.7" x2="511.5" y2="89.7" />
+            <line class="st0" x1="87.7" y1="88.3" x2="510.6" y2="511.2" />
             <g id="Layer_2" data-name="Layer 2">
               <g id="BaseLayer" data-name="BaseLayer">
                 <rect class="ww-cls-1" x="288.07" y="259.49" width="25.18" height="86.62" />
@@ -88,7 +94,7 @@
 
               </style>
             </defs>>
-            <g id="Legends" data-name="Legends" [attr.transform]="'translate(0 ,'+ (ww_Height - 105)+')'">
+            <g id="Legends" data-name="Legends" [attr.transform]="'translate(0 , 0)'">
               <g id="Layer_1-2" data-name="Layer 1">
                 <circle class="cls-1" cx="5.36" cy="98.29" r="5.11" fill="#DE1623" />
                 <text class="cls-2" transform="translate(14.06 101.81)">6</text>
@@ -108,6 +114,14 @@
             </g>
           </svg>
         </g>
+        <text transform="matrix(1 0 0 1 44.4607 563.2902)" class="st14">
+          <tspan x="0" y="0" class="st6 st15" style="font: size 14px;">{{LeftSideName}}</tspan>
+          <tspan x="0" y="19.2" class="st6 st15">{{LeftSideData}}</tspan>
+        </text>
+        <text transform="matrix(1 0 0 1 503.1301 566.8099)" class="st14">
+          <tspan x="0" y="0" class="st6 st15" style="font: size 14px;">{{RightSideName}}</tspan>
+          <tspan x="0" y="19.2" class="st6 st15">{{RightSideData}}</tspan>
+        </text>
       </svg>
     </div>
   </section>

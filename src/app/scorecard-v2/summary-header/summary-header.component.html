@@ -184,7 +184,7 @@
                 </div>
               </div>
         }
-        @if(lastBall?.InningsId === 2){
+        @if(lastBall?.InningsId === 2 && matchDetails().result.length === 0){
             <div class="item-container">
                 <div class="item">
                     Required RR
@@ -235,6 +235,16 @@
                     {{dataChunks.secondInningsStage.runs}} / {{dataChunks.secondInningsStage.wickets}}
                 </div>
               </div>
+              @if(matchDetails().MomPlayerName){
+                <div class="item-container">
+                    <div class="item">
+                        M.O.M
+                    </div>
+                    <div class="value">
+                        {{matchDetails().MomPlayerName}}
+                    </div>
+                  </div>
+              }
         }
       </div>
     </div>

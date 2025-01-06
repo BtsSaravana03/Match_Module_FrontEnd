@@ -55,6 +55,7 @@ export interface MatchData {
     CompFullName:string;
     compprefix:string;
     isLimitedOvers:number;
+    MomPlayerName:string|null;
     inningsData: InningsData[];
     result:MatchResult[];
     info:MatchInfo | null;

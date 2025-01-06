@@ -34,7 +34,7 @@ export class PhaseWiseComponent implements OnInit {
             return {
                 Phase: g.first().PhaseofPlay,
                 Runs: g.sum(i => i.Runs + i.Extras + i.Penalty + i.BLExtras),
-                Wkts: g.count(i => i.Batwkts === 1),
+                Wkts: g.count(i => i.Dismissal === 1),
                 SR : checkSR(((g.sum(i => i.Runs + i.Extras)*100)/(g.sum(i => i.Bowlballs)))),
                 Dots: g.count(i => i.Runs === 0 && i.ExtraTypeId !== 2),
                 ['4s/6s']: g.count(i => i.isFour === 1) +'/'+ g.count(i => i.isSix === 1),

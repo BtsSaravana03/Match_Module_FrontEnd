@@ -9,19 +9,29 @@
         [selectedItem]="TabSelected" [dataSource]="Tabs" [orientation]="'horizontal'"
         (onSelectionChanged)="onTabChange($event)" [stylingMode]="'secondary'">
       </dx-tabs>
+
     </div>
-    <div class="mt-2" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
+    <div class="mt-2 d-flex justify-content-between"
+      *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
+      <div style="flex: 1;">
       <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix"
         keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true"
         (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
+    </div>
+      <button id="filter_button_mbl" class="filter-btn" *ngIf="isMobile()"><i class="fa-solid fa-filter"></i></button>
+      @if(isMobile()){
+        <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()"
+        [SelectedInnings]="selctedInnings()" target="#filter_button_mbl"></app-graphics-filter>
+      }
+
     </div>
     <div id="Pitchmap" #Pitchmap *ngIf="TabSelected==='Pitchmap'">
       <ng-container>
         <div class="d-flex">
           <div class="graphic-filter">
-            <button id="pitchmap_filter_btn" class="filter-btn" *ngIf="isMobile()"><i class="fa-solid fa-filter"></i></button>
+            <!-- <button id="pitchmap_filter_btn" class="filter-btn" *ngIf="isMobile()"><i class="fa-solid fa-filter"></i></button> -->
             <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()"
-              [SelectedInnings]="selctedInnings()" target="#pitchmap_filter_btn"></app-graphics-filter>
+              [SelectedInnings]="selctedInnings()" target="#"></app-graphics-filter>
           </div>
           <div class="graphics">
             <app-pitch-map [ballArray]="ballArrayFiltered()"></app-pitch-map>
@@ -35,9 +45,10 @@
       <ng-container>
         <div class="d-flex">
           <div class="graphic-filter">
-            <button id="wagonwheel_filter_btn" class="filter-btn"  *ngIf="isMobile()"><i class="fa-solid fa-filter"></i></button>
+            <!-- <button id="wagonwheel_filter_btn" class="filter-btn" *ngIf="isMobile()"><i
+                class="fa-solid fa-filter"></i></button> -->
             <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()"
-              [SelectedInnings]="selctedInnings()" target="#wagonwheel_filter_btn"></app-graphics-filter>
+              [SelectedInnings]="selctedInnings()" target="#"></app-graphics-filter>
           </div>
           <div class="graphics">
             <app-wagon-wheel [ballArray]="ballArrayFiltered()"></app-wagon-wheel>
@@ -49,14 +60,16 @@
     <div id="Beehive" #Beehive *ngIf="TabSelected==='Beehive'">
       <ng-container>
         <div class="d-flex">
-            <div class="graphic-filter">
-                <button id="beehive_filter_btn" class="filter-btn" *ngIf="isMobile()"><i class="fa-solid fa-filter"></i></button>
-                <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()" [SelectedInnings]="selctedInnings()" target="#beehive_filter_btn"></app-graphics-filter>
-            </div>
-           <div class="graphics">
+          <div class="graphic-filter">
+            <!-- <button id="beehive_filter_btn" class="filter-btn" *ngIf="isMobile()"><i
+                class="fa-solid fa-filter"></i></button> -->
+            <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()"
+              [SelectedInnings]="selctedInnings()" target="#"></app-graphics-filter>
+          </div>
+          <div class="graphics">
             <app-beehive [ballArray]="ballArrayFiltered()"></app-beehive>
-           </div>
-</div>
+          </div>
+        </div>
 
       </ng-container>
     </div>

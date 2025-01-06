@@ -32,6 +32,11 @@ export class WagonWheelComponent {
   tooltipTarget:string|undefined;
   targetBall:BallData|undefined;
   scale = 1;
+  LeftSideData:string = '0 (0)';
+  RightSideData:string = '0 (0)';
+  isFlipped = false;
+  LeftSideName = 'OFF';
+  RightSideName = 'LEG'
 
   @HostListener('window:resize')
   onResize() {
@@ -72,14 +77,38 @@ export class WagonWheelComponent {
 
   setWagonwheel(){
     let filtered_balls = this.graphicServices.applyFilter(this.ballArray());
+    let BattingTypes = new Set();
+    filtered_balls.forEach(i =>{
+        if( i.StBattingTypeID){
+            BattingTypes.add(i.StBattingTypeID)
+        }
+    })
     const x1 =0,y1=0;
     const circleRadius = 300;
+    this.isFlipped = false;
+    let LeftBalls = 0,LeftRuns = 0,RightBalls = 0,RightRuns = 0;
     const svgContainer = this.el.nativeElement.querySelector('#WW_Lines');
     svgContainer.innerHTML = '';
     filtered_balls.forEach(i => {
       //let circleRadius = Math.sqrt(i.wa)
-      if(i.WW_Angle && i.WW_DistancePercentage){
-        const radian = (i.WW_Angle - 90) * (Math.PI/180);
+      let Angle = i.WW_Angle;
+      if(BattingTypes.size === 2){
+        this.isFlipped = true;
+        this.LeftSideName = 'OFF';
+        this.RightSideName = 'LEG (Flipped)';
+      }
+      else if (BattingTypes.size === 1 && BattingTypes.has(1)){
+        this.LeftSideName = 'OFF';
+        this.RightSideName = 'LEG'
+      }else if(BattingTypes.size === 1 && BattingTypes.has(2)){
+        this.LeftSideName = 'LEG';
+        this.RightSideName = 'OFF';
+      }
+      if(Angle !== null && i.WW_DistancePercentage !== null){
+        if(i.StBattingTypeID === 2 && this.isFlipped){
+            Angle = 360 - i.WW_Angle;
+        }
+        const radian = (Angle - 90) * (Math.PI/180);
         let DistancePer = i.WW_DistancePercentage;
         if(i.isFour===1){
           DistancePer = 100;
@@ -97,6 +126,7 @@ export class WagonWheelComponent {
         this.renderer.setAttribute(line,'stroke-width','1');
         this.renderer.setAttribute(line,'class', 'animated-line');
         this.renderer.setAttribute(line, 'id', 'line'+i.AutoId);
+        this.renderer.setAttribute(line, 'data-angle', Angle.toString());
         this.renderer.listen(line, 'click', () => {
           this.onBallClick(i);
         });
@@ -122,7 +152,16 @@ export class WagonWheelComponent {
           this.onBallClick(i);
         });
         svgContainer.appendChild(circle);
+        if(Angle >= 0 && Angle <= 180){
+            RightBalls += i.Batballs;
+            RightRuns += i.Runs + i.Penalty + i.BLExtras + i.Extras;
+        }else if(Angle >= 181 && Angle <= 360){
+            LeftBalls += i.Batballs;
+            LeftRuns += i.Runs + i.Penalty + i.BLExtras + i.Extras;
+        }
       }
+      this.RightSideData = `${RightRuns} (${RightBalls})`;
+      this.LeftSideData = `${LeftRuns} (${LeftBalls})`;
     })
   }
   onBallClick(i:BallData){

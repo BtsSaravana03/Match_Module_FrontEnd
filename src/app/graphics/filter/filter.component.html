@@ -1,7 +1,7 @@
 @if (mobile_view()) {
     <dx-popover [target]="target()" showEvent="click" className="mt-3" [width]="mobile_view()?'95%':400" [shading]="true"
     [position]="{at:'bottom'}" [showTitle]="false" shadingColor="rgba(0, 0, 0, 0.5)" #filterPopover
-    [animation]="slideAnimation" [enableBodyScroll]="false">
+    [animation]="slideAnimation" [enableBodyScroll]="false" >
     <div *dxTemplate="let data of 'content'">
       <div id="filter-wrap">
           <dx-tabs #withIcon [selectedIndex]="selectedTabIndex" [scrollByContent]="true" [showNavButtons]="true" [focusStateEnabled]="false"

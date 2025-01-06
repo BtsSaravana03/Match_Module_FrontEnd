@@ -97,3 +97,10 @@ export function oversToBalls(overs: number): number {
     const partialBalls = Math.round((overs - fullOvers) * 10); // Extract the fractional part and convert to balls
     return fullOvers * 6 + partialBalls; // Total balls = full overs in balls + partial balls
 }
+export function oversSplit(overs:number) {
+    let parts = overs.toString().split('.');
+    let over = parseInt(parts[0]);
+    let balls = parts.length > 1 ? parseInt(parts[1]) : 0;
+    let ballFraction = balls / 6;
+    return { over, ballFraction };
+}
