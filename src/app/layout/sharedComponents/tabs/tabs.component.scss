@@ -18,7 +18,11 @@
                 padding: 5px 10px;
             }
         }
-
+        @media screen and (max-width:430px) {
+            width: fit-content;
+            overflow: auto;
+        scrollbar-width: none;
+        }
     }
     .tab{
         padding: 10px;

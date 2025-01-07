@@ -24,7 +24,7 @@ export class FilterComponent implements OnInit,AfterViewInit {
   BowlingTypes:BowlingTypes[] = [];
   selectedTabIndex = 0;
   mobile_view = input.required<boolean>();
-  target = input.required<string>();
+  target = input<string>();
   popoverComponent = viewChild<DxPopoverComponent>('filterPopover');
   Batsman:{Id:number,Name:string}[] = [];
   Bowler:{Id:number,Name:string}[] = [];

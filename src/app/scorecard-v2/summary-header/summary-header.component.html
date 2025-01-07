@@ -184,7 +184,7 @@
                 </div>
               </div>
         }
-        @if(lastBall?.InningsId === 2 && matchDetails().result.length === 0){
+        @if((lastBall?.InningsId === 2 && matchDetails().result.length === 0) && !hideRequiredRR){
             <div class="item-container">
                 <div class="item">
                     Required RR

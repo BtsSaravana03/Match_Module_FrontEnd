@@ -62,7 +62,7 @@ export class GraphicsService {
     const imageWidth = svg_W;
     const imageHeight = svg_H;
     const aspectRatio = imageWidth / imageHeight;
-    const availableWidth = window_W- this.navbarHeight;
+    const availableWidth = window_W;
     const availableHeight = window_H - this.navbarHeight;
     let scale;
     if (availableWidth / aspectRatio <= availableHeight) {
@@ -70,7 +70,7 @@ export class GraphicsService {
     } else {
         scale = availableHeight / imageHeight;
     }
-    return Math.min(scale, 1.5);
+    return scale;
   }
   getItemColor(Dismissal:number,Runs:number):string{
     let color = '#000';

@@ -1,8 +1,12 @@
 import { BallData } from "../ball-by-ball/ball-by-ball.interface";
 
 export function getDismissalString(_a:BallData): string {
-    const {DismissalTypeID,DismissalFielder1Name,DismissalFielder2Name,BowlerName,DismissalFielderID1,BowlerID} = _a;
-    switch (DismissalTypeID) {
+    const {DismissalTypeID,DismissalFielder1Name,DismissalFielder2Name,BowlerName,DismissalFielderID1,BowlerID,NonBallType} = _a;
+    let DismissalType = _a.DismissalTypeID;
+    if(_a.NonBallType !== null && _a.NonBallType !== 7){
+        DismissalType = _a.NonBallType;
+    }
+    switch (DismissalType) {
         case 1: // Bowled
             return `b ${BowlerName}`;
         case 2: // Caught
@@ -22,14 +26,18 @@ export function getDismissalString(_a:BallData): string {
             return `mankaded b ${BowlerName}`;
         case 8: // Retire hurt
             return `retired hurt`;
+        case 9: // Retire hurt
+            return `retired out`;
         case 11: // Time Out
             return `timed out`;
         case 10: // Obstructing the field
             return `obstructed the field`;
         case 12: // Handle the ball
             return `handled the ball`;
-        case 13: // Hit ball twice
+        case 13: // Retire Not Out
             return `hit the ball twice`;
+        case 14: // Hit ball twice
+            return `retire not out`;
         case 15: // Absent hurt
             return `absent hurt`;
         default:

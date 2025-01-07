@@ -84,4 +84,7 @@ export interface BallData {
     InVideoMode:number;
     BatOrder:number;
     MultipleBowlers:boolean;
+    NonBallDismissalBatter:string;
+    NonBallType:number|null;
+    NonBall_dismissBatter:number|null;
 }

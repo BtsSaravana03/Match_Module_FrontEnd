@@ -27,11 +27,11 @@
     </div>
     <div id="Pitchmap" #Pitchmap *ngIf="TabSelected==='Pitchmap'">
       <ng-container>
-        <div class="d-flex">
+        <div class="graphics-mobile-flex">
           <div class="graphic-filter">
             <!-- <button id="pitchmap_filter_btn" class="filter-btn" *ngIf="isMobile()"><i class="fa-solid fa-filter"></i></button> -->
             <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()"
-              [SelectedInnings]="selctedInnings()" target="#"></app-graphics-filter>
+              [SelectedInnings]="selctedInnings()"></app-graphics-filter>
           </div>
           <div class="graphics">
             <app-pitch-map [ballArray]="ballArrayFiltered()"></app-pitch-map>
@@ -43,12 +43,12 @@
     </div>
     <div id="Wagonwheel" #Wagonwheel *ngIf="TabSelected==='Wagonwheel'">
       <ng-container>
-        <div class="d-flex">
+        <div class="graphics-mobile-flex">
           <div class="graphic-filter">
             <!-- <button id="wagonwheel_filter_btn" class="filter-btn" *ngIf="isMobile()"><i
                 class="fa-solid fa-filter"></i></button> -->
             <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()"
-              [SelectedInnings]="selctedInnings()" target="#"></app-graphics-filter>
+              [SelectedInnings]="selctedInnings()"></app-graphics-filter>
           </div>
           <div class="graphics">
             <app-wagon-wheel [ballArray]="ballArrayFiltered()"></app-wagon-wheel>
@@ -59,12 +59,12 @@
     </div>
     <div id="Beehive" #Beehive *ngIf="TabSelected==='Beehive'">
       <ng-container>
-        <div class="d-flex">
+        <div class="graphics-mobile-flex">
           <div class="graphic-filter">
             <!-- <button id="beehive_filter_btn" class="filter-btn" *ngIf="isMobile()"><i
                 class="fa-solid fa-filter"></i></button> -->
             <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()"
-              [SelectedInnings]="selctedInnings()" target="#"></app-graphics-filter>
+              [SelectedInnings]="selctedInnings()"></app-graphics-filter>
           </div>
           <div class="graphics">
             <app-beehive [ballArray]="ballArrayFiltered()"></app-beehive>

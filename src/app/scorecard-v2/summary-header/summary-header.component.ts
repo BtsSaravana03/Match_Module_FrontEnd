@@ -67,6 +67,7 @@ export class SummaryHeaderComponent implements OnChanges{
   MatchStartMsg:string = 'Yet to start';
   expand:boolean = true;
   lastBall:BallData|undefined;
+  hideRequiredRR:boolean = false;
   dataChunks:DataChunks = {
     projections: {
         at8RPO: 0,
@@ -343,7 +344,8 @@ export class SummaryHeaderComponent implements OnChanges{
         }
     }
   }
-  calculateStats(balls: BallData[],lastBall: BallData,totalOvers: number):DataChunks {
+
+  calculateStats(balls: BallData[], lastBall: BallData, totalOvers: number): DataChunks {
     const totalScore = lastBall.TeamRuns;
     const oversBowled = lastBall.Overs;
     const oversRemaining = totalOvers - oversBowled;
@@ -355,71 +357,76 @@ export class SummaryHeaderComponent implements OnChanges{
     const currentRunRate = oversBowled > 0 ? totalScore / (_Over.over + _Over.ballFraction) : 0;
     // Required Run Rate
     const runsScored = Enumerable.from(balls)
-        .where(i => i.InningsId === 2)
-        .sum(i => i.Runs);
-        let _RequiredOver = oversSplit(oversRemaining);
+      .where(i => i.InningsId === 2)
+      .sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras);
+    let _RequiredOver = oversSplit(oversRemaining);
+    if (targetRuns >= totalScore) {
+      this.hideRequiredRR = false;
+    } else {
+      this.hideRequiredRR = true;
+    }
     const requiredRunRate = (targetRuns - runsScored) / (_RequiredOver.over + _RequiredOver.ballFraction);
 
     // Last Events
     const lastBoundary = Enumerable.from(balls)
-        .where(i => i.isFour === 1)
-        .orderByDescending(i => i.AutoId)
-        .firstOrDefault();
+      .where(i => i.isFour === 1)
+      .orderByDescending(i => i.AutoId)
+      .firstOrDefault();
 
     const lastSix = Enumerable.from(balls)
-        .where(i => i.isSix === 1)
-        .orderByDescending(i => i.AutoId)
-        .firstOrDefault();
+      .where(i => i.isSix === 1)
+      .orderByDescending(i => i.AutoId)
+      .firstOrDefault();
 
     const lastDotBall = Enumerable.from(balls)
-        .where(i => i.Runs === 0 && i.isWide === 0 && i.isNoBall === 0)
-        .orderByDescending(i => i.AutoId)
-        .firstOrDefault();
+      .where(i => i.Runs === 0 && i.isWide === 0 && i.isNoBall === 0)
+      .orderByDescending(i => i.AutoId)
+      .firstOrDefault();
 
     const ballsPerOver = 6;
     const lastFiveOvers = Enumerable.from(balls)
-    .where(i => i.InningsId === lastBall.InningsId)
-    .groupBy(i => `${i.OverId}`)
-    .takeFromLast(5)
-    .select(g => {
+      .where(i => i.InningsId === lastBall.InningsId)
+      .groupBy(i => `${i.OverId}`)
+      .takeFromLast(5)
+      .select(g => {
         return {
-            Runs: g.sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras),
-            Wickets: g.count(i => i.Dismissal === 1)
-         };
-    })
-    .toArray();
+          Runs: g.sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras),
+          Wickets: g.count(i => i.Dismissal === 1)
+        };
+      })
+      .toArray();
     let totalRunsInLastFiveOvers = 0;
     let totalWicketsInLastFiveOvers = 0;
 
     lastFiveOvers.forEach(ball => {
-        totalRunsInLastFiveOvers += ball.Runs;
-        totalWicketsInLastFiveOvers += ball.Wickets;
+      totalRunsInLastFiveOvers += ball.Runs;
+      totalWicketsInLastFiveOvers += ball.Wickets;
     });
 
     const secondInningsStage = {
-        runs: runsScored,
-        wickets: lastBall.TeamWickets,
-        overs: oversBowled
+      runs: runsScored,
+      wickets: lastBall.TeamWickets,
+      overs: oversBowled
     };
 
     // Organizing into dataChunks
     return {
-        projections: {
-            at8RPO: projectedAt8RPO,
-            at10RPO: projectedAt10RPO
-        },
-        currentRunRate,
-        requiredRunRate,
-        lastEvents: {
-            boundary: lastBoundary,
-            six: lastSix,
-            dotBall: lastDotBall
-        },
-        lastFiveOvers:{
-            Runs: totalRunsInLastFiveOvers,
-            Wickets: totalWicketsInLastFiveOvers,
-        },
-        secondInningsStage
+      projections: {
+        at8RPO: projectedAt8RPO,
+        at10RPO: projectedAt10RPO
+      },
+      currentRunRate,
+      requiredRunRate,
+      lastEvents: {
+        boundary: lastBoundary,
+        six: lastSix,
+        dotBall: lastDotBall
+      },
+      lastFiveOvers: {
+        Runs: totalRunsInLastFiveOvers,
+        Wickets: totalWicketsInLastFiveOvers,
+      },
+      secondInningsStage
     };
-}
+  }
 }
