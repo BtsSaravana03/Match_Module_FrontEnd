@@ -35,7 +35,7 @@
               "node_modules/devextreme/dist/css/dx.fluent.saas.light.css",
               "src/styles.scss"
             ],
-            
+
             "scripts": []
           },
           "configurations": {
@@ -48,8 +48,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "5MB",
+                  "maximumError": "10MB"
                 }
               ],
               "outputHashing": "all"
@@ -57,7 +57,7 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": false
             }
           },
           "defaultConfiguration": "production"

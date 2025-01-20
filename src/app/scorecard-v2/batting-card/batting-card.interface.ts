@@ -82,6 +82,7 @@ interface InningsData {
     BattingClubPrefix: string;
     BowlingClubName: string;
     BowlingClubPrefix: string;
+    SyncTime:number;
 }
 export interface MatchResult {
     AutoNo: number;

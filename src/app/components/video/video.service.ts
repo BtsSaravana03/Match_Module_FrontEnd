@@ -128,8 +128,9 @@ export class VideoService {
       this.videoArray.set(videos);
       this.playVideo();
   }
-  PlayBallbyball(index:number){
+  PlayBallbyball(index:number,inningsID:number){
     let videos = Enumerable.from(this.ballArray())
+    .where(i => i.InningsId === inningsID)
     .groupBy(
         (x: BallData) => `${x.MatchId}-${x.BowlingClubID}-${x.deviceTime_Start}-${x.deviceTime_End}-${x.MatchId}-${x.StrikerName}-${x.InningsId}-${x.BallId}-${x.hlsPath}-${x.Overs}-${x.BowlerName}-${x.Runs}`
       )

@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { firstValueFrom } from 'rxjs';
-import { api_url } from "../variable";
+import { api_url } from "../../variable";
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +16,7 @@ export class HttpServices {
       console.error('Error fetching data', error);
       throw error;
     }
-  }  
+  }
   async postData(url: string, params?: any): Promise<any> {
     try {
         const response = await fetch(api_url + url, {

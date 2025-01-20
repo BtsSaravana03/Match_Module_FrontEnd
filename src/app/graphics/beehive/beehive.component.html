@@ -1,6 +1,6 @@
 <div id="beehive-container" [ngStyle]="{'height.px': bh_Height*scale}">
   <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="'0 0 ' + (bh_Width + 25) + ' ' + bh_Height"
-    [attr.width]="bh_Width + 25" [attr.height]="bh_Height" id="svg_Wrap">
+    [attr.width]="(bh_Width + 25)*scale" [attr.height]="bh_Height*scale" id="svg_Wrap">
     <g transform="translate(0, 0)">
       <svg id="Beehive" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" [attr.width]="bh_Width"
         [attr.height]="bh_Height" viewBox="0 0 493 355">

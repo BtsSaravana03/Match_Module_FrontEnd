@@ -54,9 +54,9 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
   @HostListener('window:resize')
   onResize() {
       let scale = this.graphicServices.getScaling(this.bh_Width,this.bh_Height,window.innerWidth,window.innerHeight);
-      const container = this.el.nativeElement.querySelector('#beehive-container');
-      container.style.transform = `scale(${scale})`;
-      container.style.transformOrigin = "top center";
+    //   const container = this.el.nativeElement.querySelector('#beehive-container');
+    //   container.style.transform = `scale(${scale})`;
+    //   container.style.transformOrigin = "top center";
       setTimeout(() => {
         this.scale = scale;
         this.cdr.detectChanges();

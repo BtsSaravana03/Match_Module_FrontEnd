@@ -17,11 +17,25 @@
 <nav class="navbar"  [ngClass]="{'d-none': !visibility()}">
     <div class="d-flex align-items-center gap-4 justify-content-between w-100">
     <div class="logo"><img src="../../../../../images/cricket_21_logo.png" class="logo_1" alt="LOGO"></div>
-    <div class="search-bar">
-        <button class="menu-btn" (click)="onMatchSelection()"><i class="fa-solid fa-right-left"></i></button>
+    <!-- <div class="search-bar">
+        <button class="menu-btn" (click)="onMatchSelection()" title="Match Selection"><i class="fa-solid fa-right-left" ></i></button>
+        <button class="menu-btn" id="filter" title="Overall Filters"><i class="fa-solid fa-filter"></i></button>
+        <button class="menu-btn"  title="Logout" (click)="onLogout()"><i class="fa-solid fa-right-from-bracket"></i></button>
         <input type="text" placeholder="Search" />
         <button class="search-btn"><i class="fa-solid fa-magnifying-glass search-btn"></i></button>
-    </div>
+    </div> -->
+<div class="button-container">
+  <button class="button flex-center" (click)="onMatchSelection()" title="Match Selection">
+    <i class="fa-solid fa-right-left" ></i>
+  </button>
+  <button class="button flex-center" id="filter" title="Overall Filters">
+    <i class="fa-solid fa-filter"></i>
+  </button>
+  <button class="button flex-center" title="Logout" (click)="onLogout()">
+    <i class="fa-solid fa-right-from-bracket"></i>
+  </button>
+</div>
+
 </div>
 </nav>
 

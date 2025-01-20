@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
     this.onWindowResize();
   }
   onWindowResize(){
-    if(window.innerWidth < 773){
+    if(window.innerWidth < 1021){
       this.appService.isMobile.set(true);
     }
     else{

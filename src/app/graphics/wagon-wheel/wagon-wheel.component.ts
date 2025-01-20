@@ -73,9 +73,9 @@ export class WagonWheelComponent {
   @HostListener('window:resize')
   onResize() {
     let scale = this.graphicServices.getScaling(this.ww_Width, this.ww_Height, window.innerWidth, window.innerHeight);
-    const container = this.el.nativeElement.querySelector('#WW_Wrap');
-    container.style.transform = `scale(${scale})`;
-    container.style.transformOrigin = "top center";
+    // const container = this.el.nativeElement.querySelector('#WW_Wrap');
+    // container.style.transform = `scale(${scale})`;
+    // container.style.transformOrigin = "top center";
     setTimeout(() => {
       this.scale = scale;
       this.cdr.detectChanges();
@@ -120,13 +120,10 @@ export class WagonWheelComponent {
     })
 
     const x1 = 0,
-      y1 = 0;
+    y1 = 0;
     const circleRadius = 300;
     this.isFlipped = false;
-    let LeftBalls = 0,
-      LeftRuns = 0,
-      RightBalls = 0,
-      RightRuns = 0;
+    let LeftBalls = 0,LeftRuns = 0,RightBalls = 0,RightRuns = 0;
     const svgContainer = this.el.nativeElement.querySelector('#WW_Lines');
     svgContainer.innerHTML = '';
     filtered_balls.forEach(i => {

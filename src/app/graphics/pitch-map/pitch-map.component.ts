@@ -67,9 +67,9 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   @HostListener('window:resize')
   onResize() {
       let scale = this.graphicServices.getScaling(this.pm_width + this.text_Container,this.pm_height,window.innerWidth,window.innerHeight);
-      const container = this.el.nativeElement.querySelector('#pitchmap-container');
-      container.style.transform = `scale(${scale})`;
-      container.style.transformOrigin = "top center";
+    //   const container = this.el.nativeElement.querySelector('#pitchmap-container');
+    //   container.style.transform = `scale(${scale})`;
+    //   container.style.transformOrigin = "top center";
       setTimeout(() => {
         this.scale = scale;
         this.cdr.detectChanges();
@@ -127,7 +127,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     const svgElement = this.el.nativeElement.querySelector('#pitchmapSVG');
     //Clearing previous balls
     svgElement.innerHTML = '';
-    const t0 = performance.now();
+    //const t0 = performance.now();
     filtered_balls.forEach(i => {
       if(i.PM_X !== null && i.PM_Y !== null){
         const pitchReg_x = i.PM_X_CM * scaling_x;
@@ -203,8 +203,8 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
         }
       }
     })
-     const t1 = performance.now();
-     console.log(`Pitchmap Plotting took ${(t1 - t0)/1000} seconds. for ${filtered_balls.length} balls`);
+    //  const t1 = performance.now();
+    //  console.log(`Pitchmap Plotting took ${(t1 - t0)/1000} seconds. for ${filtered_balls.length} balls`);
   }
   onBallClick(i:BallData){
     this.videoService.PlayGraphicsVideos(i.BallId,i.InningsId);

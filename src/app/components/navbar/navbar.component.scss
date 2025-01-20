@@ -1,3 +1,4 @@
+@import '../../../styles/variable';
 $height : 4rem;
 $background : #fff;
 $color:#242424;
@@ -230,7 +231,7 @@ display: flex;
         border: 2px solid #007BFF;
         border-radius: 25px;
         padding: 5px 10px;
-        width: 180px !important;
+        // width: 180px !important;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
     .search-bar input {
@@ -268,12 +269,10 @@ display: flex;
     align-items: center;
     background-color: white;
     border: 2px solid #007BFF;
-    /* Adjust blue color as needed */
     border-radius: 25px;
-    /* Makes the edges round */
     padding: 5px 10px;
-    width: 300px;
-    /* Adjust width as needed */
+    gap: 15px;
+    width: fit-content;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -285,8 +284,11 @@ display: flex;
     /* Adjust icon size */
     color: #333;
     cursor: pointer;
-    margin-right: 10px;
+    // margin-right: 10px;
     /* Space between icon and input */
+    i{
+        color: #3d3d3d;
+    }
 }
 
 /* Search input field */
@@ -331,4 +333,41 @@ display: flex;
   }
   .btn-group .nav-item:last-of-type .btn {
     border-radius: 0 .25rem .25rem 0;
+  }
+
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    .button {
+        cursor: pointer;
+        text-decoration: none;
+        color: $theme-color;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: $invert-typography-color;
+        border: 2px solid $invert-typography-color;
+        transition: all 0.45s;
+      }
+
+      .button:hover {
+        transform: rotate(360deg);
+        transform-origin: center center;
+        background-color: $theme-color;
+        color: $invert-typography-color;
+      }
+
+      .button:hover .btn-svg {
+        filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(305deg)
+          brightness(103%) contrast(103%);
+      }
+
+      .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
   }

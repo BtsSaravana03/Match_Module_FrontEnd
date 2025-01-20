@@ -14,6 +14,4 @@ export class InningServiceService {
   ChangeInnings(ID:number){
     this.Innings$.next(ID);
   }
-
-
 }

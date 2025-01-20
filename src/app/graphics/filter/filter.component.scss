@@ -1,7 +1,7 @@
 @import '../../../styles/variable';
 #filter-wrap{
     width: 250px;
-    @media screen and (max-width:700px) {
+    @media screen and (max-width:1021px) {
         width: 100%;
         overflow: auto;
     }
@@ -21,7 +21,7 @@
         @media screen and (max-width:400px) {
             grid-template-columns: auto;
         }
-        @media screen and (max-width:700px) {
+        @media screen and (max-width:1021px) {
             overflow: auto;
         }
     }

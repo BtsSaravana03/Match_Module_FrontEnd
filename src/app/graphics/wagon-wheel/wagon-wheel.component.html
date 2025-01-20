@@ -2,7 +2,7 @@
   <section>
     <div id="WW_Wrap">
       <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="'0 0 ' + (709 + 25) + ' ' + 709.5"
-        [attr.width]="ww_Width + 25" [attr.height]="ww_Height" id="svg_Wrap">
+        [attr.width]="(ww_Width + 25)*scale" [attr.height]="ww_Height*scale" id="svg_Wrap">
         <g transform="translate(55, 0)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 601.81 601.81" id="WagonWheel" width="600">
             <defs>
@@ -127,14 +127,6 @@
             </g>
           </svg>
         </g>
-        <!-- <text transform="matrix(1 0 0 1 44.4607 563.2902)" class="st14">
-          <tspan x="0" y="0" class="st6 st15" style="font: size 14px;">{{LeftSideName}}</tspan>
-          <tspan x="0" y="19.2" class="st6 st15">{{LeftSideData}}</tspan>
-        </text>
-        <text transform="matrix(1 0 0 1 503.1301 566.8099)" class="st14">
-          <tspan x="0" y="0" class="st6 st15" style="font: size 14px;">{{RightSideName}}</tspan>
-          <tspan x="0" y="19.2" class="st6 st15">{{RightSideData}}</tspan>
-        </text> -->
         <text transform="matrix(1 0 0 1 26.8904 655.8187)" class="st4 st5">{{LeftSideName}}</text>
         <text transform="matrix(1 0 0 1 26.8904 675.0187)" class="st4 st5">{{LeftSideData}}</text>
         <text transform="matrix(1 0 0 1 625.4893 629.9001)" class="st4 st5">{{RightSideName}}</text>

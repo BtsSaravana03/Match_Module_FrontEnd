@@ -69,7 +69,7 @@ export class BallByBallComponent {
     this.ballArrayFiltered = Data;
   }
   onCellClick(index:number){
-    this.videoService.PlayBallbyball(index);
+    this.videoService.PlayBallbyball(index,this.selctedInnings());
   }
   getInningPre():string{
     switch (this.selctedInnings()){

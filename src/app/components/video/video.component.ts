@@ -4,8 +4,9 @@ import { CommonModule } from '@angular/common';
 import { DxPopupModule } from 'devextreme-angular';
 import { VideoBalls } from './video.interface';
 import { fromEvent, Observable, Subscription } from 'rxjs';
-import { api_url, ip, videoFolder } from '../../variable';
+import { api_url, ip, videoFolder } from '../../../variable';
 import Hls from 'hls.js';
+import { MatchData } from '../../scorecard-v2/batting-card/batting-card.interface';
 
 @Component({
   selector: 'app-video',
@@ -102,7 +103,12 @@ export class VideoComponent {
             // hls.on(Hls.Events.MANIFEST_PARSED, () => {
             //     videoElement.play().catch(console.error);
             // });
-            videoElement.currentTime = this.hlsStartFrame;
+            let currentInn = ball.InningsID;
+            let syncTime = 0;
+            if(this.matchInfo()!.inningsData[currentInn-1]){
+             syncTime = this.matchInfo()!.inningsData[currentInn-1]['SyncTime'];
+            }
+            videoElement.currentTime = this.hlsStartFrame + syncTime;
             videoElement.load()
             videoElement.play();
         } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {

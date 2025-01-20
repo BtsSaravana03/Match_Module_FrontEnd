@@ -1,7 +1,7 @@
 <div id="pitchmap-container" [ngStyle]="{'height.px': pm_height*scale}">
   <section>
     <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="'0 0 ' + (pm_width + text_Container) + ' ' + pm_height"
-      [attr.width]="pm_width + text_Container" [attr.height]="pm_height" id="svg_Wrap">
+      [attr.width]="(pm_width + text_Container)*scale" [attr.height]="pm_height * scale" id="svg_Wrap">
       <g transform="translate(0, 0)">
         <svg id="pitchmapSVG_Container" [attr.width]="pm_width" [attr.height]="pm_height" data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="'0 0 ' + pm_width + ' ' + pm_height"

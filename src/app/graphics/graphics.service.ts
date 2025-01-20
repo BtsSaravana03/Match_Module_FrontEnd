@@ -62,7 +62,10 @@ export class GraphicsService {
     const imageWidth = svg_W;
     const imageHeight = svg_H;
     const aspectRatio = imageWidth / imageHeight;
-    const availableWidth = window_W;
+    let availableWidth = window_W -271;
+    if(window.innerWidth <= 700){
+        availableWidth = window_W
+    }
     const availableHeight = window_H - this.navbarHeight;
     let scale;
     if (availableWidth / aspectRatio <= availableHeight) {
