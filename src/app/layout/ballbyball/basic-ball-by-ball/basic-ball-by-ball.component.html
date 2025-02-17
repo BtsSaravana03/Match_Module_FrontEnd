@@ -25,7 +25,7 @@
       <dxi-column dataField="Runs" caption="R" alignment="left"></dxi-column>
       <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
       <div *dxTemplate="let data of 'cellTemplate'">
-        <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick(data.rowIndex)"></i>
+        <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick(data.row.dataIndex,data.data)"></i>
       </div>
       <dxo-export [enabled]="true" [allowExportSelectedData]="false" [formats]="['xlsx', 'pdf']"></dxo-export>
       <dxo-scrolling mode="infinite"></dxo-scrolling>

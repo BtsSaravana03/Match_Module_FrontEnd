@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, Component, effect, inject, input, OnChanges, OnInit, output, SimpleChanges } from '@angular/core';
-import { BallByBallService } from '../../../services/ball-by-ball.service';
+import { AfterContentInit, Component, ElementRef, input, OnChanges, output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-tabs',
@@ -19,6 +18,7 @@ export class TabsComponent implements AfterContentInit,OnChanges {
     setTabValue = input<undefined|number>();
     visibility =input.required<boolean>();
     TinyTabSize = input<boolean>(false);
+
 
     ngAfterContentInit(): void {
         this.selectedItem = this.dataSource()[0]??undefined;

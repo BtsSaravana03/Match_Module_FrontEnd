@@ -19,7 +19,7 @@
                     <app-over-by-over [ballArray]="ballArray()" [selctedInnings]="selctedInnings"></app-over-by-over>
                 }
                 @else if(TabSelected === 'PhaseWise'){
-                    <app-phase-wise [selctedInnings]="selctedInnings" [ballArray]="ballArray()"></app-phase-wise>
+                    <app-phase-wise [selctedInnings]="selctedInnings" [ballArray]="ballArray()" [matchDetails]="this.matchDetails()"></app-phase-wise>
                 }
 
             }

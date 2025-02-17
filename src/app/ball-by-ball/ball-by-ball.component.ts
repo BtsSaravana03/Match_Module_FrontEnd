@@ -68,8 +68,8 @@ export class BallByBallComponent {
     .where(i => i.InningsId === this.selctedInnings()).toArray();
     this.ballArrayFiltered = Data;
   }
-  onCellClick(index:number){
-    this.videoService.PlayBallbyball(index,this.selctedInnings());
+  onCellClick(index:number,rowData?:BallData){
+    this.videoService.PlayBallbyball(index,this.selctedInnings(),rowData?.BallId);
   }
   getInningPre():string{
     switch (this.selctedInnings()){

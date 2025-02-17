@@ -67,19 +67,20 @@ export class WormComponent {
     if (this.matchDetails().inningsData && this.matchDetails().inningsData.length > 0) {
         let club = this.matchDetails().inningsData[this.selctedInnings() -1].BattingClubID;
         this.clubName = this.matchDetails().inningsData[this.selctedInnings() -1].BattingClubPrefix;
-        let filteredBalls = this.graphicServices.applyFilter(this.ballArray());
+        let balls = this.ballArray().filter(i => i.InningsId === this.selctedInnings())
+        let filteredBalls = this.graphicServices.applyFilter(balls);
         let totalOvers = this.matchDetails().MatchOvers;
-        if (totalOvers === 0 && this.ballArray().length > 0) {
-            totalOvers = _.last(this.ballArray())?.OverId ?? 0;
+        if (totalOvers === 0 && balls.length > 0) {
+            totalOvers = _.last(balls)?.OverId ?? 0;
         }
         this.worm = Array.from({ length: totalOvers }, (_, index) => {
             const overId = index + 1;
-            const overData = filteredBalls.filter(i => i.BattingClubID === club && i.OverId === overId && i.InningsId===this.selctedInnings());
+            const overData = filteredBalls.filter(i => i.BattingClubID === club && i.OverId === overId);
             // const runs = overData.length > 0
             //     ? overData.reduce((sum, i) => sum + (i.TeamRuns || 0), 0)
             //     : null; // Set runs to null if no data for this over
             const runs = overData.length > 0?overData[overData.length-1].TeamRuns: null
-            const wickets = overData.filter(i => i.Dismissal === 1).length;
+            const wickets = overData.filter(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11)).length;
             return {
                 Over: overId,
                 Runs: runs,

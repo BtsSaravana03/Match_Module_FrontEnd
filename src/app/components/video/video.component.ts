@@ -20,7 +20,7 @@ export class VideoComponent {
 //   @ViewChild('videoPlayer', { static: true }) videoElement!: HTMLVideoElement;
   videoElement = viewChild<ElementRef>('videoPlayer');
   selctedInnings = input<number>();
-  matchInfo = input<any>();
+  matchInfo = input.required<any>();
   videos = signal<VideoBalls[]|[]>([]);
   videoSrc = signal<string>("");
   videoIndex = signal<number>(0);
@@ -80,6 +80,7 @@ export class VideoComponent {
     return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getFullYear()).slice(2)}`;
   }
   async onVideoClick(link: string, index: number) {
+    debugger;
     this.isHls = false;
     this.videoIndex.set(index);
     let ball = this.videos()[index];
@@ -93,9 +94,9 @@ export class VideoComponent {
     if(ball.VideoMode === 3){
         this.isHls = true;
         this.hlsStartFrame = ball.StartFrame;
-        this.hlsEndFrame = ball.EndFrame;
+
         const videoElement = this.videoElement()?.nativeElement;
-        const hlsUrl = videoFolder +ball.hlsPath;
+        const hlsUrl = videoFolder + ball.hlsPath;
         if (Hls.isSupported()) {
             const hls = new Hls();
             hls.loadSource(hlsUrl);
@@ -108,6 +109,7 @@ export class VideoComponent {
             if(this.matchInfo()!.inningsData[currentInn-1]){
              syncTime = this.matchInfo()!.inningsData[currentInn-1]['SyncTime'];
             }
+            this.hlsEndFrame = ball.EndFrame + syncTime;
             videoElement.currentTime = this.hlsStartFrame + syncTime;
             videoElement.load()
             videoElement.play();
@@ -132,10 +134,10 @@ export class VideoComponent {
     //else if(true){
     else if(ball.VideoMode === 1 || ball.VideoMode === 2){
       let folder = this.matchInfo().MtcVideos+' '+this.formatDate(this.matchInfo()?.Date)+ball.InningsID;
-      let _p =  videoFolder + folder +'/'+ folder+'_'+ball.BallID+'.mp4';
+      let _p =  ball.hlsPath+'/' + folder +'/'+ folder+'_'+ball.BallID+'.mp4';
       // normalize = _p.replace(/\\/g, '/');
-     // let blob = await this.convertToBlob(_p,ball.VideoMode);
-      this.videoSrc.set(_p);
+      let blob = await this.convertToBlob(_p);
+      this.videoSrc.set(blob);
     }
 
     else{
@@ -153,14 +155,19 @@ export class VideoComponent {
     // }
   }
   playNext(){
+    const videoElement = this.videoElement()?.nativeElement;
     let currentIndex = this.videoIndex();
     if(!this.videos()[currentIndex+1]){
+      videoElement.pause();
       return;
     }
     this.onVideoClick(this.videos()[currentIndex+1].VideoPath,currentIndex+1)
   }
   onTrimChange(element:HTMLInputElement){
     this.Trim = element.checked;
+  }
+  convertPathToUrl(filePath: string): string {
+    return filePath.replace(/^[A-Z]:/, videoFolder).replace(/\\/g, '/');
   }
   onVideoProgress(video: HTMLVideoElement) {
     //if(!this.videoElement) this.videoElement = video;
@@ -176,7 +183,7 @@ export class VideoComponent {
   setCurrentTab(type:"Bat"|"Bowl"){
     this.currentTab = type;
   }
-  async convertToBlob(filePath:string,videotype:number){
+  async convertToBlob(filePath:string){
     //let video = await this.httpServices.getData('video/getBlobURL/'+filePath);
     // var URL = window.URL || window.webkitURL;
     // URL.createObjectURL(video);

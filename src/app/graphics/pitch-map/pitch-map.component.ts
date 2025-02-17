@@ -35,6 +35,7 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
   private cdr = inject(ChangeDetectorRef);
+  matchDetails = signal<any>({});
 
   ballArray = input.required<BallData[]>();
   rangeDefault:Range = {Balls:0,Runs: 0,Avg:'0',SR:'0',Wickets:0,y:0}
@@ -84,6 +85,9 @@ export class PitchMapComponent implements OnInit,AfterViewInit {
     const filter = this.graphicServices.filterObservable.subscribe(updated => {
       this.setPitchmap();
     })
+    const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated => {
+        this.matchDetails.set(updated);
+      })
     this.destroyRef.onDestroy(()=>{
       //subscription.unsubscribe();
       filter.unsubscribe();

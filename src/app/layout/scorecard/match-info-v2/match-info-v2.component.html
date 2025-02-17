@@ -34,7 +34,11 @@
         </tr>
         <tr>
             <td><strong>Match Days</strong></td>
-            <td>{{getFormattedDate}} - {{dayOrNight}} ({{matchInfo().info?.MatchOvers}}-over match)</td>
+            <td>{{getFormattedDate}} - {{dayOrNight}}
+                @if(!TestMatch){
+                    ({{matchInfo().info?.MatchOvers}}-over match)
+                }
+            </td>
         </tr>
         <!-- <tr>
             <td><strong>SRH Player Replacement</strong></td>

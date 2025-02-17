@@ -26,16 +26,22 @@ export class VideoService {
   setComponent(component:VideoComponent){
     this.videoComponent = component;
   }
-  playVideo(index?:number){
+  playVideo(index?:number,ballID?:number){
     if(this.videoComponent){
-      this.currentVideoIndex.set(index?index:0);
-      this.videoComponent.show(index);
-      this.videoComponent.videoPopup = true;
+        let idx = 0;
+        if(ballID){
+            idx = this.videoArray().findIndex(i => i.BallID === ballID)
+        } else if(index) {
+            idx = index;
+        }
+        this.currentVideoIndex.set(idx);
+        this.videoComponent.show(idx);
+        this.videoComponent.videoPopup = true;
     }
   }
-  PlayPartnershipVideos(PartnerID:string,Innings:number){
+  PlayPartnershipVideos(PartnerID:string,Innings:number,WicketOrder:number){
     let videos = Enumerable.from(this.ballArray())
-    .where(i=> i.Partnerid === PartnerID && i.InningsId===Innings)
+    .where(i=> i.Partnerid === PartnerID && i.InningsId===Innings && i.PartnerWktOrder === WicketOrder)
     .groupBy(
         (x: BallData) => `${x.MatchId}-${x.BowlingClubID}-${x.deviceTime_Start}-${x.deviceTime_End}-${x.MatchId}-${x.StrikerName}-${x.InningsId}-${x.BallId}-${x.hlsPath}-${x.Overs}-${x.BowlerName}-${x.Runs}`
       )
@@ -128,7 +134,7 @@ export class VideoService {
       this.videoArray.set(videos);
       this.playVideo();
   }
-  PlayBallbyball(index:number,inningsID:number){
+  PlayBallbyball(index:number,inningsID:number,BallID?:number){
     let videos = Enumerable.from(this.ballArray())
     .where(i => i.InningsId === inningsID)
     .groupBy(
@@ -173,7 +179,7 @@ export class VideoService {
       })
       .toArray();
       this.videoArray.set(videos);
-      this.playVideo(index);
+      this.playVideo(index,BallID);
   }
   LibraryBallVideo(PlayerID:number, type:any, inningsId:number) {
     let videos = Enumerable.from(this.ballArray())

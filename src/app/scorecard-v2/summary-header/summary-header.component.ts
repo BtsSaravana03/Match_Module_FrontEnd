@@ -5,7 +5,7 @@ import Enumerable from 'linq';
 import moment from 'moment';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import _, { isNative, last } from 'lodash';
-import { calculateOvers, getCurrentBallDescription, oversSplit, oversToBalls } from '../../scripts/cricket_gen';
+import { calculateOvers, getCurrentBallDescription, isTestMatch, oversSplit, oversToBalls } from '../../scripts/cricket_gen';
 import { splitName } from '../../scripts/generic';
 import { AppService } from '../../services/app.service';
 
@@ -239,10 +239,10 @@ export class SummaryHeaderComponent implements OnChanges{
                     }
                 }
             }
-            if (matchDetails.isLimitedOvers === 1) {
+            if (!isTestMatch(matchDetails.MatchTypeID)) {
                  if (inningsData.length > 0 && this.currentInnings() === 2) {
                     // Second Innings Description for Limited overs
-                    const inning2data = this.summary()[1] ?? null;
+                    const inning2data = this.summary()[1] ?this.summary()[1]: null;
                     if (inning2data) {
                         const TeamName = matchDetails.inningsData[1].BattingClubName;
                         const inning1data = this.summary()[0];
@@ -391,7 +391,7 @@ export class SummaryHeaderComponent implements OnChanges{
       .select(g => {
         return {
           Runs: g.sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras),
-          Wickets: g.count(i => i.Dismissal === 1)
+          Wickets: g.count(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11))
         };
       })
       .toArray();

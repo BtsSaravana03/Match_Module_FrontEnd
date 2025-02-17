@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
   private appService = inject(AppService);
   private destroy = inject(DestroyRef);
   private route = inject(Router);
+//   OverviewTab = viewChild<ElementRef<TabsComponent>>('TabsOverview');
   navbarVisible!:boolean;
   generateMatches:boolean = false;
   resizeObservable$!:Observable<Event>;
@@ -32,8 +33,7 @@ export class AppComponent implements OnInit {
     {name:'Graphics',value:'graphics'},
     {name:'Spell',value:'spell'},
     {name:'Fielding',value:'fielding'}
-  ]
-
+  ];
   constructor(viewport: ViewportScroller) {
     viewport.setOffset([0, 56]);
   }
@@ -44,6 +44,7 @@ export class AppComponent implements OnInit {
     })
     const matchSelection = this.appService.matchSelection_observable$.subscribe(updated=>{
       this.generateMatches = updated;
+    //   this.OverviewTab()?.nativeElement.changeTab('overview');
     })
     this.destroy.onDestroy(()=>{
       navSubscription.unsubscribe();

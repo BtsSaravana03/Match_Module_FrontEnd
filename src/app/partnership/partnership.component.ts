@@ -43,16 +43,20 @@ export class PartnershipComponent implements OnInit {
     })
   }
   generatePartnership(){
-    let Partnership = 0;
+    //let Partnership = 0;
     const data:Partnership[] = Enumerable.from(this.ballArray())
     .where(i => i.InningsId === this.selctedInnings())
-    .groupBy(i=> i.Partnerid)
+    .groupBy(i=> `${i.Partnerid}-${i.PartnerWktOrder}`)
     .select(g =>{
       const Striker = g.first().StrikerID;
       const NonStriker = g.first().NonStrikerID;
-      Partnership++;
+      //Partnership++;
+      let Partnership = g.first().PartnerWktOrder;
+      if(!Partnership){
+        Partnership = g.max(i => i.PartnerWktOrder) + 1;
+      }
       return{
-        PartnershipID:g.key(),
+        PartnershipID:g.first().Partnerid,
         Player_1_Name:g.first().StrikerName,
         Player_2_Name:g.first().NonStrikerName,
         Player_1_0s:g.count(i=>i.Batruns === 0 && i.StrikerID===Striker),
@@ -67,7 +71,7 @@ export class PartnershipComponent implements OnInit {
         Player_2_4s:g.sum(i=>i.isFour === 1 && i.StrikerID===NonStriker?1:0),
         Player_1_6s:g.sum(i=>i.isSix === 1 && i.StrikerID===Striker?1:0),
         Player_2_6s:g.sum(i=>i.isSix === 1 && i.StrikerID===NonStriker?1:0),
-        Wicket: Partnership,
+        Wicket: g.first().PartnerWktOrder,
         Runs:g.sum(i=> i.Runs + i.Extras + i.Penalty + i.BLExtras) + ` (${g.sum(i => i.Batballs)})`
       }
     }).toArray();
@@ -78,6 +82,6 @@ export class PartnershipComponent implements OnInit {
 //     this.generatePartnership();
 //   }
   onCellClick(data:Partnership){
-    this.videoService.PlayPartnershipVideos(data.PartnershipID,this.selctedInnings());
+    this.videoService.PlayPartnershipVideos(data.PartnershipID,this.selctedInnings(),data.Wicket);
   }
 }

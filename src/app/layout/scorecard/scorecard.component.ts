@@ -73,7 +73,7 @@ export class ScorecardComponent implements OnInit{
     }
     generateSummary(){
         this.summary = Enumerable.from(this.ballArray())
-          .groupBy(i => i.InningsId === this.selctedInnings).select(g => {
+          .groupBy(i => i.InningsId).select(g => {
             const extrasByType = {
               overstep: g.where(i => i.ExtraTypeId === 1 || i.ExtraTypeId === 5 || i.ExtraTypeId === 6)
                 .sum(i => i.ExtraTypeId === 1 ? i.Extras : 1),
@@ -96,7 +96,7 @@ export class ScorecardComponent implements OnInit{
               TeamTotal: TeamTotal,
               ExtrasTotal: Object.values(extrasByType).reduce((acc, val) => acc + val, 0),
               ExtrasBreakup: extrasBreakup,
-              Dismissals: g.count(i => i.Dismissal === 1),
+              Dismissals: g.count(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11)),
               Overs: overs,
               BattingClubId:g.first().BattingClubID,
               RunRate:checkInf(TeamTotal / overs)
@@ -107,6 +107,7 @@ export class ScorecardComponent implements OnInit{
         this.selctedInnings = e.InningsID;
         this.inningService.selectedInnings.set(e.InningsID);
         this.inningService.currentInningData = e;
-        this.inningService.ChangeInnings(e.InningsID)
+        this.inningService.ChangeInnings(e.InningsID);
+        this.generateSummary();
       }
 }

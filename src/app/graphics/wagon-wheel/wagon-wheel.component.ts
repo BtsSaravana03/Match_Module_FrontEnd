@@ -58,6 +58,7 @@ export class WagonWheelComponent {
   private cdr = inject(ChangeDetectorRef);
 
   ballArray = input.required < BallData[] > ();
+  matchDetails = signal<any>({});
   ww_Width = 602;
   ww_Height = 650;
   tooltipTarget: string | undefined;
@@ -94,6 +95,9 @@ export class WagonWheelComponent {
     const filter = this.graphicServices.filterObservable.subscribe(updated => {
       this.setWagonwheel();
     })
+    const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated => {
+        this.matchDetails.set(updated);
+      })
     this.destroyRef.onDestroy(() => {
       //subscription.unsubscribe();
       filter.unsubscribe();

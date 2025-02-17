@@ -34,7 +34,7 @@
           <span [ngClass]="{'text-dim':!m.isCurrentInn,'text-dark-d':m.isCurrentInn}">{{m.Total}}<span
               *ngIf="m.Dismissal !== 10">/{{m.Dismissal}}</span></span>
           }
-          <span *ngIf="TeamASummary[$index+1]"> & </span>
+          <span *ngIf="TeamASummary[$index+1]" class="text-dim"> & </span>
           }
         </p>
       </div>

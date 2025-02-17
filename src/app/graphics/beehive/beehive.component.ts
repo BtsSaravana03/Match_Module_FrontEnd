@@ -17,13 +17,14 @@ import { CommonModule } from '@angular/common';
   encapsulation:ViewEncapsulation.None
 })
 export class BeehiveComponent implements OnInit,AfterViewInit {
-  //private ballbyballService = inject(BallByBallService);
+  private ballbyballService = inject(BallByBallService);
   private destroyRef = inject(DestroyRef);
   private videoService = inject(VideoService);
   private graphicServices = inject(GraphicsService);
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
   private cdr = inject(ChangeDetectorRef);
+  matchDetails = signal<any>({});
 
   ballArray = input.required<BallData[]>();
   bh_Width = 493;
@@ -46,6 +47,9 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
     const filter = this.graphicServices.filterObservable.subscribe(updated => {
       this.setBeehive();
     })
+    const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated => {
+        this.matchDetails.set(updated);
+      })
     this.destroyRef.onDestroy(()=>{
       //subscription.unsubscribe();
       filter.unsubscribe();
@@ -67,7 +71,7 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
   }
   setBeehive(){
     let filtered_balls = this.graphicServices.applyFilter(this.ballArray());
-    const ballRadius = 5;
+    const ballRadius = 4;
     //PitchMap SVG Dimensions
     const width = this.bh_Width;
     const height = this.bh_Height;

@@ -40,7 +40,7 @@
     <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
     <dxo-export [enabled]="true" [allowExportSelectedData]="false" [formats]="['xlsx', 'pdf']"></dxo-export>
     <div *dxTemplate="let data of 'cellTemplate'">
-      <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick(data.rowIndex)"></i>
+      <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick(data.row.dataIndex,data.data)"></i>
     </div>
     <div *dxTemplate="let d of 'dismissalTemplate'">
       @if(d.data.Dismissal===1){W}@else {}

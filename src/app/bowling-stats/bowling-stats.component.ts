@@ -9,6 +9,7 @@ import { checkSR } from '../scripts/generic';
 import { DxDataGridModule } from 'devextreme-angular';
 import { VideoComponent } from "../components/video/video.component";
 import { VideoService } from '../components/video/video.service';
+import { isTestMatch } from '../scripts/cricket_gen';
 
 @Component({
   selector: 'app-bowling-stats',
@@ -45,7 +46,8 @@ export class BowlingStatsComponent {
     });
     const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated=>{
       this.matchDetails.set(updated);
-      this.isTestMatch = this.matchDetails()?.isLimitedOvers === 0?true:false;
+      //this.isTestMatch = this.matchDetails()?.isLimitedOvers === 0?true:false;
+      this.isTestMatch = isTestMatch(this.matchDetails().MatchTypeID);
     })
     this.destroyRef.onDestroy(()=>{
       subscription.unsubscribe();

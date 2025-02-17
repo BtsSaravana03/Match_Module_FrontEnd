@@ -112,3 +112,12 @@ export function oversSplit(overs:number) {
     let ballFraction = balls / 6;
     return { over, ballFraction };
 }
+export function isTestMatch(MatchType:number):boolean {
+    const testMatchTypes = [1,4,8,11,14,17,20,26,29,32,35];
+    if(testMatchTypes.includes(MatchType)){
+        return true;
+    }
+    else {
+        return false;
+    }
+}

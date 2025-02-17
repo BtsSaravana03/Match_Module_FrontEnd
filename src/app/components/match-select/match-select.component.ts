@@ -6,7 +6,7 @@ import { HttpServices } from '../../services/http.service';
 import { BallByBallService } from '../../services/ball-by-ball.service';
 import { AppService } from '../../services/app.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InningServiceService } from '../../services/inning-service.service';
 
 @Component({
@@ -21,6 +21,7 @@ export class MatchSelectComponent implements OnInit {
   private httpService = inject(HttpServices);
   private appService = inject(AppService);
   private inningsService = inject(InningServiceService);
+  private routes = inject(Router)
   resizeObservable$!:Observable<Event>;
   resizeSubscription$!: Subscription;
   destroyRef = inject(DestroyRef);
@@ -40,6 +41,8 @@ export class MatchSelectComponent implements OnInit {
       if(this.selectedComp && this.selectedMatch){
         this.ballService.generate_ballbyball(this.selectedComp,this.selectedMatch);
         await this.ballService.getCurrentMatchDetails(this.selectedMatch);
+        sessionStorage.setItem('currentMatchId', this.selectedMatch.toString());
+        // this.routes.navigate(['v2','overview']);
       }
       this.appService.toggleMatchSelection(false);
     },
@@ -72,10 +75,7 @@ export class MatchSelectComponent implements OnInit {
     this.destroyRef.onDestroy(()=>{
       this.resizeSubscription$.unsubscribe();
     })
-
-        this.getCompetitions();
-
-
+    this.getCompetitions();
     //const res = await this.ballService.getDismissalTypes();
   }
   onResize(){
@@ -108,4 +108,5 @@ export class MatchSelectComponent implements OnInit {
 
     }
   }
+
 }

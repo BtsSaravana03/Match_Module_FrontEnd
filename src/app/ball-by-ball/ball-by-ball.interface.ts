@@ -62,6 +62,7 @@ export interface BallData {
     TeamWickets:number;
     DismissalTypeDesc:string;
     Partnerid:string;
+    PartnerWktOrder:number;
     PM_X:number;
     PM_Y:number;
     PM_X_CM:number;

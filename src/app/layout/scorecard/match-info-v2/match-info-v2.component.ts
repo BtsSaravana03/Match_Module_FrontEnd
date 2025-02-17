@@ -1,6 +1,6 @@
-import { Component, input } from '@angular/core';
-import { CardComponent } from "../../sharedComponents/card/card.component";
+import { Component, effect, input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatchData } from '../../../scorecard-v2/batting-card/batting-card.interface';
+import {isTestMatch} from '../../../scripts/cricket_gen'
 import moment from 'moment';
 
 @Component({
@@ -12,6 +12,13 @@ import moment from 'moment';
 })
 export class MatchInfoV2Component {
     matchInfo = input.required<MatchData>();
+    TestMatch:boolean = false;
+    constructor(){
+        effect(()=>{
+            const matchInfo = this.matchInfo();
+            this.TestMatch = isTestMatch(matchInfo.MatchTypeID);
+        })
+    }
     get dayOrNight(){
         if(this.matchInfo().inningsData.length>0){
             return this.matchInfo().inningsData[0].DayOrNight===1?'Day':'Night';
