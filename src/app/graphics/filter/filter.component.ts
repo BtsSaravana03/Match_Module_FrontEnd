@@ -39,7 +39,7 @@ export class FilterComponent implements OnInit,AfterViewInit {
     },
     {
       id: 2,
-      icon: 'fa-sharp fa-solid fa-tennis-ball fa-xs',
+      icon: 'fa-solid fa-baseball fa-xs',
     }
   ];
   appliedFilters:GraphicsFilter = {

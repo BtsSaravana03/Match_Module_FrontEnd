@@ -1,26 +1,39 @@
 @echo off
-setlocal enabledelayedexpansion  :: Enable delayed expansion for safe variable handling
+setlocal enabledelayedexpansion
+
+:: Check for internet access by pinging Google's public DNS
+ping -n 1 8.8.8.8 >nul 2>&1
+if %errorlevel% equ 0 (
+    echo Internet connection detected.
+    set "USE_LOCAL_IP=1"
+) else (
+    echo No internet connection. Defaulting to localhost.
+    set "USE_LOCAL_IP=0"
+)
 
 :: Initialize IP variable
 set "IP="
 
-:: Attempt to retrieve the local IP address (case-insensitive search)
-for /f "tokens=2 delims=:" %%A in ('ipconfig ^| findstr /i "IPv4"') do (
+:: Retrieve the local IPv4 address (excluding 127.0.0.1)
+for /f "tokens=2 delims=:" %%A in ('ipconfig ^| findstr /C:"IPv4 Address" ^| findstr /V "127.0.0.1"') do (
     set "IP=%%A"
-    :: Trim leading spaces using delayed expansion
-    set "IP=!IP:~1!"
+    set "IP=!IP:~1!"  :: Trim leading space
     goto :foundIP
 )
 
 :foundIP
-:: Check if IP was found; if not, default to localhost
+:: If no local IP is found, default to localhost
 if "%IP%"=="" (
-    echo No local IP address found. Defaulting to localhost.
-    set "IP=127.0.0.1"
+    set "IP=localhost"
 )
 
-:: Start the Angular HTTP server with the determined IP
+:: If internet is not available, force localhost
+if "%USE_LOCAL_IP%"=="0" (
+    set "IP=localhost"
+)
+
+:: Start Angular HTTP server on chosen IP
 echo Starting server on %IP%...
-angular-http-server --open -p 4200 --host %IP%
+angular-http-server --open -p 4200 --host %IP% --silent
 
 endlocal

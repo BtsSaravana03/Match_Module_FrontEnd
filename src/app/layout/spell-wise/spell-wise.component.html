@@ -7,5 +7,6 @@
       <dx-data-grid [dataSource]="SpellWiseData" [allowColumnReordering]="false" keyExpr="PlayerName" [showColumnLines]="true" [sorting]="{mode:'none'}"
       [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
       [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="isMobile" [width]="'100%'">
+      <dxo-scrolling mode="infinite"></dxo-scrolling>
     </dx-data-grid>
 </app-card>

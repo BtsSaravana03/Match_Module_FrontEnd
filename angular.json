@@ -38,6 +38,8 @@
             ],
             "styles": [
               "node_modules/devextreme/dist/css/dx.fluent.saas.light.css",
+              "src/styles/bootstrap.min.css",
+              "src/styles/font-awesome/all.min.css",
               "src/styles.scss"
             ],
 
@@ -98,6 +100,7 @@
               }
             ],
             "styles": [
+              "src/styles/bootstrap.min.css",
               "src/styles.scss"
             ],
             "scripts": []
