@@ -98,6 +98,7 @@ export class MatchSelectComponent implements OnInit {
     this.selectedComp = e.selectedItem.ID;
     if(this.selectedComp){
       const res = await this.httpService.getData(`home/getMatches/${this.selectedComp}`);
+      console.log(res);
       this.MatchDataSource = res;
     }
   }

@@ -11,13 +11,13 @@
       </div>
       <div class="field-container">
         <label class="field-label">Match</label>
-        <dx-select-box #selectBox [dataSource]="MatchDataSource" [acceptCustomValue]="false" displayExpr="MatchNameDate"
-          valueExpr="ID" searchExpr="MatchName" [searchEnabled]="true" (onSelectionChanged)="onMatchSelected($event)"
+        <dx-select-box #selectBox [dataSource]="MatchDataSource" [acceptCustomValue]="false" displayExpr="MatchNameDateShort"
+          valueExpr="ID" searchExpr="MatchNameDateShort" [searchEnabled]="true" (onSelectionChanged)="onMatchSelected($event)"
           [disabled]="selectedComp === undefined">
 
           <div *dxTemplate="let data of 'item'">
             <span title="{{ data.MatchNameDate }}">
-                {{data.MatchNameDate}}
+                {{data.MatchNameDateShort}}
             </span>
 
           </div>

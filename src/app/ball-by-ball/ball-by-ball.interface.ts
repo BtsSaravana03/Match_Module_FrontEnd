@@ -1,3 +1,5 @@
+import { NumberValueAccessor } from "@angular/forms";
+
 export interface BallData {
     AutoId: number;
     BLExtraTypeID: number;
@@ -88,4 +90,9 @@ export interface BallData {
     NonBallDismissalBatter:string;
     NonBallType:number|null;
     NonBall_dismissBatter:number|null;
+    CreaseMovement:number;
+    BatSubjectName:string;
+    Uncomfortable:number;
+    BatSubject: number|null;
+    Penalty1:number;
 }

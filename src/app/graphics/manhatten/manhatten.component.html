@@ -1,41 +1,53 @@
 <div>
     <dx-chart id="manhatten" [dataSource]="manhatten" *ngIf="manhatten.length > 0">
-      <dxi-series [valueField]="'Runs'" [argumentField]="'Over'" [name]="clubName" type="bar"
-      color="#184bd3"
-      [label]="{
-        visible: true,
-        position: 'outside',
-        customizeText: customizeLabelText,
-        font: {
-            family: 'Readex Pro, sans-serif',
-            size: 14,
-            color: '#184bd3'
-        },
-        backgroundColor: '#fff',
-        border: {
-            visible: true,
-            width: 1,
-            color: '#184bd3',
-            cornerRadius: 10
-        }
-    }">
-      </dxi-series>
-      <dxo-argument-axis
-        [tickInterval]="1"
-        [valueMarginsEnabled]="false"
-        [grid]="{ visible: false }"
-        [label]="{ format: { type: 'decimal' }, font: {
-            family: 'Readex Pro, sans-serif',
-            size: 14,
-            color: '#333333'
-        }}"
-        [title]="{ text: 'Overs' }">
-      </dxo-argument-axis>
-      <dxi-value-axis [grid]="{ visible: false }" [title]="{ text: 'Runs' }" [label]="{font: {
-        family: 'Readex Pro, sans-serif',
-        size: 14,
-        color: '#333333'
-    }}"></dxi-value-axis>
-      <dxo-legend [visible]="true" horizontalAlignment="center"></dxo-legend>
-    </dx-chart>
+        <dxo-common-series-settings argumentField="Over" type="stackedBar"></dxo-common-series-settings>
+
+        <dxi-series [valueField]="'Runs'" name="Runs" color="#184bd3">
+
+        </dxi-series>
+        <dxi-series [valueField]="'Extras'" name="Extras" color="#547792"></dxi-series>
+        <dxi-series [valueField]="'Wickets'" name="Wickets" color="#BB3E00">
+            <!-- <dxo-label
+                [visible]="true"
+                position="outside"
+                [customizeText]="customizeLabelText"
+                [font]="{ family: 'Readex Pro, sans-serif', size: 14, color: '#fff' }"
+                backgroundColor="#BB3E00"
+                [border]="{ visible: true, width: 1, color: '#184bd3' }">
+                </dxo-label> -->
+                <dxo-label
+                [visible]="true"
+                position="top"
+                [customizeText]="customizeLabelText"
+                [font]="{ family: 'Readex Pro, sans-serif', size: 14, color: '#fff' }"
+                backgroundColor="#184bd3"
+                [border]="{ visible: true, width: 1, color: '#184bd3' }">
+                </dxo-label>
+        </dxi-series>
+
+        <dxo-argument-axis
+          [tickInterval]="1"
+          [valueMarginsEnabled]="false"
+          [grid]="{ visible: false }"
+          [label]="{ format: { type: 'decimal' }, font: { family: 'Readex Pro, sans-serif', size: 14, color: '#333333' } }"
+          [title]="{ text: 'Overs' }">
+        </dxo-argument-axis>
+
+        <dxi-value-axis
+          [grid]="{ visible: false }"
+          [title]="{ text: 'Runs' }"
+          [label]="{ font: { family: 'Readex Pro, sans-serif', size: 14, color: '#333333' } }">
+        </dxi-value-axis>
+
+        <dxo-legend [visible]="true" horizontalAlignment="center"></dxo-legend>
+
+        <dxo-tooltip
+    [enabled]="true"
+    location="edge"
+    [shared]="true"
+    [customizeTooltip]="customizeTooltip"
+  ></dxo-tooltip>
+      </dx-chart>
+
+
   </div>

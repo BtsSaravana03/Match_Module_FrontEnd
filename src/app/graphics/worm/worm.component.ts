@@ -97,5 +97,8 @@ export class WormComponent {
 
     }
   }
+  customizeWormTooltip = (e: any) => ({
+    text: `Runs: ${e.value}`
+  });
 
 }

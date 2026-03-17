@@ -4,7 +4,8 @@
   "cli": {
     "cache": {
       "enabled": false
-    }
+    },
+    "analytics": "53f16b55-475a-45c8-a9ad-d7376203e2b1"
   },
   "newProjectRoot": "projects",
   "projects": {

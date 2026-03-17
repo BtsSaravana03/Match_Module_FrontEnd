@@ -4,6 +4,9 @@ export interface GraphicsFilter {
     BattingType:number[];
     Batsman:number[];
     Bowlers:number[];
+    BatSubject:number[],
+    CreaseMovement:number[],
+    uncomfortable?: number
 }
 export interface BowlingTypes{
     Id:number;

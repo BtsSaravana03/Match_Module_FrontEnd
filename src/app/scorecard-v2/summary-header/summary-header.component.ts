@@ -67,7 +67,7 @@ export class SummaryHeaderComponent implements OnChanges{
   MatchStartMsg:string = 'Yet to start';
   expand:boolean = true;
   lastBall:BallData|undefined;
-  hideRequiredRR:boolean = false;
+  hideRequiredRR:boolean = true;
   dataChunks:DataChunks = {
     projections: {
         at8RPO: 0,
@@ -297,7 +297,7 @@ export class SummaryHeaderComponent implements OnChanges{
                         } else if (currentInningIndex === 2 || currentInningIndex === 3) {
                             // Lead or Chase for 3rd and 4th Innings
                             if (currentInningIndex === 2) {
-                                const leadBy = currentOverallTotal - opponentTotal1;
+                                const leadBy = opponentOverallTotal - currentTotal1;
                                 if (leadBy > 0) {
                                     this.description = `${currentTeamName} lead by ${leadBy} runs in the 3rd innings`;
                                 } else {
@@ -346,6 +346,7 @@ export class SummaryHeaderComponent implements OnChanges{
   }
 
   calculateStats(balls: BallData[], lastBall: BallData, totalOvers: number): DataChunks {
+    let TestMatch = isTestMatch(this.matchDetails().MatchTypeID);
     const totalScore = lastBall.TeamRuns;
     const oversBowled = lastBall.Overs;
     const oversRemaining = totalOvers - oversBowled;
@@ -360,13 +361,12 @@ export class SummaryHeaderComponent implements OnChanges{
       .where(i => i.InningsId === 2)
       .sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras);
     let _RequiredOver = oversSplit(oversRemaining);
-    if (targetRuns >= totalScore) {
+    if ((targetRuns > totalScore) && lastBall.InningsId === 2 && !TestMatch) {
       this.hideRequiredRR = false;
     } else {
       this.hideRequiredRR = true;
     }
-    const requiredRunRate = (targetRuns - runsScored) / (_RequiredOver.over + _RequiredOver.ballFraction);
-
+    const requiredRunRate = (_RequiredOver.over + _RequiredOver.ballFraction) > 0? (targetRuns - runsScored) / (_RequiredOver.over + _RequiredOver.ballFraction): 0;
     // Last Events
     const lastBoundary = Enumerable.from(balls)
       .where(i => i.isFour === 1)

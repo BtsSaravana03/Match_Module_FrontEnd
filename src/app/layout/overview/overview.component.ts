@@ -4,7 +4,7 @@ import { BallByBallService } from '../../services/ball-by-ball.service';
 import { Router } from '@angular/router';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
 import { BattingCardSummary } from '../../scorecard-v2/batting-card/batting-card.interface';
-import { calculateOvers } from '../../scripts/cricket_gen';
+import { calculateOvers, isTestMatch } from '../../scripts/cricket_gen';
 import { checkInf } from '../../scripts/generic';
 import Enumerable from 'linq';
 import { CardComponent } from "../sharedComponents/card/card.component";
@@ -15,11 +15,12 @@ import { OverByOverComponent } from "./over-by-over/over-by-over.component";
 import { DxTabsModule } from 'devextreme-angular';
 import { AppService } from '../../services/app.service';
 import { PhaseWiseComponent } from "../phase-wise/phase-wise.component";
+import { OverComparisonComponent } from './over-comparison/over-comparison.component';
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [SummaryHeaderComponent, CardComponent, CommonModule, TabsComponent, OverByOverComponent, DxTabsModule, PhaseWiseComponent],
+  imports: [SummaryHeaderComponent, CardComponent, CommonModule, TabsComponent, OverByOverComponent, DxTabsModule, PhaseWiseComponent,OverComparisonComponent],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
@@ -34,9 +35,10 @@ export class OverviewComponent {
     totalInnings = signal<any[]>([]);
     selctedInnings:number = 1;
     currentInnings:number|undefined;
-    Tabs = ['OverByOver','PhaseWise'];
+    Tabs = ['OverByOver','PhaseWise','OverComparison'];
     TabSelected:string = 'OverByOver';
     isMobile = false;
+    isTestMatch = false;
 
     ngOnInit(): void {
         this.isMobile = this.appService.isMobile();
@@ -48,7 +50,13 @@ export class OverviewComponent {
         const matchSubscription = this.ballbyballService.matchObservable$.subscribe(updated => {
             this.matchDetails.set(updated);
             this.selctedInnings = 1;
-            this.totalInnings.set(this.matchDetails()?.inningsData || []);
+            this.totalInnings.set(this.matchDetails().inningsData || []);
+            this.isTestMatch = isTestMatch(this.matchDetails().MatchTypeID);
+            if(this.isTestMatch){
+                this.Tabs = ['OverByOver','PhaseWise','OverComparison'];
+            }else{
+                this.Tabs = ['OverByOver','PhaseWise','OverComparison'];
+            }
         })
         this.destroyRef.onDestroy(() => {
             subscription.unsubscribe();

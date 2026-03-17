@@ -30,6 +30,7 @@
     <dxi-column dataField="isSix" caption="IsSix" alignment="left"></dxi-column>
     <dxi-column caption="Score" alignment="left" cellTemplate="TeamScoreTemplate"></dxi-column>
     <dxi-column caption="Crease" alignment="left" dataField="CreaseMovementName"></dxi-column>
+    <dxi-column caption="Bat Subject" alignment="left" dataField="BatSubjectName"></dxi-column>
     <dxi-column caption="Fielder" alignment="left" cellTemplate="DismissalFielderTemplate"></dxi-column>
     <dxi-column caption="From" alignment="left" cellTemplate="OverAroundTemplate"></dxi-column>
     <dxi-column caption="Dismissal" alignment="left" cellTemplate="DismissalTypeTemplate"></dxi-column>
@@ -37,6 +38,7 @@
     <dxi-column caption="Appeal" alignment="left" cellTemplate="AppealTemplate"></dxi-column>
     <dxi-column caption="WTO" alignment="left" cellTemplate="WTOTemplate"></dxi-column>
     <dxi-column caption="End" alignment="left" dataField="BowlingEnd"></dxi-column>
+    <dxi-column caption="Uncomfortable" alignment="left" dataField="Uncomfortable"></dxi-column>
     <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
     <dxo-export [enabled]="true" [allowExportSelectedData]="false" [formats]="['xlsx', 'pdf']"></dxo-export>
     <div *dxTemplate="let data of 'cellTemplate'">

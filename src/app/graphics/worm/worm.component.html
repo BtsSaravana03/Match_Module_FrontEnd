@@ -5,25 +5,7 @@
         [argumentField]="'Over'"
         [name]="clubName"
         type="spline"
-        color="#184bd3"
-
-        [label]="{
-            visible: true,
-            position: 'outside',
-            customizeText: customizeLabelText,
-            font: {
-                family: 'Readex Pro, sans-serif',
-                size: 14,
-                color: '#184bd3'
-            },
-            backgroundColor: '#fff',
-            border: {
-                visible: true,
-                width: 1,
-                color: '#184bd3',
-                cornerRadius: 10
-            }
-        }">
+        color="#184bd3">
       </dxi-series>
 
       <dxo-argument-axis
@@ -45,5 +27,10 @@
     }}"></dxi-value-axis>
 
       <dxo-legend [visible]="true" horizontalAlignment="center"></dxo-legend>
+      <dxo-tooltip
+  [enabled]="true"
+  [customizeTooltip]="customizeWormTooltip"
+  [shared]="false">
+</dxo-tooltip>
     </dx-chart>
   </div>

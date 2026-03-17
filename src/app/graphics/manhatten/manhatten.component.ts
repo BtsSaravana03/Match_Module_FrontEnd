@@ -53,9 +53,18 @@ export class ManhattenComponent {
     })
 
   }
-  customizeLabelText(pointInfo: any): string {
-    return `${pointInfo.value}`;
-  }
+  customizeLabelText = (info: any) => {
+    const point = info.point || {};
+    const runs = point.data?.Runs || 0;
+    const extras = point.data?.Extras || 0;
+    const total = runs + extras;
+    if(total>0){
+        return `${total}`;
+    }else{
+        return '';
+    }
+
+  };
   setManhatten(){
     if(this.matchDetails().inningsData && this.matchDetails().inningsData.length>0){
       let club = this.matchDetails().inningsData[this.selctedInnings() - 1].BattingClubID;
@@ -70,19 +79,31 @@ export class ManhattenComponent {
       const overId = index + 1;
       const overData = filteredBalls.filter(i => i.BattingClubID === club && i.OverId === overId);
       const runs = overData.reduce((sum, i) => sum + (i.Runs || 0), 0);
+      const extras = overData.reduce((sum, i) => sum + ((i.Extras + i.Penalty + i.BLExtras) || 0), 0);
       const wickets = overData.filter(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11)).length;
           return {
               Over: overId,
               Runs: runs,
               Wickets: wickets,
+              Extras:extras
           };
       });
       this.manhatten.push({
         Over:0,
         Runs: 0,
-        Wickets:0
+        Wickets:0,
+        Extras: 0
     })
     }
 
+  }
+  customizeTooltip(info: any) {
+    const runs = info.points.find((p: any) => p.seriesName === 'Runs')?.value || 0;
+    const extras = info.points.find((p: any) => p.seriesName === 'Extras')?.value || 0;
+    const wickets = info.points.find((p: any) => p.seriesName === 'Wickets')?.value || 0;
+
+    return {
+      text: `Runs: ${runs}<br>Extras: ${extras}<br>Wickets: ${wickets}`
+    };
   }
 }

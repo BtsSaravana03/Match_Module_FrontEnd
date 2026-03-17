@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, effect, ElementRef, HostListener, inject, input, OnInit, Renderer2, signal, ViewEncapsulation } from '@angular/core';
 import { BallByBallService } from '../../services/ball-by-ball.service';
-import { AppService } from '../../services/app.service';
 import { VideoService } from '../../components/video/video.service';
 import { GraphicsService } from '../graphics.service';
 import { BallData } from '../../ball-by-ball/ball-by-ball.interface';
@@ -25,10 +24,27 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
   private renderer = inject(Renderer2);
   private cdr = inject(ChangeDetectorRef);
   matchDetails = signal<any>({});
-
+  RegionPosition = {
+                Width:494,
+                ViewboxX:0,
+                RightLegendX:0,
+                RightLegendY:-50,
+                LeftLegendX:0,
+                LeftLegendY:-50,
+                BottomLegendX:95,
+                BaseKeyX:4.1,
+                BaseLineX1:0,
+                BaseLineX2:493.8,
+                TableStartX:29.1,
+                TableLabelX:29.1,
+                TableStatRectWidth:434.6,
+                metricsTransformX:468.2,
+                gridLineStartX:30,
+                gridLineEndX:462.4
+        }
   ballArray = input.required<BallData[]>();
-  bh_Width = 493;
-  bh_Height = 355;
+  bh_Width = 494;
+  bh_Height = 459.9;
   tooltipTarget:string|undefined;
   targetBall:BallData|undefined;
   scale = 1;
@@ -76,8 +92,8 @@ export class BeehiveComponent implements OnInit,AfterViewInit {
     const width = this.bh_Width;
     const height = this.bh_Height;
     //Cricket Pitch Dimensions(in cm)
-    const beehive_width = 200;
-    const beehive_height = 200;
+    const beehive_width = 190;
+    const beehive_height = 190;
     // PX/CM Ratio
     const scaling_x = parseFloat((width / beehive_width).toFixed(4));
     const scaling_y = parseFloat((height / beehive_height).toFixed(4));

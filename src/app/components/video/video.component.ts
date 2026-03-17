@@ -7,11 +7,12 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 import { api_url, ip, videoFolder } from '../../../variable';
 import Hls from 'hls.js';
 import { MatchData } from '../../scorecard-v2/batting-card/batting-card.interface';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-video',
   standalone: true,
-  imports: [CommonModule,DxPopupModule],
+  imports: [CommonModule,DxPopupModule, FormsModule],
   templateUrl: './video.component.html',
   styleUrl: './video.component.scss',
 })
@@ -36,6 +37,12 @@ export class VideoComponent {
   hlsStartFrame:number = 0;
   hlsEndFrame:number = 0;
   isHls:boolean = false;
+  isChecked = false; // default value
+  selectedCam: string | null = null;
+  currentIndexVideo:number = 0;
+showCam1 = false;
+showCam2 = false;
+
   constructor(){
     this.videoService.setComponent(this);
     this.resizeObservable$ = fromEvent(window,'resize');
@@ -55,6 +62,18 @@ export class VideoComponent {
       this.height = '70%';
     }
   }
+
+onCheckboxClick(cam: string, event: Event) {
+  event.preventDefault(); // prevent default toggle behavior
+
+  // If clicking on a different cam, switch selection
+  if (this.selectedCam !== cam) {
+    this.selectedCam = cam;
+  }
+  this.onVideoClick1('',this.currentIndexVideo);
+  // else, do nothing (keeps it checked)
+}
+
  async show(index?:number) {
     //console.log(this.matchInfo());
     let i =index?index:0;
@@ -86,6 +105,8 @@ export class VideoComponent {
     let ball = this.videos()[index];
     this.videoService.currentVideoIndex.set(index);
     let rootFolder = ball.VideoPath;
+
+    this.currentIndexVideo = index;
     // if(ball.VideoMode === 1){
 
     //   let _p = api_url +link;
@@ -97,6 +118,7 @@ export class VideoComponent {
 
         const videoElement = this.videoElement()?.nativeElement;
         const hlsUrl = videoFolder + ball.hlsPath;
+        console.log('HLS URL:', hlsUrl);
         if (Hls.isSupported()) {
             const hls = new Hls();
             hls.loadSource(hlsUrl);
@@ -132,14 +154,70 @@ export class VideoComponent {
         // }
     }
     //else if(true){
-    else if(ball.VideoMode === 1 || ball.VideoMode === 2){
+    else if(ball.VideoMode === 2){
       let folder = this.matchInfo().MtcVideos+' '+this.formatDate(this.matchInfo()?.Date)+ball.InningsID;
-      let _p =  ball.hlsPath+'/' + folder +'/'+ folder+'_'+ball.BallID+'.mp4';
+      let outerFoldetr = ball.MatchID+'_'+this.matchInfo().MtcVideos+' '+this.formatDate(this.matchInfo()?.Date);
+      let _p =  ball.hlsPath+'/' +outerFoldetr +'/'+ folder +'/'+ folder+'_'+ball.BallID+'.mp4';
       // normalize = _p.replace(/\\/g, '/');
       let blob = await this.convertToBlob(_p);
       this.videoSrc.set(blob);
     }
+    else if(ball.VideoMode === 1){
+      let folder = this.matchInfo().MtcVideos+' '+this.formatDate(this.matchInfo()?.Date)+ball.InningsID;
+      let outerFoldetr = ball.MatchID+'_'+this.matchInfo().MtcVideos+' '+this.formatDate(this.matchInfo()?.Date);
 
+
+      //Cam1
+      let _p =  ball.hlsPath+'/' +outerFoldetr +'/'+ folder +'/'+ folder+'_'+ball.BallID+'_cam1.mp4'; //'D:\\kadamba\\tempdata\\MU Vs MM 12-10-251_1_cam1.mp4'; 
+      _p = _p.replace(/\t/g, '').trim();
+      const normalizedPath = _p.replace(/\\/g, '/');  
+       
+      const encoded = encodeURIComponent(normalizedPath);
+      console.log(api_url+ 'video/getBlobURL/'+encoded);
+      let response = await fetch(api_url+ 'video/getBlobURL/'+encoded);
+      if (!response.ok) {
+          console.log("video1 Error");
+          this.showCam1 = false;
+      }else{
+          console.log("Video1 Success");
+          this.showCam1 = true;
+          // this.selectedCam = 'cam1'; 
+      }
+ 
+
+      // //Cam2
+      let _p2 =  ball.hlsPath+'/' +outerFoldetr +'/'+ folder +'/'+ folder+'_'+ball.BallID+'_cam2.mp4'; ///'D:\\kadamba\\tempdata\\MU Vs MM 12-10-251_2_cam2.mp4'; 
+      _p2 = _p2.replace(/\t/g, '').trim();
+      const normalizedPath2 = _p2.replace(/\\/g, '/');
+      const encoded2 = encodeURIComponent(normalizedPath2);
+      console.log(api_url+ 'video/getBlobURL/'+encoded2);
+      let response2 = await fetch(api_url+ 'video/getBlobURL/'+encoded2);
+      if (!response2.ok) {
+          console.log("video2 Error");
+          this.showCam2 = false;
+      }else{
+          console.log("Video2 Success");
+          this.showCam2 = true;
+          // this.selectedCam = 'cam2'; 
+      }
+
+      //Videoplay
+      if(this.showCam1 === true && this.showCam2 === true){
+        this.selectedCam = 'cam1'; 
+         let blob = await this.convertToBlob(normalizedPath);
+         this.videoSrc.set(blob);
+      }else if(this.showCam1===true){
+        this.selectedCam = 'cam1'; 
+         let blob = await this.convertToBlob(normalizedPath);
+         this.videoSrc.set(blob);
+      }else if(this.showCam2 === true){
+        this.selectedCam = 'cam2'; 
+         let blob = await this.convertToBlob(normalizedPath2);
+         this.videoSrc.set(blob);
+      }
+
+     
+    }
     else{
       this.videoSrc.set('');
     }
@@ -154,6 +232,74 @@ export class VideoComponent {
     //   this.trimEnd = parseFloat(ball.EndTimeTrim);
     // }
   }
+
+
+   async onVideoClick1(link: string, index: number) {
+    debugger;
+    this.isHls = false;
+    this.videoIndex.set(index);
+    let ball = this.videos()[index];
+    this.videoService.currentVideoIndex.set(index);
+    let rootFolder = ball.VideoPath;
+
+    this.currentIndexVideo = index;
+     
+    if(ball.VideoMode === 1){
+      let folder = this.matchInfo().MtcVideos+' '+this.formatDate(this.matchInfo()?.Date)+ball.InningsID;
+      let outerFoldetr = ball.MatchID+'_'+this.matchInfo().MtcVideos+' '+this.formatDate(this.matchInfo()?.Date);
+
+
+      //Cam1
+      let _p =  ball.hlsPath+'/' +outerFoldetr +'/'+ folder +'/'+ folder+'_'+ball.BallID+'_cam1.mp4'; ///'D:\\kadamba\\tempdata\\MU Vs MM 12-10-251_1_cam1.mp4'; 
+      _p = _p.replace(/\t/g, '').trim();
+      const normalizedPath = _p.replace(/\\/g, '/');  
+       
+      const encoded = encodeURIComponent(normalizedPath);
+      console.log(api_url+ 'video/getBlobURL/'+encoded);
+      let response = await fetch(api_url+ 'video/getBlobURL/'+encoded);
+      if (!response.ok) {
+          console.log("video1 Error");
+          this.showCam1 = false;
+      }else{
+          console.log("Video1 Success");
+          this.showCam1 = true;
+          // this.selectedCam = 'cam1'; 
+      }
+  
+      // //Cam2
+      let _p2 =  ball.hlsPath+'/' +outerFoldetr +'/'+ folder +'/'+ folder+'_'+ball.BallID+'_cam2.mp4';  ////'D:\\kadamba\\tempdata\\MU Vs MM 12-10-251_2_cam2.mp4'; 
+      _p2 = _p2.replace(/\t/g, '').trim();
+      const normalizedPath2 = _p2.replace(/\\/g, '/');
+      const encoded2 = encodeURIComponent(normalizedPath2);
+      console.log(api_url+ 'video/getBlobURL/'+encoded2);
+      let response2 = await fetch(api_url+ 'video/getBlobURL/'+encoded2);
+      if (!response2.ok) {
+          console.log("video2 Error");
+          this.showCam2 = false;
+      }else{
+          console.log("Video2 Success");
+          this.showCam2 = true;
+          // this.selectedCam = 'cam2'; 
+      }
+
+      //Videoplay
+      if(this.selectedCam === 'cam1'){
+         let blob = await this.convertToBlob(normalizedPath);
+         this.videoSrc.set(blob);
+      }else if(this.selectedCam === 'cam2'){
+         let blob = await this.convertToBlob(normalizedPath2);
+         this.videoSrc.set(blob);
+      }
+
+     
+    }
+    else{
+      this.videoSrc.set('');
+    }
+   
+  }
+
+
   playNext(){
     const videoElement = this.videoElement()?.nativeElement;
     let currentIndex = this.videoIndex();
@@ -189,6 +335,7 @@ export class VideoComponent {
     // URL.createObjectURL(video);
     //return video.blob();
     const encoded = encodeURIComponent(filePath);
+    console.log(api_url+ 'video/getBlobURL/'+encoded);
     let response = await fetch(api_url+ 'video/getBlobURL/'+encoded);
     if (!response.ok) {
         throw new Error('Network response was not ok');

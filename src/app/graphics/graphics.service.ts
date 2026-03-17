@@ -16,7 +16,9 @@ export class GraphicsService {
     BowlingType:[],
     BattingType:[],
     Batsman:[],
-    Bowlers:[]
+    Bowlers:[],
+    BatSubject:[],
+    CreaseMovement:[]
   };
   private triggerFilter$ = new Subject <void>();
   filterObservable = this.triggerFilter$.asObservable();
@@ -53,6 +55,13 @@ export class GraphicsService {
       if(this.filter.Bowlers.length >0){
         if(!this.filter.Bowlers.includes(i.BowlerID)) return false;
       }
+      if(this.filter.CreaseMovement.length > 0){
+        if(!this.filter.CreaseMovement.includes(i.CreaseMovement)) return false;
+      }
+      if(this.filter.BatSubject.length > 0){
+            if(i.BatSubject === null || !this.filter.BatSubject.includes(i.BatSubject)) return false;
+      }
+        if(this.filter.uncomfortable && i.Uncomfortable !== this.filter.uncomfortable) return false;
       return true;
     })
     return filtered;

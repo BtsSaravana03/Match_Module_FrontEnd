@@ -12,11 +12,12 @@ import { BattingCardSummary } from '../../scorecard-v2/batting-card/batting-card
 import Enumerable from 'linq';
 import { FilterComponent } from "../../graphics/filter/filter.component";
 import { AppService } from '../../services/app.service';
+import { BeehiveRegionComponent } from '../../graphics/beehive-region/beehive-region.component';
 
 @Component({
   selector: 'app-graphics',
   standalone: true,
-  imports: [DxTabsModule, PitchMapComponent, WagonWheelComponent, BeehiveComponent, CommonModule, TabsComponent, FilterComponent],
+  imports: [DxTabsModule, PitchMapComponent, WagonWheelComponent, BeehiveComponent, CommonModule, TabsComponent, FilterComponent,BeehiveRegionComponent],
   templateUrl: './graphics.component.html',
   styleUrl: './graphics.component.scss'
 })
@@ -33,7 +34,7 @@ export class GraphicsComponent {
     selctedInnings = signal(1);
     currentInnings:number|undefined;
     setInningValue:number|undefined;
-    Tabs = ['Pitchmap','Wagonwheel','Beehive'];
+    Tabs = ['Pitchmap','Wagonwheel','Beehive','BeehiveRegion'];
     TabSelected = 'Pitchmap';
 
     filterData(){

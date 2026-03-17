@@ -85,13 +85,15 @@ export class ScorecardV2Component implements OnInit {
           legbyes: g.where(i => i.ExtraTypeId === 3 || i.ExtraTypeId === 6)
             .sum(i => i.ExtraTypeId === 3 ? i.Extras : i.Extras - 1),
           byes: g.where(i => i.ExtraTypeId === 4 || i.ExtraTypeId === 5)
-            .sum(i => i.ExtraTypeId === 4 ? i.Extras : i.Extras - 1)
+            .sum(i => i.ExtraTypeId === 4 ? i.Extras : i.Extras - 1),
+          Penalty1: g.where(i => i.Penalty1 != 0).sum(i => i.Penalty1)
         };
         const extrasBreakupParts = [];
         if (extrasByType.overstep > 0) extrasBreakupParts.push(`NB: ${extrasByType.overstep}`);
         if (extrasByType.wide > 0) extrasBreakupParts.push(`W: ${extrasByType.wide}`);
         if (extrasByType.legbyes > 0) extrasBreakupParts.push(`LB: ${extrasByType.legbyes}`);
         if (extrasByType.byes > 0) extrasBreakupParts.push(`B: ${extrasByType.byes}`);
+        if (extrasByType.Penalty1 > 0) extrasBreakupParts.push(`P: ${extrasByType.Penalty1}`);
         const extrasBreakup = extrasBreakupParts.length > 0 ? extrasBreakupParts.join(', ') : '';
         const TeamTotal = g.last() ?.TeamRuns ?? 0;
         const overs = parseFloat(calculateOvers(g.count(i => i.Bowlballs === 1)));

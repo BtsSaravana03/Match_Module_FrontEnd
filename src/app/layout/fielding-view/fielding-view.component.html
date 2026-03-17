@@ -1,4 +1,4 @@
-<app-card>
+<!-- <app-card>
     <div class="mb-3 pt-3" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
         <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix"
           keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true"
@@ -6,3 +6,39 @@
       </div>
     <app-fielding [selctedInnings]="selctedInnings"></app-fielding>
 </app-card>
+ <br />
+  <app-card [ApplyDefaultStyle]="true">
+    <div id="WTO" #wto>
+        <h4 class="card-header-custom">WTO</h4>
+      <ng-container>
+        <app-wto [matchDetails]="this.matchDetails()"></app-wto>
+      </ng-container>
+    </div>
+  </app-card> -->
+
+
+  <div class="p-3">
+  <div class="sticky-tab">
+    <dx-tabs [width]="'fit-content'" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''"
+      [focusStateEnabled]="false" [className]="'innings-template'" [showNavButtons]="true" [selectedItem]="TabSelected"
+      [dataSource]="Tabs" [orientation]="'horizontal'" (onSelectionChanged)="onTabChangeF($event)"
+      [stylingMode]="'secondary'">
+    </dx-tabs>
+  </div>
+  <div class="mt-3 mb-3" *ngIf="this.matchDetails() && this.matchDetails().inningsData.length>0">
+    <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix"
+          keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true"
+          (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
+  </div>
+  @if(TabSelected === 'Fielding'){
+  <app-card>
+    <app-fielding [selctedInnings]="selctedInnings"></app-fielding>
+  </app-card>
+  }
+  @else if(TabSelected === 'WTO'){
+  <app-card>
+      <app-wto [selctedInnings]="selctedInnings" [matchDetails]="this.matchDetails()"></app-wto>
+  </app-card>
+  }
+</div>
+

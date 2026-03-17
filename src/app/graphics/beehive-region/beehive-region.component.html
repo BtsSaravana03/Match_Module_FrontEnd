@@ -1,0 +1,177 @@
+<div [ngStyle]="{'height.px': bh_Height*scale}" id="beehiveRegionContainer" *ngIf="ballArray().length>0">
+    <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 494 348.6" [attr.width]="(bh_Width + 25)*scale" [attr.height]="bh_Height*scale" id="svg_Wrap" [ngStyle]="{'--text-color': '#000'}">
+        <defs>
+          <style>
+            .beehive-region-cls0 {
+              stroke-width: 0px;
+            }
+
+            .beehive-region-cls0, .beehive-region-cls1 {
+              fill: none;
+              stroke: #6d6e71;
+              stroke-miterlimit: 10;
+            }
+
+            .beehive-region-cls2 {
+              fill: #58595b;
+            }
+
+            .beehive-region-cls3 {
+              font-size: 12px;
+              fill: var(--text-color, #000);
+              cursor: pointer;
+              text-decoration: underline;
+            }
+
+            .beehive-region-cls4 {
+              opacity: .3;
+            }
+
+            .beehive-region-cls1 {
+              stroke-width: 2px;
+            }
+          </style>
+        </defs>
+        <g id="Stump-Region">
+            <line class="beehive-region-cls1" x1="213.3" y1="334.2" x2="276.3" y2="334.2"/>
+            <g>
+              <rect class="beehive-region-cls0" x="213.3" y="23.6" width="63" height="77.6" [style.fill]="setGradient(Regions['Stump_1'].BallsPer)"/>
+              <text class="beehive-region-cls3" x="244.8" y="62.4" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Stump_1')">
+                {{ Regions['Stump_1'].Runs }}({{ Regions['Stump_1'].Balls }})
+              </text>
+            </g>
+            <g>
+              <rect class="beehive-region-cls0" x="213.3" y="101.2" width="63" height="77.6" [style.fill]="setGradient(Regions['Stump_2'].BallsPer)"/>
+              <text class="beehive-region-cls3" x="244.8" y="140" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Stump_2')">
+                {{ Regions['Stump_2'].Runs }}({{ Regions['Stump_2'].Balls }})
+              </text>
+            </g>
+            <g>
+              <rect class="beehive-region-cls0" x="213.3" y="178.9" width="63" height="77.6" [style.fill]="setGradient(Regions['Stump_3'].BallsPer)"/>
+              <text class="beehive-region-cls3" x="244.8" y="217.7" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Stump_3')">
+                {{ Regions['Stump_3'].Runs }}({{ Regions['Stump_3'].Balls }})
+              </text>
+            </g>
+            <g>
+              <rect class="beehive-region-cls0" x="213.3" y="256.5" width="63" height="77.6" [style.fill]="setGradient(Regions['Stump_4'].BallsPer)"/>
+              <text class="beehive-region-cls3" x="244.8" y="295.3" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Stump_4')">
+                {{ Regions['Stump_4'].Runs }}({{ Regions['Stump_4'].Balls }})
+              </text>
+            </g>
+          </g>
+        <g id="Left-Region">
+          <line class="beehive-region-cls1" x1="29.1" y1="334.2" x2="213.3" y2="334.2"/>
+          <g>
+            <rect class="beehive-region-cls0" x="150.4" y="256.5" width="63" height="77.6" [style.fill]="setGradient(Regions['Left_12'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="181.9" y="295.3" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_12')">{{ Regions['Left_12'].Runs }}({{ Regions['Left_12'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="87.4" y="256.5" width="63" height="77.6" [style.fill]="setGradient(Regions['Left_11'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="118.9" y="295.3" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_11')">{{ Regions['Left_11'].Runs }}({{ Regions['Left_11'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="29.1" y="256.5" width="58.3" height="77.6" [style.fill]="setGradient(Regions['Left_10'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="58.25" y="295.3" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_10')">{{ Regions['Left_10'].Runs }}({{ Regions['Left_10'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="150.4" y="178.9" width="63" height="77.6" [style.fill]="setGradient(Regions['Left_9'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="181.9" y="217.7" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_9')">{{ Regions['Left_9'].Runs }}({{ Regions['Left_9'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="87.4" y="178.9" width="63" height="77.6" [style.fill]="setGradient(Regions['Left_8'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="118.9" y="217.7" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_8')">{{ Regions['Left_8'].Runs }}({{ Regions['Left_8'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="29.1" y="178.9" width="58.3" height="77.6" [style.fill]="setGradient(Regions['Left_7'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="58.25" y="217.7" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_7')">{{ Regions['Left_7'].Runs }}({{ Regions['Left_7'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="150.4" y="101.2" width="63" height="77.6" [style.fill]="setGradient(Regions['Left_6'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="181.9" y="140" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_6')">{{ Regions['Left_6'].Runs }}({{ Regions['Left_6'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="87.4" y="101.2" width="63" height="77.6" [style.fill]="setGradient(Regions['Left_5'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="118.9" y="140" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_5')">{{ Regions['Left_5'].Runs }}({{ Regions['Left_5'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="29.1" y="101.2" width="58.3" height="77.6" [style.fill]="setGradient(Regions['Left_4'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="58.25" y="140" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_4')">{{ Regions['Left_4'].Runs }}({{ Regions['Left_4'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="29.1" y="23.6" width="58.3" height="77.6" [style.fill]="setGradient(Regions['Left_1'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="58.25" y="62.4" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_1')">{{ Regions['Left_1'].Runs }}({{ Regions['Left_1'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="87.4" y="23.6" width="63" height="77.6" [style.fill]="setGradient(Regions['Left_2'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="118.9" y="62.4" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_2')">{{ Regions['Left_2'].Runs }}({{ Regions['Left_2'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="150.4" y="23.6" width="63" height="77.6" [style.fill]="setGradient(Regions['Left_3'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="181.9" y="62.4" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Left_3')">{{ Regions['Left_3'].Runs }}({{ Regions['Left_3'].Balls }})</text>
+          </g>
+        </g>
+        <g id="Right-Region">
+          <line class="beehive-region-cls1" x1="276.3" y1="334.2" x2="464.7" y2="334.2"/>
+          <g>
+            <rect class="beehive-region-cls0" x="276.3" y="256.5" width="63" height="77.6" [style.fill]="setGradient(Regions['Right_10'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="307.8" y="295.3" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_10')">{{ Regions['Right_10'].Runs }}({{ Regions['Right_10'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="339.2" y="256.5" width="63" height="77.6" [style.fill]="setGradient(Regions['Right_11'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="370.7" y="295.3" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_11')">{{ Regions['Right_11'].Runs }}({{ Regions['Right_11'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="402.2" y="256.5" width="62" height="77.6" [style.fill]="setGradient(Regions['Right_12'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="433.2" y="295.3" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_12')">{{ Regions['Right_12'].Runs }}({{ Regions['Right_12'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="276.3" y="178.9" width="63" height="77.6" [style.fill]="setGradient(Regions['Right_7'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="307.8" y="217.7" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_7')">{{ Regions['Right_7'].Runs }}({{ Regions['Right_7'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="339.2" y="178.9" width="63" height="77.6" [style.fill]="setGradient(Regions['Right_8'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="370.7" y="217.7" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_8')">{{ Regions['Right_8'].Runs }}({{ Regions['Right_8'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="402.2" y="178.9" width="62" height="77.6" [style.fill]="setGradient(Regions['Right_9'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="433.2" y="217.7" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_9')">{{ Regions['Right_9'].Runs }}({{ Regions['Right_9'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="276.3" y="101.2" width="63" height="77.6" [style.fill]="setGradient(Regions['Right_4'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="307.8" y="140" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_4')">{{ Regions['Right_4'].Runs }}({{ Regions['Right_4'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="339.2" y="101.2" width="63" height="77.6" [style.fill]="setGradient(Regions['Right_5'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="370.7" y="140" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_5')">{{ Regions['Right_5'].Runs }}({{ Regions['Right_5'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="402.2" y="101.2" width="62" height="77.6" [style.fill]="setGradient(Regions['Right_6'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="433.2" y="140" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_6')">{{ Regions['Right_6'].Runs }}({{ Regions['Right_6'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="276.3" y="23.6" width="63" height="77.6" [style.fill]="setGradient(Regions['Right_1'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="307.8" y="62.4" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_1')">{{ Regions['Right_1'].Runs }}({{ Regions['Right_1'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="339.2" y="23.6" width="63" height="77.6" [style.fill]="setGradient(Regions['Right_2'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="370.7" y="62.4" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_2')">{{ Regions['Right_2'].Runs }}({{ Regions['Right_2'].Balls }})</text>
+          </g>
+          <g>
+            <rect class="beehive-region-cls0" x="402.2" y="23.6" width="62" height="77.6" [style.fill]="setGradient(Regions['Right_3'].BallsPer)"/>
+            <text class="beehive-region-cls3" x="433.2" y="62.4" text-anchor="middle" dominant-baseline="middle" (click)="onRegionClick('Right_3')">{{ Regions['Right_3'].Runs }}({{ Regions['Right_3'].Balls }})</text>
+          </g>
+        </g>
+        <g id="Stumps" class="beehive-region-cls4">
+            <rect class="beehive-region-cls2" x="227.1" y="235.8" width="4.8" height="97.9" rx=".9" ry=".9"/>
+            <rect class="beehive-region-cls2" x="243.8" y="235.8" width="4.8" height="97.9" rx=".9" ry=".9"/>
+            <rect class="beehive-region-cls2" x="259.3" y="235.8" width="4.8" height="97.9" rx=".9" ry=".9"/>
+            <rect class="beehive-region-cls2" x="231.5" y="233.5" width="12.6" height="3.6" rx=".4" ry=".4"/>
+            <rect class="beehive-region-cls2" x="248.1" y="233.5" width="12.6" height="3.6" rx=".4" ry=".4"/>
+        </g>
+        <svg id="beehiveContainer" xmlns="http://www.w3.org/2000/svg" [attr.width]="bh_Width" [attr.height]="bh_Height"
+          viewBox="-246 -310 493 355">
+
+        </svg>
+      </svg>
+  </div>
+  <app-video [matchInfo]="matchDetails()" />

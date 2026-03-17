@@ -32,7 +32,10 @@ export class GraphicsComponent {
     BowlingType:[],
     BattingType:[],
     Batsman:[],
-    Bowlers:[]
+    Bowlers:[],
+    BatSubject:[],
+    CreaseMovement:[],
+    uncomfortable: 0
   }
   selectedIndex: number = 0;
   isMobile:boolean = false;
@@ -41,7 +44,8 @@ export class GraphicsComponent {
     { text: 'Wagon Wheel', route: 'wagonwheel' },
     { text: 'Beehive', route: 'beehive' },
     { text: 'Manhatten', route: 'manhatten' },
-    { text: 'Worm', route: 'worm' }
+    { text: 'Worm', route: 'worm' },
+
   ];
   resizeObservable$!:Observable<Event>;
   currentChildRoute:string|null = null;
@@ -69,7 +73,7 @@ export class GraphicsComponent {
     });
     this.currentChildRoute = this.getCurrentChildRoute();
     this.onWindowResize();
-    
+
   }
   getCurrentChildRoute(): string | null {
     let child = this.route.firstChild;

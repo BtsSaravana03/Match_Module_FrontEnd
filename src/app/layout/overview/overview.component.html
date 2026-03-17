@@ -10,7 +10,7 @@
         </dx-tabs>
       </div>
     @if(matchDetails().inningsData){
-        <div class="mx-2 mt-3 mb-3" *ngIf="this.matchDetails().inningsData.length>0">
+        <div class="mx-2 mt-3 mb-3" *ngIf="this.matchDetails().inningsData.length>0 && TabSelected !== 'OverComparison'">
             <app-tabs [dataSource]="this.matchDetails().inningsData" displayExpression="BattingClubPrefix" keyExpression="InningsID" [visibility]="true" [TinyTabSize]="true" (onTabSelectionChange)="onInningsChange($event)"></app-tabs>
           </div>
         <app-card>
@@ -21,7 +21,12 @@
                 @else if(TabSelected === 'PhaseWise'){
                     <app-phase-wise [selctedInnings]="selctedInnings" [ballArray]="ballArray()" [matchDetails]="this.matchDetails()"></app-phase-wise>
                 }
+                @else if(TabSelected === 'OverComparison'){
+                    <div class="mt-3">
+                        <app-over-comparison [ballArray]="ballArray()" [matchDetails]="this.matchDetails()"></app-over-comparison>
+                    </div>
 
+                }
             }
         </app-card>
     }

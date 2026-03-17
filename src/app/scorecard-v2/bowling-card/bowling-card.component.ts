@@ -42,6 +42,7 @@ export class BowlingCardComponent {
             maiden: maiden,
             wkt: g.count(i=>i.Bowlwkts===1),
             economy: checkSR((g.sum(i => i.Bowlballs)/g.sum(i=>i.Bowlballs))*6),
+            economy1: Math.floor(((g.sum(i => i.Bowlruns)/g.count(i=> i.Bowlballs===1))*6)*10)/10 ,
             wide: g.count(i=>i.isWide===1),
             nb: g.count(i=>i.isNoBall===1),
             byes: g.count(i=>i.ExtraTypeId===4),

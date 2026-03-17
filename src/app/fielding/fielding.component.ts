@@ -67,7 +67,7 @@ export class FieldingComponent implements OnInit {
   getTotalCatches(id: number | null): number {
     if (id) {
       return Enumerable.from(this.ballArray())
-        .where(i => i.Dismissal > 0 && i.DismissalFielderID1 === id)
+        .where(i => i.Dismissal > 0 && i.DismissalFielderID1 === id && i.DismissalTypeID === 2)
         .count();
     }
     return 0;
@@ -76,7 +76,7 @@ export class FieldingComponent implements OnInit {
     if (id) {
       return Enumerable.from(this.ballArray())
         .where(i => i.Dismissal > 0 &&
-          (i.DismissalFielderID2 === id || (i.DismissalFielderID2 == null && i.DismissalFielderID1 === id)))
+          (i.DismissalFielderID2 === id || (i.DismissalFielderID2 == null && i.DismissalFielderID1 === id)) && i.DismissalTypeID === 4)
         .count();
     }
     return 0;

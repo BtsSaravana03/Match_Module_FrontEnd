@@ -134,6 +134,53 @@ export class VideoService {
       this.videoArray.set(videos);
       this.playVideo();
   }
+  PlayBallsArrVideos(ballsArr:BallData[]){
+    this.videoComponent?.setCurrentTab('Bat');
+    let videos = Enumerable.from(ballsArr)
+    .groupBy(
+        (x: BallData) => `${x.MatchId}-${x.BowlingClubID}-${x.deviceTime_Start}-${x.deviceTime_End}-${x.MatchId}-${x.StrikerName}-${x.InningsId}-${x.BallId}-${x.hlsPath}-${x.Overs}-${x.BowlerName}-${x.Runs}`
+      )
+      .select((group) => {
+        const maxByField = <T>(field: keyof T) => group.max((item: any) => item[field]);
+
+        return {
+          MatchID: group.first().MatchId,
+          MatchName: group.first().StrikerName,
+          BowlingStyle: group.first().DeliveryStyle,
+          DeliveryStyleID: group.first().DeliveryStyle,
+          StrikerName: group.first().StrikerName,
+          StrikerID: group.first().StrikerID,
+          BowlerName: group.first().BowlerName,
+          BowlerID: group.first().BowlerID,
+          Runs: group.first().Runs,
+          competitionid: group.first().BowlingClubID,
+          InningsID: group.first().InningsId,
+          VideoPath: group.first().InVideoPath,
+          BallID: group.first().BallId,
+          Overs: group.first().Overs,
+          StartTimeTrim: group.first().deviceTime_Start,
+          EndTimeTrim: group.first().deviceTime_End,
+          StrokeName: maxByField('StrokeType'),
+          StrokeID: group.first().StrokeType,
+          DeliveryStyleName: maxByField('DeliveryStyle'),
+          VenueName: maxByField('BowlingEnd'),
+          Dismissal: maxByField('Dismissal'),
+          TeamScore: maxByField('TeamRuns'),
+          BatsmenScore: maxByField('Batruns'),
+          ReplayVideo: maxByField('hlsPath'),
+          Ballspeed: maxByField('Penalty'),
+          VideoNA: group.first().isNoBall,
+          VideoMode: group.first().VideoMode,
+          hlsPath: group.first().hlsPath,
+          InVideoMode:group.first().InVideoMode,
+          StartFrame:group.first().StartFrame,
+          EndFrame:group.first().EndFrame,
+        };
+      })
+      .toArray();
+      this.videoArray.set(videos);
+      this.playVideo();
+  }
   PlayBallbyball(index:number,inningsID:number,BallID?:number){
     let videos = Enumerable.from(this.ballArray())
     .where(i => i.InningsId === inningsID)
@@ -181,6 +228,56 @@ export class VideoService {
       this.videoArray.set(videos);
       this.playVideo(index,BallID);
   }
+
+  PlaySingleball(index:number,inningsID:number,BallID?:number){
+    let videos = Enumerable.from(this.ballArray())
+    .where(i => i.InningsId === inningsID && i.BallId === BallID)
+    .groupBy(
+        (x: BallData) => `${x.MatchId}-${x.BowlingClubID}-${x.deviceTime_Start}-${x.deviceTime_End}-${x.MatchId}-${x.StrikerName}-${x.InningsId}-${x.BallId}-${x.hlsPath}-${x.Overs}-${x.BowlerName}-${x.Runs}`
+      )
+      .select((group) => {
+        const maxByField = <T>(field: keyof T) => group.max((item: any) => item[field]);
+
+        return {
+          MatchID: group.first().MatchId,
+          MatchName: group.first().StrikerName,
+          BowlingStyle: group.first().DeliveryStyle,
+          DeliveryStyleID: group.first().DeliveryStyle,
+          StrikerName: group.first().StrikerName,
+          StrikerID: group.first().StrikerID,
+          BowlerName: group.first().BowlerName,
+          BowlerID: group.first().BowlerID,
+          Runs: group.first().Runs,
+          competitionid: group.first().BowlingClubID,
+          InningsID: group.first().InningsId,
+          VideoPath: group.first().InVideoPath,
+          BallID: group.first().BallId,
+          Overs: group.first().Overs,
+          StartTimeTrim: group.first().deviceTime_Start,
+          EndTimeTrim: group.first().deviceTime_End,
+          StrokeName: maxByField('StrokeType'),
+          StrokeID: group.first().StrokeType,
+          DeliveryStyleName: maxByField('DeliveryStyle'),
+          VenueName: maxByField('BowlingEnd'),
+          Dismissal: maxByField('Dismissal'),
+          TeamScore: maxByField('TeamRuns'),
+          BatsmenScore: maxByField('Batruns'),
+          ReplayVideo: maxByField('hlsPath'),
+          Ballspeed: maxByField('Penalty'),
+          VideoNA: group.first().isNoBall,
+          VideoMode: group.first().VideoMode,
+          hlsPath: group.first().hlsPath,
+          InVideoMode:group.first().InVideoMode,
+          StartFrame:group.first().StartFrame,
+          EndFrame:group.first().EndFrame,
+        };
+      })
+      .toArray();
+      this.videoArray.set(videos);
+      this.playVideo(index,BallID);
+  }
+
+
   LibraryBallVideo(PlayerID:number, type:any, inningsId:number) {
     let videos = Enumerable.from(this.ballArray())
       .where((x: BallData) => this.checkBallVideoFilter(x, PlayerID, type) && x.InningsId === inningsId)
@@ -452,6 +549,9 @@ export class VideoService {
         return true
       }
     }
+    return false;
+  }
+  checkRegionFilter(region:string,ball:BallData):boolean{
     return false;
   }
 }

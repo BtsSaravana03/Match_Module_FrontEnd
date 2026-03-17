@@ -28,6 +28,23 @@ export class FilterComponent implements OnInit,AfterViewInit {
   popoverComponent = viewChild<DxPopoverComponent>('filterPopover');
   Batsman:{Id:number,Name:string}[] = [];
   Bowler:{Id:number,Name:string}[] = [];
+  shotTypes = [
+  { id: 1, label: 'Attacking' },
+  { id: 2, label: 'Defensive' },
+  { id: 3, label: 'Left Alone' },
+  { id: 5, label: 'Beaten' },
+  { id: 6, label: 'Rotating' },
+  { id: 7, label: 'Play & Miss' }
+];
+creaseMovementTypes = [
+  { id: 2, label: 'Front Foot' },
+  { id: 3, label: 'Back Foot' },
+  { id: 4, label: 'Charging' },
+  { id: 5, label: 'Ducked' },
+  { id: 13, label: 'Walking Across' },
+  { id: 14, label: 'Creating Room' }
+];
+
   tabsWithIcon = [
     {
       id: 0,
@@ -47,7 +64,10 @@ export class FilterComponent implements OnInit,AfterViewInit {
     BowlingType:[],
     BattingType:[],
     Batsman:[],
-    Bowlers:[]
+    Bowlers:[],
+    BatSubject:[],
+    CreaseMovement:[],
+    uncomfortable: 0
   };
   slideAnimation = {
     show: {
@@ -80,7 +100,7 @@ export class FilterComponent implements OnInit,AfterViewInit {
   onTabSelectionChange(e: any) {
     this.selectedTabIndex = e.itemIndex;
   }
-  onCheckboxChange(filterName: keyof Omit<GraphicsFilter,'Innings'>, id: number, isChecked: boolean): void {
+  onCheckboxChange(filterName: keyof Omit<GraphicsFilter,'Innings'|'uncomfortable'>, id: number, isChecked: boolean): void {
     const filterArray = this.appliedFilters[filterName];
     if (isChecked) {
       if (!filterArray.includes(id)) {

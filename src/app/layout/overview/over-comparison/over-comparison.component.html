@@ -1,0 +1,41 @@
+
+<dx-tabs [visible]="isTestMatch" [width]="'fit-content'" [rtlEnabled]="false" [scrollByContent]="true" [noDataText]="''"
+      [focusStateEnabled]="false" [className]="'innings-template  mb-3'" [showNavButtons]="true" [selectedItem]="TabSelected1"
+      [dataSource]="Tabs" [orientation]="'horizontal'" (onSelectionChanged)="onTabChangeF($event)"
+      [stylingMode]="'secondary'">
+</dx-tabs>
+
+
+
+<dx-data-grid [dataSource]="overComparison" [allowColumnReordering]="true" keyExpr="OverNo" [showColumnLines]="true"
+  [sorting]="{mode:'none'}" [showRowLines]="true" [showBorders]="true" [elementAttr]="{ class: 'custom-data-grid' }"
+  [allowColumnResizing]="true" [columnAutoWidth]="true" >
+ 
+  
+  <!-- Define Columns -->
+  <dxi-column dataField="OverNo" caption="Over"></dxi-column>
+  <dxi-column caption="{{TeamB}}" alignment="center">
+    <dxi-column dataField="BowlerA" caption="Bowler"></dxi-column>
+    <dxi-column dataField="TeamScoreA" caption="Score"></dxi-column>
+    <dxi-column dataField="RunRateA" caption="RR"></dxi-column>
+    <dxi-column dataField="RunsA" caption="R"  [cssClass]="'team-highlight'"></dxi-column>
+    <dxi-column dataField="FourSixA" caption="4s/6s"></dxi-column>
+    <dxi-column dataField="OneTwoThreeA" caption="1s/2s/3s"></dxi-column>
+    <dxi-column dataField="BoundRateA" caption="Bdry%"></dxi-column>
+    <dxi-column dataField="DotRateA" caption="Dot%"></dxi-column>
+  </dxi-column>
+  <dxi-column caption="{{TeamA}}" alignment="center">
+    <dxi-column dataField="BowlerB" caption="Bowler"></dxi-column>
+    <dxi-column dataField="TeamScoreB" caption="Score" ></dxi-column>
+    <dxi-column dataField="RunRateB" caption="RR"></dxi-column>
+    <dxi-column dataField="RunsB" caption="R" [cssClass]="'team-highlight'"></dxi-column>
+    <dxi-column dataField="FourSixB" caption="4s/6s"></dxi-column>
+    <dxi-column dataField="OneTwoThreeB" caption="1s/2s/3s"></dxi-column>
+    <dxi-column dataField="BoundRateB" caption="Bdry%"></dxi-column>
+    <dxi-column dataField="DotRateB" caption="Dot%"></dxi-column>
+  </dxi-column>
+
+
+  <dxo-scrolling mode="infinite"></dxo-scrolling>
+
+</dx-data-grid>

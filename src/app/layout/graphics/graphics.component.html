@@ -73,5 +73,21 @@
 
       </ng-container>
     </div>
+    <div id="BeehiveRegion" #BeehiveRegion *ngIf="TabSelected==='BeehiveRegion'">
+        <ng-container>
+          <div class="graphics-mobile-flex">
+            <div class="graphic-filter">
+              <!-- <button id="beehive_filter_btn" class="filter-btn" *ngIf="isMobile()"><i
+                  class="fa-solid fa-filter"></i></button> -->
+              <app-graphics-filter [ballArray]="ballArrayFiltered()" [mobile_view]="isMobile()"
+                [SelectedInnings]="selctedInnings()"></app-graphics-filter>
+            </div>
+            <div class="graphics">
+              <app-beehive-region [ballArray]="ballArrayFiltered()"></app-beehive-region>
+            </div>
+          </div>
+
+        </ng-container>
+      </div>
   </div>
 </div>

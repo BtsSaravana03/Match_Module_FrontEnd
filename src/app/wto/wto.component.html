@@ -1,0 +1,46 @@
+<div>
+  <!-- <app-innings-tab (inningsChange)="onInningsChange($event)" /> -->
+  <dx-data-grid [dataSource]="ballArrayFilteredWTO" keyExpr="AutoId" [showColumnLines]="true"
+    [sorting]="{mode:'multiple'}" [showRowLines]="true" [showBorders]="true"
+    [elementAttr]="{ class: 'custom-data-grid' }" [allowColumnReordering]="true" [allowColumnResizing]="true"
+     [columnAutoWidth]="true">
+
+    <!-- <dxo-column-fixing [enabled]="true"></dxo-column-fixing> -->
+    <dxi-column caption="Field Action" alignment="left" cellTemplate="FieldTypeTemplate"></dxi-column>
+    <dxi-column dataField="Overs" caption="O" alignment="left"></dxi-column>
+    <dxi-column dataField="BowlerName" caption="Bowler" alignment="left"></dxi-column>
+    <dxi-column dataField="StrikerName" caption="Batsman" alignment="left"></dxi-column>
+    <dxi-column dataField="NonStrikerName" caption="NonStriker" alignment="left"></dxi-column>
+    <dxi-column dataField="FielderName" caption="Fielder" alignment="left"></dxi-column>
+    <dxi-column dataField="BatrunsRunning" caption="Batter Score" alignment="left"></dxi-column>
+    <dxi-column dataField="FinalBatrunsRunning" caption="Batter Final Score" alignment="left"></dxi-column>
+    <!-- <dxi-column  dataField="TeamRuns"caption="Team Score" alignment="left"></dxi-column> -->
+    <!-- <dxi-column caption="Team Score" alignment="left">
+         <ng-template dxTemplate="cellTemplate" let-data>{{data.TeamRuns}} / {{data.TeamWickets}}</ng-template>
+    </dxi-column> -->
+ 
+    <dxi-column caption="Team Score" alignment="left" cellTemplate="TeamScoreTemplate"></dxi-column>
+    <dxi-column cellTemplate="cellTemplate" alignment="center" width="50px"></dxi-column>
+
+   <div *dxTemplate="let data of 'cellTemplate'">
+      <i class="fa-solid fa-circle-play fa-lg " style="color: #74C0FC;" (click)="onCellClick(data.row.dataIndex,data.data)"></i>
+    </div>
+    <div *dxTemplate="let d of 'FieldTypeTemplate'">
+      {{ 
+        d.data.FieldType == 1 ? 'Drop Catch' : 
+        d.data.FieldType == 2 ? 'Miss Runout' :
+        d.data.FieldType == 5 ? 'Miss Stumping' : '' 
+      }}
+    </div>
+ 
+
+    <div *dxTemplate="let d of 'TeamScoreTemplate'">
+      {{d.data.TeamRuns}}/{{d.data.TeamWickets}}
+    </div>
+
+  </dx-data-grid>
+
+</div>
+
+ 
+<app-video [selctedInnings]="this.selctedInnings()" [matchInfo]="matchDetails()" />
