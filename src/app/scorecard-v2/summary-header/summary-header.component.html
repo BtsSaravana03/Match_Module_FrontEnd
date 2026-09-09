@@ -226,15 +226,17 @@
               {{dataChunks.lastFiveOvers.Runs}} / {{dataChunks.lastFiveOvers.Wickets}}
             </div>
           </div>
-          @if(lastBall?.InningsId === 2){
-            <div class="item-container">
-                <div class="item">
-                    At this Stage
+          @if(lastBall?.InningsId === 2 || (isTestMatch(matchDetails().MatchTypeID) && lastBall && lastBall.InningsId > 1)){
+             @if((!isTestMatch(matchDetails().MatchTypeID))){
+               <div class="item-container">        
+                  <div class="item">
+                      At this Stage
+                  </div>
+                  <div class="value">
+                      {{dataChunks.secondInningsStage.runs}} / {{dataChunks.secondInningsStage.wickets}}
+                  </div>
                 </div>
-                <div class="value">
-                    {{dataChunks.secondInningsStage.runs}} / {{dataChunks.secondInningsStage.wickets}}
-                </div>
-              </div>
+              }            
               @if(matchDetails().MomPlayerName){
                 <div class="item-container">
                     <div class="item">

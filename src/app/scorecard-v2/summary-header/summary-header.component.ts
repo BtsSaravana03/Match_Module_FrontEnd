@@ -9,34 +9,34 @@ import { calculateOvers, getCurrentBallDescription, isTestMatch, oversSplit, ove
 import { splitName } from '../../scripts/generic';
 import { AppService } from '../../services/app.service';
 
-interface TeamSummary{
-  TeamID:number,
-  Total:number,
-  Dismissal:number,
-  isCurrentInn:boolean,
-  Overs:number
+interface TeamSummary {
+  TeamID: number,
+  Total: number,
+  Dismissal: number,
+  isCurrentInn: boolean,
+  Overs: number
 };
 interface DataChunks {
-    projections: {
-        at8RPO: number;
-        at10RPO: number;
-    };
-    currentRunRate: number;
-    requiredRunRate: number;
-    lastEvents: {
-        boundary: BallData | null|undefined;
-        six: BallData | null|undefined;
-        dotBall: BallData | null |undefined;
-    };
-    lastFiveOvers: {
-        Runs:number;
-        Wickets:number
-    };
-    secondInningsStage: {
-        runs: number;
-        wickets: number;
-        overs: number;
-    };
+  projections: {
+    at8RPO: number;
+    at10RPO: number;
+  };
+  currentRunRate: number;
+  requiredRunRate: number;
+  lastEvents: {
+    boundary: BallData | null | undefined;
+    six: BallData | null | undefined;
+    dotBall: BallData | null | undefined;
+  };
+  lastFiveOvers: {
+    Runs: number;
+    Wickets: number
+  };
+  secondInningsStage: {
+    runs: number;
+    wickets: number;
+    overs: number;
+  };
 }
 
 @Component({
@@ -46,61 +46,61 @@ interface DataChunks {
   templateUrl: './summary-header.component.html',
   styleUrl: './summary-header.component.scss'
 })
-export class SummaryHeaderComponent implements OnChanges{
+export class SummaryHeaderComponent implements OnChanges {
   private appServices = inject(AppService);
   overContainerDiv = viewChild<ElementRef>('overContainer')
   ballArray = input.required<BallData[]>();
   summary = input.required<BattingCardSummary[]>();
   matchDetails = input.required<MatchData>();
   selctedInnings = input.required<number>();
-  currentInnings = input.required<number|undefined>();
+  currentInnings = input.required<number | undefined>();
   isMobile = signal<boolean>(false);
-  MatchDateFormatted:string = '-';
-  TeamASummary:TeamSummary[]|[]= [];
-  TeamBSummary:TeamSummary[]|[]= [];
-  CurrentOver:number|null = null;
-  CurrentOverRuns:any[] = [];
-  strikerData:any[] = [];
-  nonStrikerData:any[] = [];
-  bowlerData:any[] = [];
-  description:string = '';
-  MatchStartMsg:string = 'Yet to start';
-  expand:boolean = true;
-  lastBall:BallData|undefined;
-  hideRequiredRR:boolean = true;
-  dataChunks:DataChunks = {
+  MatchDateFormatted: string = '-';
+  TeamASummary: TeamSummary[] | [] = [];
+  TeamBSummary: TeamSummary[] | [] = [];
+  CurrentOver: number | null = null;
+  CurrentOverRuns: any[] = [];
+  strikerData: any[] = [];
+  nonStrikerData: any[] = [];
+  bowlerData: any[] = [];
+  description: string = '';
+  MatchStartMsg: string = 'Yet to start';
+  expand: boolean = true;
+  lastBall: BallData | undefined;
+  hideRequiredRR: boolean = true;
+  dataChunks: DataChunks = {
     projections: {
-        at8RPO: 0,
-        at10RPO: 0
+      at8RPO: 0,
+      at10RPO: 0
     },
     currentRunRate: 0,
     requiredRunRate: 0,
     lastEvents: {
-        boundary: null,
-        six: null,
-        dotBall: null
+      boundary: null,
+      six: null,
+      dotBall: null
     },
     lastFiveOvers: {
-        Runs: 0,
-        Wickets:0
+      Runs: 0,
+      Wickets: 0
     },
     secondInningsStage: {
-        runs: 0,
-        wickets: 0,
-        overs: 0
+      runs: 0,
+      wickets: 0,
+      overs: 0
     }
-};
-  constructor(){
-    effect(()=>{
-      if(this.summary() && this.matchDetails()){
+  };
+  constructor() {
+    effect(() => {
+      if (this.summary() && this.matchDetails()) {
         this.updateSummary();
         setTimeout(() => {
-            if(this.overContainerDiv()){
-                this.overContainerDiv()!.nativeElement.scrollLeft = this.overContainerDiv()!.nativeElement.scrollWidth;
-            }
-            if(this.lastBall){
-                this.dataChunks = this.calculateStats(this.ballArray(),this.lastBall,this.matchDetails().MatchOvers)
-            }
+          if (this.overContainerDiv()) {
+            this.overContainerDiv()!.nativeElement.scrollLeft = this.overContainerDiv()!.nativeElement.scrollWidth;
+          }
+          if (this.lastBall) {
+            this.dataChunks = this.calculateStats(this.ballArray(), this.lastBall, this.matchDetails().MatchOvers)
+          }
         }, 0);
       }
     });
@@ -108,109 +108,119 @@ export class SummaryHeaderComponent implements OnChanges{
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-      if(changes['ballArray']){
-        this.updateIndividualScores();
-        this.generateEquation();
-        if(this.overContainerDiv()){
-            this.overContainerDiv()!.nativeElement.scrollLeft = this.overContainerDiv()!.nativeElement.scrollWidth;
-        }
-        if(this.lastBall){
-            this.dataChunks = this.calculateStats(this.ballArray(),this.lastBall,this.matchDetails().MatchOvers)
-        }
+    if (changes['ballArray']) {
+      this.updateIndividualScores();
+      this.generateEquation();
+      if (this.overContainerDiv()) {
+        this.overContainerDiv()!.nativeElement.scrollLeft = this.overContainerDiv()!.nativeElement.scrollWidth;
       }
+      if (this.lastBall) {
+        this.dataChunks = this.calculateStats(this.ballArray(), this.lastBall, this.matchDetails().MatchOvers)
+      }
+    }
   }
-  updateSummary(){
+  updateSummary() {
     //This is summary Header for Scores
     this.TeamASummary = [];
     this.TeamBSummary = [];
-    if(this.matchDetails().inningsData && this.matchDetails().inningsData.length>0){
+    if (this.matchDetails().inningsData && this.matchDetails().inningsData.length > 0) {
       this.TeamASummary = Enumerable.from(this.summary())
-      .where(i=> i.BattingClubId === this.matchDetails()?.inningsData[0]?.BattingClubID)
-      .groupBy(i=> `${i.BattingClubId}-${i.Innings}`).select(g=>{
-        return{
-          TeamID: g.first()?.BattingClubId,
-          Total:g.first()?.TeamTotal,
-          Dismissal:g.first()?.Dismissals,
-          isCurrentInn:g.first().Innings===this.currentInnings()?true:false,
-          Overs:g.first()?.Overs
-        }
-      }).toArray();
+        .where(i => i.BattingClubId === this.matchDetails()?.inningsData[0]?.BattingClubID)
+        .groupBy(i => `${i.BattingClubId}-${i.Innings}`).select(g => {
+          return {
+            TeamID: g.first()?.BattingClubId,
+            Total: g.first()?.TeamTotal,
+            Dismissal: g.first()?.Dismissals,
+            isCurrentInn: g.first().Innings === this.currentInnings() ? true : false,
+            Overs: g.first()?.Overs
+          }
+        }).toArray();
       this.TeamBSummary = Enumerable.from(this.summary())
-      .where(i=> i.BattingClubId === this.matchDetails()?.inningsData[0]?.BowlingClubID)
-      .groupBy(i=> `${i.BattingClubId}-${i.Innings}`).select(g=>{
-        return{
-          TeamID: g.first()?.BattingClubId,
-          Total:g.first()?.TeamTotal,
-          Dismissal:g.first()?.Dismissals,
-          isCurrentInn:g.first().Innings===this.currentInnings()?true:false,
-          Overs:g.first()?.Overs
-        }
-      }).toArray();
+        .where(i => i.BattingClubId === this.matchDetails()?.inningsData[0]?.BowlingClubID)
+        .groupBy(i => `${i.BattingClubId}-${i.Innings}`).select(g => {
+          return {
+            TeamID: g.first()?.BattingClubId,
+            Total: g.first()?.TeamTotal,
+            Dismissal: g.first()?.Dismissals,
+            isCurrentInn: g.first().Innings === this.currentInnings() ? true : false,
+            Overs: g.first()?.Overs
+          }
+        }).toArray();
     }
     //This is for venue and other details
-    this.MatchDateFormatted = this.matchDetails().Date?moment(this.matchDetails().Date).format('dddd Do MMMM YYYY, HH:mm'):'-';
+    this.MatchDateFormatted = this.matchDetails().Date ? moment(this.matchDetails().Date).format('dddd Do MMMM YYYY, HH:mm') : '-';
   }
 
-  updateIndividualScores(){
+  updateIndividualScores() {
     let balls = this.ballArray();
     let lastBall = _.last(balls);
     this.lastBall = lastBall;
-    if(lastBall){
-        this.CurrentOver = lastBall.Overs;
-        this.CurrentOverRuns = Enumerable.from(balls)
+    if (lastBall) {
+      this.CurrentOver = lastBall.Overs;
+      this.CurrentOverRuns = Enumerable.from(balls)
         .where(i => i.InningsId === lastBall.InningsId)
         .takeFromLast(50)
         .groupBy(i => `${i.OverId}`)
-        .select((g)=>{
-            return {
-                overId: g.first().OverId,
-                overBalls: g.select(ball => ({
-                    four: ball.isFour === 1 ? true : false,
-                    six: ball.isSix === 1 ? true : false,
-                    run: getCurrentBallDescription(ball),
-                    wicket: ball.Dismissal === 1 ? true : false
-                })).toArray()
-            };
+        .select((g) => {
+          return {
+            overId: g.first().OverId,
+            overBalls: g.select(ball => ({
+              four: ball.isFour === 1 ? true : false,
+              six: ball.isSix === 1 ? true : false,
+              run: getCurrentBallDescription(ball),
+              wicket: ball.Dismissal === 1 ? true : false
+            })).toArray()
+          };
         }).toArray();
-        let [striker,nonStriker] = lastBall.Partnerid.split('-');
-        this.strikerData = Enumerable.from(balls).where(i => i.StrikerID === parseInt(striker))
+      let [striker, nonStriker] = lastBall.Partnerid.split('-');
+      let strikerQuery = Enumerable.from(balls).where(i => i.StrikerID === parseInt(striker));
+      let nonStrikerQuery = Enumerable.from(balls).where(i => i.StrikerID === parseInt(nonStriker));
+      let bowlerQuery = Enumerable.from(balls).where(i => i.BowlerID === lastBall.BowlerID);
+
+      if (isTestMatch(this.matchDetails().MatchTypeID)) {
+        strikerQuery = strikerQuery.where(i => i.InningsId === lastBall.InningsId);
+        nonStrikerQuery = nonStrikerQuery.where(i => i.InningsId === lastBall.InningsId);
+        bowlerQuery = bowlerQuery.where(i => i.InningsId === lastBall.InningsId);
+      }
+
+      this.strikerData = strikerQuery
         .groupBy(i => `${i.Partnerid}-${i.StrikerID}-${i.NonStrikerID}`)
-        .select(g =>{
-            const {firstname,lastname} = splitName(g.first().StrikerName);
-            const strikerID = g.first().StrikerID;
-            return{
-                FirstName:firstname,
-                LastName:lastname,
-                Runs:g.sum(i => i.Batruns),
-                Balls: g.sum(i => i.Batballs),
-                isStriker: strikerID === lastBall.StrikerID?true:false
-            }
+        .select(g => {
+          const { firstname, lastname } = splitName(g.first().StrikerName);
+          const strikerID = g.first().StrikerID;
+          return {
+            FirstName: firstname,
+            LastName: lastname,
+            Runs: g.sum(i => i.Batruns),
+            Balls: g.sum(i => i.Batballs),
+            isStriker: strikerID === lastBall.StrikerID ? true : false
+          }
         }).toArray();
-        this.nonStrikerData = Enumerable.from(balls).where(i => i.StrikerID === parseInt(nonStriker))
+      this.nonStrikerData = nonStrikerQuery
         .groupBy(i => `${i.StrikerID}`)
-        .select(g =>{
-            const {firstname,lastname} = splitName(g.first().StrikerName);
-            const strikerID = g.first().StrikerID;
-            return{
-                FirstName:firstname,
-                LastName:lastname,
-                Runs:g.sum(i => i.Batruns),
-                Balls: g.sum(i => i.Batballs),
-                isStriker: strikerID === lastBall.StrikerID?true:false
-            }
+        .select(g => {
+          const { firstname, lastname } = splitName(g.first().StrikerName);
+          const strikerID = g.first().StrikerID;
+          return {
+            FirstName: firstname,
+            LastName: lastname,
+            Runs: g.sum(i => i.Batruns),
+            Balls: g.sum(i => i.Batballs),
+            isStriker: strikerID === lastBall.StrikerID ? true : false
+          }
         }).toArray();
-        this.bowlerData = Enumerable.from(balls).where(i => i.BowlerID === lastBall.BowlerID)
+      this.bowlerData = bowlerQuery
         .groupBy(i => `${i.BowlerID}`)
-        .select(g =>{
-            const {firstname,lastname} = splitName(g.first().BowlerName);
-            const BowlerID = g.first().BowlerID;
-            return{
-                FirstName:firstname,
-                LastName:lastname,
-                Runs:g.sum(i => i.Bowlruns),
-                Overs: parseFloat(calculateOvers(g.sum(i=> i.Bowlballs===1?1:0))),
-                Wickets: g.count(i=>i.Bowlwkts===1)
-            }
+        .select(g => {
+          const { firstname, lastname } = splitName(g.first().BowlerName);
+          const BowlerID = g.first().BowlerID;
+          return {
+            FirstName: firstname,
+            LastName: lastname,
+            Runs: g.sum(i => i.Bowlruns),
+            Overs: parseFloat(calculateOvers(g.sum(i => i.Bowlballs === 1 ? 1 : 0))),
+            Wickets: g.count(i => i.Bowlwkts === 1)
+          }
         }).toArray();
     }
   }
@@ -219,131 +229,133 @@ export class SummaryHeaderComponent implements OnChanges{
     const matchDetails = this.matchDetails();
     const inningsData = matchDetails?.inningsData ?? [];
     const currentInningIndex = this.currentInnings()! - 1;
-    if(inningsData.length > 0){
-        if(this.matchDetails().MatchComplete){
-            let teamWon = this.matchDetails().result.find(i => i.Won === 1);
-            if(teamWon){
-                let addon = (teamWon?.DuckWorthLewis === 1)?'(DLS method)':'';
-                addon = (teamWon?.SuperOver === 1)?'(one-over eliminator)':'';
-                this.description = `${teamWon?.ClubName} ${teamWon?.Result} ${addon}`;
-            }
+    if (inningsData.length > 0) {
+      if (this.matchDetails().MatchComplete) {
+        let teamWon = this.matchDetails().result.find(i => i.Won === 1);
+        if (teamWon) {
+          let addon = (teamWon?.DuckWorthLewis === 1) ? '(DLS method)' : '';
+          addon = (teamWon?.SuperOver === 1) ? '(one-over eliminator)' : '';
+          this.description = `${teamWon?.ClubName} ${teamWon?.Result} ${addon}`;
         }
-        else{
-            if (inningsData.length > 0 && this.currentInnings() === 1) {
-                const tossWinner = inningsData.find(i => i.TossWin === 1);
-                if (tossWinner) {
-                    if (tossWinner.WinTeam === tossWinner.BattingClubID) {
-                        this.description = `${tossWinner.BattingClubName} elected to bat`;
-                    } else if (tossWinner.WinTeam === tossWinner.BowlingClubID) {
-                        this.description = `${tossWinner.BowlingClubName} elected to bowl`;
-                    }
-                }
+      }
+      else {
+        if (inningsData.length > 0 && this.currentInnings() === 1) {
+          const tossWinner = inningsData.find(i => i.TossWin === 1);
+          if (tossWinner) {
+            if (tossWinner.WinTeam === tossWinner.BattingClubID) {
+              this.description = `${tossWinner.BattingClubName} elected to bat`;
+            } else if (tossWinner.WinTeam === tossWinner.BowlingClubID) {
+              this.description = `${tossWinner.BowlingClubName} elected to bowl`;
             }
-            if (!isTestMatch(matchDetails.MatchTypeID)) {
-                 if (inningsData.length > 0 && this.currentInnings() === 2) {
-                    // Second Innings Description for Limited overs
-                    const inning2data = this.summary()[1] ?this.summary()[1]: null;
-                    if (inning2data) {
-                        const TeamName = matchDetails.inningsData[1].BattingClubName;
-                        const inning1data = this.summary()[0];
-                        let neededRuns = inning1data.TeamTotal - inning2data.TeamTotal;
-                        let remainingBalls = oversToBalls(matchDetails.MatchOvers) - oversToBalls(inning2data.Overs);
-                        let revisedBalls = matchDetails.inningsData[1].RevisedOvers;
-                        let revisedTarget = matchDetails.inningsData[1].RevisedTarget;
-                        if (revisedBalls) {
-                            remainingBalls = revisedBalls - oversToBalls(inning2data.Overs);
-                        }
-                        if (revisedTarget) {
-                            neededRuns = revisedTarget - inning2data.TeamTotal;
-                        }
-                        this.description = `${TeamName} needed ${neededRuns<0?0:neededRuns} to win from ${remainingBalls}`;
-                    }
-                }
-            } else {
-                if(typeof(this.currentInnings()) === 'number'){
-                    const currentInning = inningsData[currentInningIndex] ?? {};
-                    const opponentInning = inningsData[currentInningIndex % 2 === 0 ? currentInningIndex + 1 : currentInningIndex - 1] ?? {};
-                    const summary = this.summary();
-                    // Extract relevant totals
-                    const currentTeamName = currentInning.BattingClubName;
-                    const currentTeamTotal = summary[currentInningIndex].TeamTotal ?? 0;
-                    const opponentTotal1 = summary[0]?.TeamTotal ?? 0; // Team A's 1st Innings
-                    const opponentTotal2 = summary[2]?.TeamTotal ?? 0; // Team A's 2nd Innings
-                    const opponentOverallTotal = opponentTotal1 + opponentTotal2;
-                    const currentTotal1 = summary[1]?.TeamTotal ?? 0; // Team B's 1st Innings
-                    const currentTotal2 = summary[3]?.TeamTotal ?? 0; // Team B's 2nd Innings
-                    const currentOverallTotal = currentTotal1 + currentTotal2;
+          }
+        }
+        if (!isTestMatch(matchDetails.MatchTypeID)) {
+          if (inningsData.length > 0 && this.currentInnings() === 2) {
+            // Second Innings Description for Limited overs
+            const inning2data = this.summary()[1] ? this.summary()[1] : null;
+            if (inning2data) {
+              const TeamName = matchDetails.inningsData[1].BattingClubName;
+              const inning1data = this.summary()[0];
+              let neededRuns = (inning1data.TeamTotal - inning2data.TeamTotal) + 1;
+              let remainingBalls = oversToBalls(matchDetails.MatchOvers) - oversToBalls(inning2data.Overs);
+              let revisedBalls = matchDetails.inningsData[1].RevisedOvers;
+              let revisedTarget = matchDetails.inningsData[1].RevisedTarget;
+              if (revisedBalls) {
+                remainingBalls = revisedBalls - oversToBalls(inning2data.Overs);
+              }
+              if (revisedTarget) {
+                neededRuns = revisedTarget - inning2data.TeamTotal;
+              }
+              this.description = `${TeamName} needed ${neededRuns < 0 ? 0 : neededRuns} to win from ${remainingBalls}`;
+            }
+          }
+        } else {
+          if (typeof (this.currentInnings()) === 'number') {
+            const currentInning = inningsData[currentInningIndex] ?? {};
+            const opponentInning = inningsData[currentInningIndex % 2 === 0 ? currentInningIndex + 1 : currentInningIndex - 1] ?? {};
+            const summary = this.summary();
+            // Extract relevant totals
+            const currentTeamName = currentInning.BattingClubName;
+            const currentTeamTotal = summary[currentInningIndex].TeamTotal ?? 0;
+            const opponentTotal1 = summary[0]?.TeamTotal ?? 0; // Team A's 1st Innings
+            const opponentTotal2 = summary[2]?.TeamTotal ?? 0; // Team A's 2nd Innings
+            const opponentOverallTotal = opponentTotal1 + opponentTotal2;
+            const currentTotal1 = summary[1]?.TeamTotal ?? 0; // Team B's 1st Innings
+            const currentTotal2 = summary[3]?.TeamTotal ?? 0; // Team B's 2nd Innings
+            const currentOverallTotal = currentTotal1 + currentTotal2;
 
-                    // Follow-On Check
-                    if (matchDetails.isFollowOn === 1 && currentInningIndex === 2) {
-                        // Follow-on scenario, 3rd Innings
-                        this.description = `${currentTeamName} are batting in the 3rd innings after following on`;
-                    } else if (matchDetails.isFollowOn === 1 && currentInningIndex === 3) {
-                        // Follow-on scenario, 4th Innings
-                        const neededRuns = opponentOverallTotal - currentOverallTotal + 1;
-                        this.description = `${currentTeamName} need ${neededRuns} runs to win in the 4th innings`;
-                    } else {
-                        // Non-follow-on scenario
-                        if (currentInningIndex === 1) {
-                            if (currentTeamTotal > opponentTotal1) {
-                                const leadBy = currentTeamTotal - opponentTotal1;
-                                this.description = `${currentTeamName} lead by ${leadBy} runs in the 1st innings`;
-                            } else if (currentTeamTotal < opponentTotal1) {
-                                const trailBy = opponentTotal1 - currentTeamTotal;
-                                this.description = `${currentTeamName} trail by ${trailBy} runs in the 1st innings`;
-                            } else {
-                                this.description = `${currentTeamName} are level with ${inningsData[0]?.BattingClubName}`;
-                            }
-                        } else if (currentInningIndex === 2 || currentInningIndex === 3) {
-                            // Lead or Chase for 3rd and 4th Innings
-                            if (currentInningIndex === 2) {
-                                const leadBy = opponentOverallTotal - currentTotal1;
-                                if (leadBy > 0) {
-                                    this.description = `${currentTeamName} lead by ${leadBy} runs in the 3rd innings`;
-                                } else {
-                                    this.description = `${currentTeamName} trail by ${Math.abs(leadBy)} runs in the 3rd innings`;
-                                }
-                            } else if (currentInningIndex === 3) {
-                                const neededRuns = opponentOverallTotal - currentOverallTotal + 1;
-                                if (neededRuns > 0) {
-                                    this.description = `${currentTeamName} need ${neededRuns} runs to win in the 4th innings`;
-                                } else {
-                                    const leadBy = Math.abs(neededRuns);
-                                    this.description = `${currentTeamName} lead by ${leadBy} runs in the 4th innings`;
-                                }
-                            }
-                        }
-                    }
+            // Follow-On Check
+            if (matchDetails.isFollowOn === 1 && currentInningIndex === 2) {
+              // Follow-on scenario, 3rd Innings
+              this.description = `${currentTeamName} are batting in the 3rd innings after following on`;
+            } else if (matchDetails.isFollowOn === 1 && currentInningIndex === 3) {
+              // Follow-on scenario, 4th Innings
+              const neededRuns = opponentOverallTotal - currentOverallTotal + 1;
+              this.description = `${currentTeamName} need ${neededRuns} runs to win in the 4th innings`;
+            } else {
+              // Non-follow-on scenario
+              if (currentInningIndex === 1) {
+                if (currentTeamTotal > opponentTotal1) {
+                  const leadBy = currentTeamTotal - opponentTotal1;
+                  this.description = `${currentTeamName} lead by ${leadBy} runs in the 1st innings`;
+                } else if (currentTeamTotal < opponentTotal1) {
+                  const trailBy = opponentTotal1 - currentTeamTotal;
+                  this.description = `${currentTeamName} trail by ${trailBy} runs in the 1st innings`;
+                } else {
+                  this.description = `${currentTeamName} are level with ${inningsData[0]?.BattingClubName}`;
                 }
+              } else if (currentInningIndex === 2 || currentInningIndex === 3) {
+                // Lead or Chase for 3rd and 4th Innings
+                if (currentInningIndex === 2) {
+                  const leadBy = opponentOverallTotal - currentTotal1;
+                  if (leadBy > 0) {
+                    this.description = `${currentTeamName} lead by ${leadBy} runs in the 3rd innings`;
+                  } else {
+                    this.description = `${currentTeamName} trail by ${Math.abs(leadBy)} runs in the 3rd innings`;
+                  }
+                } else if (currentInningIndex === 3) {
+                  const neededRuns = opponentOverallTotal - currentOverallTotal + 1;
+                  if (neededRuns > 0) {
+                    this.description = `${currentTeamName} need ${neededRuns} runs to win in the 4th innings`;
+                  } else {
+                    const leadBy = Math.abs(neededRuns);
+                    this.description = `${currentTeamName} lead by ${leadBy} runs in the 4th innings`;
+                  }
+                }
+              }
             }
+          }
         }
+      }
     }
     ///FOR BEFORE MATCH DESCRIPTION
-    else{
-        const date = moment(new Date());
-        const matchDate = moment(this.matchDetails().Date);
-        const diff = moment.duration(matchDate.diff(date));
+    else {
+      const date = moment(new Date());
+      const matchDate = moment(this.matchDetails().Date);
+      const diff = moment.duration(matchDate.diff(date));
 
-        if (diff.asMilliseconds() < 0) {
-            this.description = 'Match not covered in live';
-            this.MatchStartMsg = 'Not covered';
-        } else if (diff.asMilliseconds() >= 0) {
-            this.MatchStartMsg = 'Yet to start';
+      if (diff.asMilliseconds() < 0) {
+        this.description = 'Match not covered in live';
+        this.MatchStartMsg = 'Not covered';
+      } else if (diff.asMilliseconds() >= 0) {
+        this.MatchStartMsg = 'Yet to start';
 
-            const days = Math.floor(diff.asDays());
-            const hours = Math.floor(diff.asHours() % 24);
-            const minutes = Math.floor(diff.asMinutes() % 60);
+        const days = Math.floor(diff.asDays());
+        const hours = Math.floor(diff.asHours() % 24);
+        const minutes = Math.floor(diff.asMinutes() % 60);
 
-            if (days > 0) {
-                this.description = `Match starts in ${days}d ${hours}h ${minutes}m`;
-            } else if (hours > 0) {
-                this.description = `Match starts in ${hours}h ${minutes}m`;
-            } else {
-                this.description = `Match starts in ${minutes}m`;
-            }
+        if (days > 0) {
+          this.description = `Match starts in ${days}d ${hours}h ${minutes}m`;
+        } else if (hours > 0) {
+          this.description = `Match starts in ${hours}h ${minutes}m`;
+        } else {
+          this.description = `Match starts in ${minutes}m`;
         }
+      }
     }
   }
+
+  isTestMatch = isTestMatch;
 
   calculateStats(balls: BallData[], lastBall: BallData, totalOvers: number): DataChunks {
     let TestMatch = isTestMatch(this.matchDetails().MatchTypeID);
@@ -357,31 +369,34 @@ export class SummaryHeaderComponent implements OnChanges{
     const projectedAt10RPO = totalScore + (oversRemaining * 10);
     const currentRunRate = oversBowled > 0 ? totalScore / (_Over.over + _Over.ballFraction) : 0;
     // Required Run Rate
-    const runsScored = Enumerable.from(balls)
-      .where(i => i.InningsId === 2)
-      .sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras);
+    let runsScoredQuery = Enumerable.from(balls);
+    if (TestMatch) {
+      runsScoredQuery = runsScoredQuery.where(i => i.InningsId === lastBall.InningsId);
+    } else {
+      runsScoredQuery = runsScoredQuery.where(i => i.InningsId === 2);
+    }
+    const runsScored = runsScoredQuery.sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras);
     let _RequiredOver = oversSplit(oversRemaining);
     if ((targetRuns > totalScore) && lastBall.InningsId === 2 && !TestMatch) {
       this.hideRequiredRR = false;
     } else {
       this.hideRequiredRR = true;
     }
-    const requiredRunRate = (_RequiredOver.over + _RequiredOver.ballFraction) > 0? (targetRuns - runsScored) / (_RequiredOver.over + _RequiredOver.ballFraction): 0;
+    const requiredRunRate = (_RequiredOver.over + _RequiredOver.ballFraction) > 0 ? ((targetRuns - runsScored) + 1) / (_RequiredOver.over + _RequiredOver.ballFraction) : 0;
     // Last Events
-    const lastBoundary = Enumerable.from(balls)
-      .where(i => i.isFour === 1)
-      .orderByDescending(i => i.AutoId)
-      .firstOrDefault();
+    let lastBoundaryQuery = Enumerable.from(balls).where(i => i.isFour === 1);
+    let lastSixQuery = Enumerable.from(balls).where(i => i.isSix === 1);
+    let lastDotBallQuery = Enumerable.from(balls).where(i => i.Runs === 0 && i.isWide === 0 && i.isNoBall === 0);
 
-    const lastSix = Enumerable.from(balls)
-      .where(i => i.isSix === 1)
-      .orderByDescending(i => i.AutoId)
-      .firstOrDefault();
+    if (TestMatch) {
+      lastBoundaryQuery = lastBoundaryQuery.where(i => i.InningsId === lastBall.InningsId);
+      lastSixQuery = lastSixQuery.where(i => i.InningsId === lastBall.InningsId);
+      lastDotBallQuery = lastDotBallQuery.where(i => i.InningsId === lastBall.InningsId);
+    }
 
-    const lastDotBall = Enumerable.from(balls)
-      .where(i => i.Runs === 0 && i.isWide === 0 && i.isNoBall === 0)
-      .orderByDescending(i => i.AutoId)
-      .firstOrDefault();
+    const lastBoundary = lastBoundaryQuery.orderByDescending(i => i.AutoId).firstOrDefault();
+    const lastSix = lastSixQuery.orderByDescending(i => i.AutoId).firstOrDefault();
+    const lastDotBall = lastDotBallQuery.orderByDescending(i => i.AutoId).firstOrDefault();
 
     const ballsPerOver = 6;
     const lastFiveOvers = Enumerable.from(balls)
