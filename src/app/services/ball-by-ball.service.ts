@@ -40,7 +40,7 @@ export class BallByBallService implements OnDestroy {
       });
     } else {
       // Poll data every 30 seconds if the match is not complete
-      interval(30000)
+      interval(15000)
         .pipe(
           startWith(0),
           switchMap(() =>

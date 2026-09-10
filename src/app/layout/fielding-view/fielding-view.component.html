@@ -32,7 +32,7 @@
   </div>
   @if(TabSelected === 'Fielding'){
   <app-card>
-    <app-fielding [selctedInnings]="selctedInnings"></app-fielding>
+    <app-fielding [selctedInnings]="selctedInnings" [matchDetails]="this.matchDetails()"></app-fielding>
   </app-card>
   }
   @else if(TabSelected === 'WTO'){
