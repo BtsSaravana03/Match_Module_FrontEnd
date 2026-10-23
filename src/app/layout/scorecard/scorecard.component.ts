@@ -14,7 +14,7 @@ import { ManhattenComponent } from "../../graphics/manhatten/manhatten.component
 import { CardComponent } from "../sharedComponents/card/card.component";
 import { VideoComponent } from "../../components/video/video.component";
 import Enumerable from 'linq';
-import { calculateOvers } from '../../scripts/cricket_gen';
+import { calculateOvers, calculateOversPrecise } from '../../scripts/cricket_gen';
 import { checkInf } from '../../scripts/generic';
 import { CommonModule } from '@angular/common';
 import { AppService } from '../../services/app.service';
@@ -91,14 +91,14 @@ export class ScorecardComponent implements OnInit{
             if (extrasByType.byes > 0) extrasBreakupParts.push(`B: ${extrasByType.byes}`);
             if (extrasByType.Penalty1 > 0) extrasBreakupParts.push(`P: ${extrasByType.Penalty1}`);
             const extrasBreakup = extrasBreakupParts.length > 0 ? extrasBreakupParts.join(', ') : '';
-            const TeamTotal = g.last() ?.TeamRuns ?? 0;
-            const overs = parseFloat(calculateOvers(g.count(i => i.Bowlballs === 1)));
+            const TeamTotal = Math.max(g.max(i => i.TeamRuns) || 0, g.sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras));
+            const overs = calculateOversPrecise(g.toArray());
             return {
               Innings: g.first().InningsId,
               TeamTotal: TeamTotal,
               ExtrasTotal: Object.values(extrasByType).reduce((acc, val) => acc + val, 0),
               ExtrasBreakup: extrasBreakup,
-              Dismissals: g.count(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11)),
+              Dismissals: g.count(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11) || (i.NonBallType === 16) || (i.DismissalTypeID === 16) || (i.DismissalTypeID === 9)),
               Overs: overs,
               BattingClubId:g.first().BattingClubID,
               RunRate:checkInf(TeamTotal / overs)

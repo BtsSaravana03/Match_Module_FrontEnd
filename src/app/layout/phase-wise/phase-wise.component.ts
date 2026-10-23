@@ -45,11 +45,11 @@ export class PhaseWiseComponent implements OnInit {
                 return {
                     Phase: g.first().PhaseofPlay,
                     Runs: g.sum(i => i.Runs + i.Extras + i.Penalty + i.BLExtras),
-                    Wkts: g.count(i =>(i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11)),
+                    Wkts: g.count(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11) || (i.NonBallType === 16) || (i.DismissalTypeID === 16) || (i.DismissalTypeID === 9)),
                     SR : checkSR(((g.sum(i => i.Runs + i.Extras)*100)/(g.sum(i => i.Bowlballs)))),
                     Dots: g.count(i => i.Runs === 0 && i.ExtraTypeId !== 2),
                     ['4s/6s']: g.count(i => i.isFour === 1) +'/'+ g.count(i => i.isSix === 1),
-                    ['1s/2s/3s']: g.count(i => i.Runs === 1) + '/'+ g.count(i => i.Runs === 2) + '/'+ g.count(i => i.Runs === 2),
+                    ['1s/2s/3s']: g.count(i => i.Runs === 1) + '/'+ g.count(i => i.Runs === 2) + '/'+ g.count(i => i.Runs === 3),
                     ['Bdry%']: checkSR(((g.sum(i => (i.isFour === 1 ? 4 : 0)) + (g.sum(i => (i.isSix === 1 ? 6 : 0)))) / g.count(i => i.Bowlballs===1)) * 100),
                     ['Dot%']: checkSR((g.count(i => i.Bowlruns === 0) / g.count(i => i.Bowlballs===1)) * 100),
                     ['Wd/Nb']: g.count(i => i.isWide === 1) +'/'+g.count(i => i.isNoBall === 1),

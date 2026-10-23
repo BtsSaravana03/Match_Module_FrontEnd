@@ -80,7 +80,7 @@ export class WormComponent {
             //     ? overData.reduce((sum, i) => sum + (i.TeamRuns || 0), 0)
             //     : null; // Set runs to null if no data for this over
             const runs = overData.length > 0?overData[overData.length-1].TeamRuns: null
-            const wickets = overData.filter(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11)).length;
+            const wickets = overData.filter(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11) || (i.NonBallType === 16) || (i.DismissalTypeID === 16) || (i.DismissalTypeID === 9)).length;
             return {
                 Over: overId,
                 Runs: runs,

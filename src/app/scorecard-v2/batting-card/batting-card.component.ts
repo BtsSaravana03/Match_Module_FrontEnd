@@ -58,7 +58,7 @@ export class BattingCardComponent{
             _6s: g.count(i => i.isSix === 1),
             dotPer: checkSR((g.count(i => i.Batruns === 0) / g.count(i => i.Batballs===1)) * 100),
             bdryPer: checkSR(((g.sum(i => (i.isFour === 1 ? 4 : 0)) + (g.sum(i => (i.isSix === 1 ? 6 : 0)))) / g.count(i => i.Batballs===1)) * 100),
-            wkt: g.count(i =>  ((i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11))),
+            wkt: g.count(i =>  ((i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11) || (i.NonBallType === 16) || (i.DismissalTypeID === 16) || (i.DismissalTypeID === 9))),
             dismissalSts: g.count(i => ((i.Dismissal === 1) || (i.NonBallType !== null && i.NonBallType !== 7)))===0?'Not Out': this.setDismissal(g.where(i => i.Dismissal === 1|| (i.NonBallType !== null && i.NonBallType !== 7)).toArray()),
             isLastRow: false,
             BatOrder: g.first().BatOrder

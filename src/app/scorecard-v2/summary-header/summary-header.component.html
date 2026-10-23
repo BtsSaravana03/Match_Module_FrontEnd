@@ -156,16 +156,14 @@
       </div>
       <hr style="margin: 20px 0 0 0;" class="line-color" />
       <div class="chunk-wrap">
-        @if(dataChunks.currentRunRate !== 0){
-            <div class="item-container">
-                <div class="item">
-                    Current RR
-                </div>
-                <div class="value">
-                    {{dataChunks.currentRunRate.toFixed(1)}}
-                </div>
-              </div>
-        }
+        <div class="item-container">
+            <div class="item">
+                Current RR
+            </div>
+            <div class="value">
+                {{dataChunks.currentRunRate ? dataChunks.currentRunRate.toFixed(1) : '0.0'}}
+            </div>
+          </div>
         @if(lastBall?.InningsId === 1){
             <div class="item-container">
                 <div class="item">

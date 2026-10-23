@@ -80,7 +80,7 @@ export class ManhattenComponent {
       const overData = filteredBalls.filter(i => i.BattingClubID === club && i.OverId === overId);
       const runs = overData.reduce((sum, i) => sum + (i.Runs || 0), 0);
       const extras = overData.reduce((sum, i) => sum + ((i.Extras + i.Penalty + i.BLExtras) || 0), 0);
-      const wickets = overData.filter(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11)).length;
+      const wickets = overData.filter(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11) || (i.NonBallType === 16) || (i.DismissalTypeID === 16) || (i.DismissalTypeID === 9)).length;
           return {
               Over: overId,
               Runs: runs,

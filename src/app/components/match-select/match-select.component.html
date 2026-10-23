@@ -49,8 +49,16 @@
             </div>
         </div>
     </div> -->
+    <dx-load-panel
+      [visible]="isLoading"
+      [showIndicator]="true"
+      [showPane]="true"
+      [shading]="true"
+      shadingColor="rgba(0,0,0,0.2)"
+      message="Loading match data...">
+    </dx-load-panel>
   </div>
   <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="center" [options]="generateButton"
-    [disabled]="selectedMatch === undefined">
+    [disabled]="selectedMatch === undefined || isLoading">
   </dxi-toolbar-item>
 </dx-popup>

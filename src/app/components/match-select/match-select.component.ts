@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, model, OnInit, ViewEncapsulation } from '@angular/core';
-import { DxPopupModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxLoadPanelModule, DxPopupModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { HttpServices } from '../../services/http.service';
@@ -12,7 +12,7 @@ import { InningServiceService } from '../../services/inning-service.service';
 @Component({
   selector: 'app-match-select',
   standalone: true,
-  imports: [DxPopupModule,DxSelectBoxModule,CommonModule],
+  imports: [DxPopupModule, DxSelectBoxModule, DxLoadPanelModule, CommonModule],
   templateUrl: './match-select.component.html',
   styleUrl: './match-select.component.scss'
 })
@@ -32,6 +32,7 @@ export class MatchSelectComponent implements OnInit {
   CompDataSource:any[] = [];
   selectedMatch!:number;
   MatchDataSource:any[] = [];
+  isLoading: boolean = false;
   generateButton: DxButtonTypes.Properties = {
     width: 300,
     text: 'Submit',
@@ -39,10 +40,16 @@ export class MatchSelectComponent implements OnInit {
     stylingMode: 'contained',
     onClick: async () => {
       if(this.selectedComp && this.selectedMatch){
-        this.ballService.generate_ballbyball(this.selectedComp,this.selectedMatch);
-        await this.ballService.getCurrentMatchDetails(this.selectedMatch);
-        sessionStorage.setItem('currentMatchId', this.selectedMatch.toString());
-        // this.routes.navigate(['v2','overview']);
+        try {
+          this.isLoading = true;
+          await this.ballService.getCurrentMatchDetails(this.selectedMatch);
+          await this.ballService.generate_ballbyball(this.selectedComp, this.selectedMatch);
+          sessionStorage.setItem('currentMatchId', this.selectedMatch.toString());
+        } catch (error) {
+          console.error('Error loading match ball by ball data:', error);
+        } finally {
+          this.isLoading = false;
+        }
       }
       this.appService.toggleMatchSelection(false);
     },

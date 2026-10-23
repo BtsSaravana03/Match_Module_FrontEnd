@@ -50,15 +50,26 @@ export function calculateOvers(totalBalls: number) {
     return `${fullOvers}.${remainingBalls}`;
 }
 export function calculateOversPrecise(Balls: BallData[]) {
+    if (!Balls || Balls.length === 0) return 0;
     let overs = 0;
     let balls = 0;
+    let hasEndOverFlag = false;
+
     for (let i = 0; i < Balls.length; i++) {
-        balls++;
-        if ((Balls[i].EndOver === 1 && !Balls[i].MultipleBowlers)) {
+        if (Balls[i].Bowlballs === 1) {
+            balls++;
+        }
+        if (Balls[i].EndOver === 1 && !Balls[i].MultipleBowlers) {
+            hasEndOverFlag = true;
             overs++;
             balls = 0;
         }
     }
+
+    if (!hasEndOverFlag) {
+        return parseFloat(calculateOvers(balls));
+    }
+
     return parseFloat(`${overs}.${balls}`);
 }
 export function getCurrentBallDescription(ball: BallData): string {
@@ -101,15 +112,18 @@ export function getCurrentBallDescription(ball: BallData): string {
     return description;
 }
 export function oversToBalls(overs: number): number {
-    const fullOvers = Math.floor(overs); // Extract the full overs
-    const partialBalls = Math.round((overs - fullOvers) * 10); // Extract the fractional part and convert to balls
-    return fullOvers * 6 + partialBalls; // Total balls = full overs in balls + partial balls
+    if (!overs) return 0;
+    const parts = overs.toString().split('.');
+    const fullOvers = parseInt(parts[0], 10) || 0;
+    const partialBalls = parts.length > 1 ? parseInt(parts[1], 10) : 0;
+    return fullOvers * 6 + partialBalls;
 }
 export function oversSplit(overs: number) {
-    let parts = overs.toString().split('.');
-    let over = parseInt(parts[0]);
-    let balls = parts.length > 1 ? parseInt(parts[1]) : 0;
-    let ballFraction = balls / 6;
+    if (!overs) return { over: 0, ballFraction: 0 };
+    const parts = overs.toString().split('.');
+    const over = parseInt(parts[0], 10) || 0;
+    const balls = parts.length > 1 ? parseInt(parts[1], 10) : 0;
+    const ballFraction = balls / 6;
     return { over, ballFraction };
 }
 export function isTestMatch(MatchType: number): boolean {

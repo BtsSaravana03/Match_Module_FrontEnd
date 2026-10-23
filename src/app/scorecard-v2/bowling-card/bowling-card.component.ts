@@ -43,10 +43,13 @@ export class BowlingCardComponent {
           wkt: g.count(i => i.Bowlwkts === 1),
           economy: checkSR((g.sum(i => i.Bowlballs) / g.sum(i => i.Bowlballs)) * 6),
           economy1: Math.floor(((g.sum(i => i.Bowlruns) / g.count(i => i.Bowlballs === 1)) * 6) * 10) / 10,
-          wide: g.count(i => i.isWide === 1),
-          nb: g.count(i => i.ExtraTypeId === 1 || i.ExtraTypeId === 5),
-          byes: g.count(i => i.ExtraTypeId === 4),
-          legByes: g.count(i => i.ExtraTypeId === 3),
+          wide: g.where(i => i.ExtraTypeId === 2).sum(i => i.Extras),
+          nb: g.where(i => i.ExtraTypeId === 1 || i.ExtraTypeId === 5 || i.ExtraTypeId === 6)
+            .sum(i => i.ExtraTypeId === 1 ? i.Extras : 1),
+          byes: g.where(i => i.ExtraTypeId === 4 || i.ExtraTypeId === 5)
+            .sum(i => i.ExtraTypeId === 4 ? i.Extras : i.Extras - 1),
+          legByes: g.where(i => i.ExtraTypeId === 3 || i.ExtraTypeId === 6)
+            .sum(i => i.ExtraTypeId === 3 ? i.Extras : i.Extras - 1),
           dot: g.sum(i => (i.Runs === 0 && i.BLExtraTypeID === 0) ? 1 : 0),
           _1s: g.sum(i => (i.Bowlruns === 1 && i.ExtraTypeId === 0) ? 1 : 0),
           _2s: g.sum(i => (i.Bowlruns === 2 && i.ExtraTypeId === 0) ? 1 : 0),

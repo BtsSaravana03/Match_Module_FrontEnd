@@ -173,18 +173,12 @@ export class SummaryHeaderComponent implements OnChanges {
           };
         }).toArray();
       let [striker, nonStriker] = lastBall.Partnerid.split('-');
-      let strikerQuery = Enumerable.from(balls).where(i => i.StrikerID === parseInt(striker));
-      let nonStrikerQuery = Enumerable.from(balls).where(i => i.StrikerID === parseInt(nonStriker));
-      let bowlerQuery = Enumerable.from(balls).where(i => i.BowlerID === lastBall.BowlerID);
-
-      if (isTestMatch(this.matchDetails().MatchTypeID)) {
-        strikerQuery = strikerQuery.where(i => i.InningsId === lastBall.InningsId);
-        nonStrikerQuery = nonStrikerQuery.where(i => i.InningsId === lastBall.InningsId);
-        bowlerQuery = bowlerQuery.where(i => i.InningsId === lastBall.InningsId);
-      }
+      let strikerQuery = Enumerable.from(balls).where(i => i.StrikerID === parseInt(striker) && i.InningsId === lastBall.InningsId);
+      let nonStrikerQuery = Enumerable.from(balls).where(i => i.StrikerID === parseInt(nonStriker) && i.InningsId === lastBall.InningsId);
+      let bowlerQuery = Enumerable.from(balls).where(i => i.BowlerID === lastBall.BowlerID && i.InningsId === lastBall.InningsId);
 
       this.strikerData = strikerQuery
-        .groupBy(i => `${i.Partnerid}-${i.StrikerID}-${i.NonStrikerID}`)
+        .groupBy(i => `${i.StrikerID}`)
         .select(g => {
           const { firstname, lastname } = splitName(g.first().StrikerName);
           const strikerID = g.first().StrikerID;
@@ -359,32 +353,47 @@ export class SummaryHeaderComponent implements OnChanges {
 
   calculateStats(balls: BallData[], lastBall: BallData, totalOvers: number): DataChunks {
     let TestMatch = isTestMatch(this.matchDetails().MatchTypeID);
-    const totalScore = lastBall.TeamRuns;
+    const currentInningsBalls = balls.filter(i => i.InningsId === lastBall.InningsId);
+    const totalScore = Math.max(
+      Enumerable.from(currentInningsBalls).max(i => i.TeamRuns) || 0,
+      Enumerable.from(currentInningsBalls).sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras)
+    );
     const oversBowled = lastBall.Overs;
-    const oversRemaining = totalOvers - oversBowled;
-    let _Over = oversSplit(oversBowled);
-    const targetRuns = this.TeamASummary[0].Total ?? 0;
-    // Projected Scores
-    const projectedAt8RPO = totalScore + (oversRemaining * 8);
-    const projectedAt10RPO = totalScore + (oversRemaining * 10);
-    const currentRunRate = oversBowled > 0 ? totalScore / (_Over.over + _Over.ballFraction) : 0;
-    // Required Run Rate
-    let runsScoredQuery = Enumerable.from(balls);
-    if (TestMatch) {
-      runsScoredQuery = runsScoredQuery.where(i => i.InningsId === lastBall.InningsId);
-    } else {
-      runsScoredQuery = runsScoredQuery.where(i => i.InningsId === 2);
+
+    const innings2Data = this.matchDetails()?.inningsData?.[1];
+    let totalMatchBalls = oversToBalls(totalOvers);
+    let targetRuns = (this.TeamASummary[0]?.Total ?? 0) + 1;
+
+    if (lastBall.InningsId === 2 && !TestMatch && innings2Data) {
+      if (innings2Data.RevisedTarget) {
+        targetRuns = innings2Data.RevisedTarget;
+      }
+      if (innings2Data.RevisedOvers) {
+        const rev = innings2Data.RevisedOvers;
+        // If RevisedOvers is given as total balls (e.g. 60) vs overs (e.g. 10)
+        totalMatchBalls = rev > totalOvers ? rev : oversToBalls(rev);
+      }
     }
-    const runsScored = runsScoredQuery.sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras);
-    let _RequiredOver = oversSplit(oversRemaining);
+
+    const ballsBowled = oversToBalls(oversBowled);
+    const remainingBalls = Math.max(0, totalMatchBalls - ballsBowled);
+    const oversRemainingDecimal = remainingBalls / 6;
+    const oversBowledDecimal = ballsBowled / 6;
+
+    // Projected Scores
+    const projectedAt8RPO = Math.round(totalScore + (oversRemainingDecimal * 8));
+    const projectedAt10RPO = Math.round(totalScore + (oversRemainingDecimal * 10));
+    const currentRunRate = oversBowledDecimal > 0 ? totalScore / oversBowledDecimal : 0;
+
+    // Required Run Rate
     if ((targetRuns > totalScore) && lastBall.InningsId === 2 && !TestMatch) {
       this.hideRequiredRR = false;
     } else {
       this.hideRequiredRR = true;
     }
-    const requiredRunRate = (_RequiredOver.over + _RequiredOver.ballFraction) > 0 ? ((targetRuns - runsScored) + 1) / (_RequiredOver.over + _RequiredOver.ballFraction) : 0;
+    const requiredRunRate = oversRemainingDecimal > 0 ? (targetRuns - totalScore) / oversRemainingDecimal : 0;
     // Last Events
-    let lastBoundaryQuery = Enumerable.from(balls).where(i => i.isFour === 1);
+    let lastBoundaryQuery = Enumerable.from(balls).where(i => i.isFour === 1 || i.isSix === 1);
     let lastSixQuery = Enumerable.from(balls).where(i => i.isSix === 1);
     let lastDotBallQuery = Enumerable.from(balls).where(i => i.Runs === 0 && i.isWide === 0 && i.isNoBall === 0);
 
@@ -406,7 +415,7 @@ export class SummaryHeaderComponent implements OnChanges {
       .select(g => {
         return {
           Runs: g.sum(i => i.Runs + i.Penalty + i.Extras + i.BLExtras),
-          Wickets: g.count(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11))
+          Wickets: g.count(i => (i.Dismissal === 1) || (i.NonBallType === 9) || (i.NonBallType === 11) || (i.NonBallType === 16) || (i.DismissalTypeID === 16) || (i.DismissalTypeID === 9))
         };
       })
       .toArray();
@@ -418,9 +427,33 @@ export class SummaryHeaderComponent implements OnChanges {
       totalWicketsInLastFiveOvers += ball.Wickets;
     });
 
+    let stageRuns = 0;
+    let stageWickets = 0;
+
+    if (lastBall.InningsId === 2) {
+      const currentBalls2ndInn = balls.filter(i => i.InningsId === 2 && i.Bowlballs === 1).length;
+      const inn1Balls = balls.filter(i => i.InningsId === 1);
+
+      let count = 0;
+      for (const b of inn1Balls) {
+        if (b.Bowlballs === 1) {
+          count++;
+        }
+        if (count <= currentBalls2ndInn) {
+          stageRuns += (b.Runs + b.Penalty + b.Extras + b.BLExtras);
+          if (b.Dismissal === 1 || b.NonBallType === 9 || b.NonBallType === 11 || b.NonBallType === 16 || b.DismissalTypeID === 16 || b.DismissalTypeID === 9) {
+            stageWickets++;
+          }
+        }
+        if (count >= currentBalls2ndInn && currentBalls2ndInn > 0) {
+          break;
+        }
+      }
+    }
+
     const secondInningsStage = {
-      runs: runsScored,
-      wickets: lastBall.TeamWickets,
+      runs: stageRuns,
+      wickets: stageWickets,
       overs: oversBowled
     };
 
